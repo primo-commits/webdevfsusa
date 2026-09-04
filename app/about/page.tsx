@@ -7,7 +7,7 @@ import { PartnerLogos } from "@/components/partner-logos";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "FeeSlayers is a business development company for shop owners and contractors. Not a credit card processor.",
+    "More than payments. Built for growth. FeeSlayers helps businesses solve the problems that stand between them and their next customer, their next sale, and their next stage of growth.",
 };
 
 export default function AboutPage() {
@@ -16,18 +16,19 @@ export default function AboutPage() {
       <section className="bg-cream">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-24">
           <h1 className="max-w-3xl text-4xl font-semibold leading-tight md:text-5xl">
-            Not a card processor.
+            More than payments. Built for growth.
           </h1>
           <div className="mt-6 max-w-prose space-y-4 text-lg text-navy-soft">
             <p>
-              FeeSlayers is a business development company for shop owners and
-              contractors. We take on the growth side of the shop: getting it
-              found, getting the phone to ring, getting the customer to yes, and
-              keeping the money once the sale is made.
+              FeeSlayers helps businesses solve the problems that stand between
+              them and their next customer, their next sale, and their next
+              stage of growth.
             </p>
             <p>
-              Payments is one of our five services. It is the last one, not the
-              headline. It is there so the margin you earn on a job stays yours.
+              From getting found on Google and generating new leads, to helping
+              customers afford larger purchases, accessing capital for your
+              business, and keeping more of every transaction, we bring the
+              pieces together under one roof.
             </p>
           </div>
         </div>
