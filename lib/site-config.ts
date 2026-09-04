@@ -19,8 +19,17 @@ export const company = {
   url: "https://www.feeslayers.com",
   leadMagnet: "https://merchants.feeslayers.com",
   booking: "https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A",
-  tagline: "Everything your business needs to grow.",
+  tagline: "More Customers. More Capital. More Growth.",
 } as const;
+
+/** Hero strip under the headline, in the order given by primo. */
+export const heroServices = [
+  "Payments",
+  "Consumer Financing",
+  "Business Funding",
+  "Google Visibility",
+  "Advertising",
+] as const;
 
 /** Named publicly on purpose: shows the shop who is behind each service. */
 export const partners = {

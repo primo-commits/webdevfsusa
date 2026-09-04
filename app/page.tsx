@@ -1,4 +1,4 @@
-import { company, services, pricing, financing, partners, legal } from "@/lib/site-config";
+import { company, services, heroServices, pricing, financing, partners, legal } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
 import { StatGrid } from "@/components/stat-grid";
 import { PartnerLogos } from "@/components/partner-logos";
@@ -14,6 +14,9 @@ export default function HomePage() {
           <h1 className="max-w-3xl text-4xl font-semibold leading-tight md:text-5xl">
             {company.tagline}
           </h1>
+          <p className="mt-4 text-base font-medium text-navy-soft md:text-lg">
+            {heroServices.join(" \u00b7 ")}
+          </p>
           <p className="mt-6 max-w-prose text-lg text-navy-soft">
             FeeSlayers runs the growth side of your shop: the Google listing,
             the ads, financing for the big jobs. Payments come last, and stay
