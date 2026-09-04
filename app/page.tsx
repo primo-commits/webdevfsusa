@@ -1,6 +1,7 @@
 import { company, services, pricing, financing, partners, legal } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
 import { StatGrid } from "@/components/stat-grid";
+import { PartnerLogos } from "@/components/partner-logos";
 
 const stack = pricing.public.ultimateStack;
 const telHref = `tel:${company.phone.replace(/\D/g, "")}`;
@@ -73,13 +74,7 @@ export default function HomePage() {
             Partners you can look up. We set it up and stay on the account.
           </p>
           <div className="mt-8">
-            <StatGrid
-              stats={[
-                { label: "Consumer financing", value: partners.consumerFinancing },
-                { label: "Business capital", value: partners.businessCapital },
-                { label: "Payment processing", value: partners.paymentProcessing },
-              ]}
-            />
+            <PartnerLogos />
           </div>
         </div>
       </section>

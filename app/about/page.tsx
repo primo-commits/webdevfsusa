@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { company, audience, partners } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
+import { PartnerLogos } from "@/components/partner-logos";
 
 export const metadata: Metadata = {
   title: "About",
@@ -55,6 +56,9 @@ export default function AboutPage() {
             through {partners.paymentProcessing}. We chose each one, we set up the
             account, and we stay on it with you.
           </p>
+          <div className="mt-8">
+            <PartnerLogos />
+          </div>
         </div>
       </section>
 

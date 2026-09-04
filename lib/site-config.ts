@@ -26,7 +26,7 @@ export const company = {
 export const partners = {
   consumerFinancing: "Flexxbuy",
   businessCapital: "Cashbuoy",
-  paymentProcessing: "MiCamp",
+  paymentProcessing: "MiCamp Solutions",
 } as const;
 
 /** Ordered deliberately: revenue first, margin protection last. */
