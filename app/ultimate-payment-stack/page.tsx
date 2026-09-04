@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { company, pricing, financing, legal } from "@/lib/site-config";
+import { company, pricing, financing, partners, legal } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
 import { StatGrid } from "@/components/stat-grid";
 
@@ -14,11 +14,11 @@ export const metadata: Metadata = {
 
 const parts = [
   {
-    body: "A lender network behind every estimate, so the big repair gets approved instead of declined. The lender carries the default risk, not the shop.",
+    body: `A lender network behind every estimate, through our partner ${partners.consumerFinancing}, so the big repair gets approved instead of declined. The lender carries the default risk, not the shop.`,
     href: "/services/consumer-financing",
   },
   {
-    body: "A compliant cash discount program, so processing costs stop coming out of the margin. You keep the full ticket.",
+    body: `A compliant cash discount program through our processing partner ${partners.paymentProcessing}, so processing costs stop coming out of the margin. You keep the full ticket.`,
     href: "/services/payment-processing",
   },
   {

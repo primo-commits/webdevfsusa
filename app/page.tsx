@@ -1,4 +1,4 @@
-import { company, services, pricing, financing, legal } from "@/lib/site-config";
+import { company, services, pricing, financing, partners, legal } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
 import { StatGrid } from "@/components/stat-grid";
 
@@ -11,7 +11,7 @@ export default function HomePage() {
       <section className="bg-cream">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
           <h1 className="max-w-3xl text-4xl font-semibold leading-tight md:text-5xl">
-            Get found, get called, get the yes.
+            {company.tagline}
           </h1>
           <p className="mt-6 max-w-prose text-lg text-navy-soft">
             FeeSlayers runs the growth side of your shop: the Google listing,
@@ -66,11 +66,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="bg-cream">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <h2 className="text-2xl font-semibold">Who is behind each service</h2>
+          <p className="mt-2 max-w-prose text-navy-soft">
+            Partners you can look up. We set it up and stay on the account.
+          </p>
+          <div className="mt-8">
+            <StatGrid
+              stats={[
+                { label: "Consumer financing", value: partners.consumerFinancing },
+                { label: "Business capital", value: partners.businessCapital },
+                { label: "Payment processing", value: partners.paymentProcessing },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="bg-cream-dim">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-2xl font-semibold">
             Financing that gets customers to yes
           </h2>
+          <p className="mt-2 max-w-prose text-navy-soft">
+            Through our partner {partners.consumerFinancing}.
+          </p>
           <div className="mt-8">
             <StatGrid
               stats={[

@@ -13,7 +13,8 @@ FeeSlayers Inc., a Delaware corporation, US market only.
 74 E Glenwood Avenue, Unit 5817, Smyrna, DE 19977
 (302) 520-5447 · info@feeslayers.com · feeslayers.com
 Lead magnet landing page: merchants.feeslayers.com (GoHighLevel)
-Processing partner: MiCamp Solutions / Meritt Payments.
+Partners, named publicly on the site: Flexxbuy (consumer financing),
+Cashbuoy (business capital), MiCamp (payment processing).
 
 ## 2. What FeeSlayers is
 
@@ -113,7 +114,5 @@ fee percentage, advertising management fee per campaign.
 
 ## 10. Open items
 
-- Confirm whether the financing partner is named publicly on the site, or kept
-  generic the way it is kept generic in outreach email.
 - Exact logo hex values and a vector wordmark file for `public/`.
 - Booking link or form destination for every call to action.

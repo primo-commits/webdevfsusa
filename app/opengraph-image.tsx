@@ -3,7 +3,7 @@ import { company } from "@/lib/site-config";
 import { poppins } from "@/lib/og-font";
 import { brand } from "@/lib/brand";
 
-export const alt = `${company.name}: get found, get called, get the yes.`;
+export const alt = `${company.name}: ${company.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -29,7 +29,7 @@ export default async function OpenGraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ fontSize: 56, fontWeight: 600, lineHeight: 1.15, maxWidth: 1040 }}>
-            Get found, get called, get the yes.
+            {company.tagline}
           </div>
           <div style={{ fontSize: 30, fontWeight: 600, color: brand.gold }}>{company.phone}</div>
         </div>

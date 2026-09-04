@@ -7,6 +7,7 @@ import {
   pricing,
   financing,
   businessCapital,
+  partners,
   legal,
 } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
@@ -31,6 +32,12 @@ const stats: Partial<Record<string, Stat[]>> = {
     { label: "Credit requirement", value: businessCapital.creditRequirement },
     { label: "Funding speed", value: businessCapital.funding },
   ],
+};
+
+const partnerBySlug: Partial<Record<string, string>> = {
+  "consumer-financing": partners.consumerFinancing,
+  "payment-processing": partners.paymentProcessing,
+  "business-capital": partners.businessCapital,
 };
 
 const legalLines: Partial<Record<string, string[]>> = {
@@ -69,6 +76,7 @@ export default async function ServicePage({
 
   const serviceStats = stats[service.slug];
   const serviceLegalLines = legalLines[service.slug];
+  const partner = partnerBySlug[service.slug];
 
   return (
     <>
@@ -86,6 +94,13 @@ export default async function ServicePage({
             {service.promise}
           </p>
           <p className="mt-4 max-w-prose text-navy-soft">{service.detail}</p>
+
+          {partner && (
+            <p className="mt-4 max-w-prose text-navy-soft">
+              Delivered through our partner {partner}. We set it up and stay on
+              the account.
+            </p>
+          )}
 
           {service.slug === "google-presence" && (
             <p className="mt-4 max-w-prose text-navy-soft">

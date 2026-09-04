@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { company, audience } from "@/lib/site-config";
+import { company, audience, partners } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
 
 export const metadata: Metadata = {
@@ -48,6 +48,18 @@ export default function AboutPage() {
 
       <section className="bg-cream">
         <div className="mx-auto max-w-5xl px-6 py-16">
+          <h2 className="text-2xl font-semibold">Who we work with behind the scenes</h2>
+          <p className="mt-4 max-w-prose text-navy-soft">
+            Consumer financing runs through {partners.consumerFinancing}. Business
+            capital runs through {partners.businessCapital}. Payment processing runs
+            through {partners.paymentProcessing}. We chose each one, we set up the
+            account, and we stay on it with you.
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-cream">
+        <div className="mx-auto max-w-5xl px-6 pb-16">
           <p className="max-w-prose text-navy-soft">
             {company.legalName} is based in {company.address.city},{" "}
             {company.address.state}. See{" "}

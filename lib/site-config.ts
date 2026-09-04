@@ -19,6 +19,14 @@ export const company = {
   url: "https://www.feeslayers.com",
   leadMagnet: "https://merchants.feeslayers.com",
   booking: "https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A",
+  tagline: "Everything your business needs to grow.",
+} as const;
+
+/** Named publicly on purpose: shows the shop who is behind each service. */
+export const partners = {
+  consumerFinancing: "Flexxbuy",
+  businessCapital: "Cashbuoy",
+  paymentProcessing: "MiCamp",
 } as const;
 
 /** Ordered deliberately: revenue first, margin protection last. */
