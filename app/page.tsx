@@ -85,9 +85,13 @@ export default function HomePage() {
       <section className="bg-cream-dim">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-2xl font-semibold">
-            Financing that gets customers to yes
+            Turn repair estimates into approved repairs.
           </h2>
-          <p className="mt-2 max-w-prose text-navy-soft">
+          <p className="mt-2 max-w-prose text-lg text-navy-soft">
+            Give customers flexible financing, when paying all at once
+            isn’t an option.
+          </p>
+          <p className="mt-2 max-w-prose text-sm text-navy-soft">
             Through our partner {partners.consumerFinancing}.
           </p>
           <div className="mt-8">
