@@ -95,11 +95,11 @@ export const pricing = {
     },
     googlePresence: {
       name: "Google presence",
-      price: "$200/month",
       note: "First 30 days free for clients on another FeeSlayers service.",
     },
   },
   quoteOnCall: {
+    googlePresence: "$200/month, kept off the site per primo",
     financingStandalone: "Setup plus annual membership, first year billed together",
     financingFundingFee: "Funding fee applies only on funded loans",
     advertising: "Monthly management fee per campaign",
@@ -117,7 +117,6 @@ export const financing = {
 
 export const businessCapital = {
   range: "$2,500 to $250,000",
-  timeInBusiness: "3 months in business",
   monthlyRevenue: "$5,000/month gross revenue",
   creditRequirement: "No credit score requirement",
   funding: "Funding as fast as 24 hours",

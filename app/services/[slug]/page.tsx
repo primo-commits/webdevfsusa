@@ -16,9 +16,6 @@ import { StatGrid } from "@/components/stat-grid";
 type Stat = { label: string; value: string };
 
 const stats: Partial<Record<string, Stat[]>> = {
-  "google-presence": [
-    { label: "Price", value: pricing.public.googlePresence.price },
-  ],
   "consumer-financing": [
     { label: "Lender network", value: financing.lenderNetwork },
     { label: "Loan range", value: financing.loanRange },
@@ -27,7 +24,6 @@ const stats: Partial<Record<string, Stat[]>> = {
   ],
   "business-capital": [
     { label: "Funding range", value: businessCapital.range },
-    { label: "Time in business", value: businessCapital.timeInBusiness },
     { label: "Monthly revenue", value: businessCapital.monthlyRevenue },
     { label: "Credit requirement", value: businessCapital.creditRequirement },
     { label: "Funding speed", value: businessCapital.funding },
@@ -111,6 +107,15 @@ export default async function ServicePage({
           {service.slug === "advertising" && (
             <p className="mt-4 max-w-prose text-navy-soft">
               Pricing is quoted on a call, based on the campaign.
+            </p>
+          )}
+
+          {service.slug === "payment-processing" && (
+            <p className="mt-4 max-w-prose text-navy-soft">
+              Two ways to run it: a cash discount program, where the card fee
+              is passed to the customer and the shop keeps the full ticket, or
+              cost-plus pricing, where the shop pays the true cost of each card
+              plus a fixed markup. We set up whichever fits how you sell.
             </p>
           )}
 
