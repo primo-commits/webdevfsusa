@@ -1,4 +1,14 @@
+import Link from "next/link";
 import { company, legal } from "@/lib/site-config";
+
+const links = [
+  { href: "/services", label: "Services" },
+  { href: "/ultimate-payment-stack", label: "The Ultimate Payment Stack" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy policy" },
+  { href: "/terms", label: "Terms of use" },
+];
 
 export function SiteFooter() {
   const { street, city, state, zip } = company.address;
@@ -12,10 +22,21 @@ export function SiteFooter() {
         </p>
         <p>
           <a href={`tel:${company.phone.replace(/\D/g, "")}`}>{company.phone}</a>
-          {" \u00b7 "}
+          {" · "}
           <a href={`mailto:${company.email}`}>{company.email}</a>
         </p>
-        <p className="max-w-prose text-cream/70">{legal.financingDisclosure}</p>
+        <nav aria-label="Footer">
+          <ul className="flex flex-wrap gap-x-5 gap-y-1 text-cream/85">
+            {links.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="hover:text-cream">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <p className="max-w-prose pt-3 text-cream/70">{legal.financingDisclosure}</p>
         <p className="max-w-prose text-cream/70">{legal.notALender}</p>
       </div>
     </footer>
