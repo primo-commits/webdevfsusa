@@ -1,5 +1,6 @@
 import { company, services, pricing, financing, legal } from "@/lib/site-config";
 import { CtaLink } from "@/components/cta-link";
+import { StatGrid } from "@/components/stat-grid";
 
 const stack = pricing.public.ultimateStack;
 const telHref = `tel:${company.phone.replace(/\D/g, "")}`;
@@ -70,24 +71,16 @@ export default function HomePage() {
           <h2 className="text-2xl font-semibold">
             Financing that gets customers to yes
           </h2>
-          <dl className="mt-8 grid gap-8 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm text-navy-soft">Lender network</dt>
-              <dd className="text-xl font-medium">{financing.lenderNetwork}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-navy-soft">Loan range</dt>
-              <dd className="text-xl font-medium">{financing.loanRange}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-navy-soft">Decision</dt>
-              <dd className="text-xl font-medium">{financing.decision}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-navy-soft">Funding</dt>
-              <dd className="text-xl font-medium">{financing.funding}</dd>
-            </div>
-          </dl>
+          <div className="mt-8">
+            <StatGrid
+              stats={[
+                { label: "Lender network", value: financing.lenderNetwork },
+                { label: "Loan range", value: financing.loanRange },
+                { label: "Decision", value: financing.decision },
+                { label: "Funding", value: financing.funding },
+              ]}
+            />
+          </div>
           <p className="mt-10 max-w-prose text-sm text-navy-soft">
             {legal.financingDisclosure} {legal.notALender}
           </p>

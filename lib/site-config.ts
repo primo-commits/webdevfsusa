@@ -98,6 +98,14 @@ export const financing = {
   processingImpact: "Works alongside whatever processing the shop already has",
 } as const;
 
+export const businessCapital = {
+  range: "$2,500 to $250,000",
+  timeInBusiness: "3 months in business",
+  monthlyRevenue: "$5,000/month gross revenue",
+  creditRequirement: "No credit score requirement",
+  funding: "Funding as fast as 24 hours",
+} as const;
+
 export const audience = {
   primary: [
     "Auto repair shops",
