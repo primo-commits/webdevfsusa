@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { company, pricing } from "@/lib/site-config";
+import { Wordmark } from "@/components/wordmark";
 
 const nav = [
   { href: "/services", label: "Services" },
@@ -12,8 +13,8 @@ export function SiteHeader() {
   return (
     <header className="bg-navy text-cream">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-6 py-4">
-        <Link href="/" className="font-semibold tracking-tight">
-          {company.name}
+        <Link href="/" className="text-xl">
+          <Wordmark onDark />
         </Link>
         <a
           href={`tel:${company.phone.replace(/\D/g, "")}`}

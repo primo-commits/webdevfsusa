@@ -1,23 +1,24 @@
 import type { Config } from "tailwindcss";
+import { brand } from "./lib/brand";
 
-// Brand tokens live here and in app/globals.css. Do not hardcode hex values in components.
+// Brand tokens live in lib/brand.ts and app/globals.css. Do not hardcode hex values in components.
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         navy: {
-          DEFAULT: "#162333",
-          deep: "#0E1826",
-          soft: "#243449",
+          DEFAULT: brand.navy,
+          deep: brand.navyDeep,
+          soft: brand.navySoft,
         },
         gold: {
-          DEFAULT: "#F0CB46",
-          dark: "#D4AE2A",
+          DEFAULT: brand.gold,
+          dark: brand.goldDark,
         },
         cream: {
-          DEFAULT: "#F6F5F0",
-          dim: "#E8E6DE",
+          DEFAULT: brand.cream,
+          dim: brand.creamDim,
         },
       },
       fontFamily: {

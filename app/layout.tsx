@@ -12,14 +12,29 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const description =
+  "Business development for shops and contractors: get found, get the phone ringing, get the customer to yes, and keep the full ticket.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(company.url),
   title: {
     default: "FeeSlayers",
     template: "%s | FeeSlayers",
   },
-  description:
-    "Business development for shops and contractors: get found, get the phone ringing, get the customer to yes, and keep the full ticket.",
+  description,
+  openGraph: {
+    type: "website",
+    siteName: company.name,
+    locale: "en_US",
+    url: company.url,
+    title: company.name,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: company.name,
+    description,
+  },
 };
 
 export default function RootLayout({

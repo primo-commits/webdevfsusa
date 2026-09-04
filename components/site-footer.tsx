@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { company, legal } from "@/lib/site-config";
+import { Wordmark } from "@/components/wordmark";
 
 const links = [
   { href: "/services", label: "Services" },
@@ -16,6 +17,9 @@ export function SiteFooter() {
   return (
     <footer className="bg-navy text-cream">
       <div className="mx-auto max-w-5xl space-y-3 px-6 py-10 text-sm">
+        <p className="text-lg">
+          <Wordmark onDark />
+        </p>
         <p className="font-medium">{company.legalName}</p>
         <p>
           {street}, {city}, {state} {zip}
