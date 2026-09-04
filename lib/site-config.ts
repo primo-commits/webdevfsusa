@@ -135,6 +135,7 @@ export const audience = {
 
 /** Use verbatim. Do not paraphrase compliance language. */
 export const legal = {
+  effectiveDate: "November 2025",
   financingDisclosure:
     "Financing is provided by third-party lenders. Approval, terms and rates depend on the applicant and are set by the lender.",
   cashDiscount:

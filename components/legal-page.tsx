@@ -1,3 +1,5 @@
+import { legal } from "@/lib/site-config";
+
 type Section = { heading: string; body: string[] };
 
 type Props = {
@@ -16,7 +18,7 @@ export function LegalPage({ title, intro, sections }: Props) {
             {title}
           </h1>
           <p className="mt-6 max-w-prose text-lg text-navy-soft">{intro}</p>
-          {/* TODO(primo): add an effective date once legal has reviewed. */}
+          <p className="mt-4 text-sm text-navy-soft">Effective {legal.effectiveDate}.</p>
         </div>
       </section>
       <section className="bg-cream">

@@ -102,6 +102,10 @@ fee percentage, advertising management fee per campaign.
 - Cash discount programs are implemented to comply with card brand rules and
   applicable state law.
 
+Privacy policy and terms of use: effective November 2025, when FeeSlayers
+started. Partner logos (Flexxbuy, CashBuoy, MiCamp Solutions) are shown with
+permission.
+
 ## 9. Site structure
 
 - Home
