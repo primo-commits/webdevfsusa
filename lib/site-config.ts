@@ -25,7 +25,7 @@ export const company = {
 /** Named publicly on purpose: shows the shop who is behind each service. */
 export const partners = {
   consumerFinancing: "Flexxbuy",
-  businessCapital: "Cashbuoy",
+  businessCapital: "CashBuoy",
   paymentProcessing: "MiCamp Solutions",
 } as const;
 

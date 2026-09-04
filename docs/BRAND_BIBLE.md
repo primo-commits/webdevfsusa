@@ -14,7 +14,7 @@ FeeSlayers Inc., a Delaware corporation, US market only.
 (302) 520-5447 · info@feeslayers.com · feeslayers.com
 Lead magnet landing page: merchants.feeslayers.com (GoHighLevel)
 Partners, named publicly on the site: Flexxbuy (consumer financing),
-Cashbuoy (business capital), MiCamp (payment processing).
+CashBuoy (business capital), MiCamp (payment processing).
 
 ## 2. What FeeSlayers is
 
