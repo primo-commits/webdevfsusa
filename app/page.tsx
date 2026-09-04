@@ -18,7 +18,7 @@ export default function HomePage() {
             out of your margin.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-6">
-            <CtaLink href={company.leadMagnet}>Book a call</CtaLink>
+            <CtaLink href={company.booking}>Book a call</CtaLink>
             <a href={telHref} className="font-medium text-navy">
               Or call {company.phone}
             </a>
@@ -60,7 +60,7 @@ export default function HomePage() {
             ))}
           </ul>
           <div className="mt-10">
-            <CtaLink href={company.leadMagnet}>Book a call</CtaLink>
+            <CtaLink href={company.booking}>Book a call</CtaLink>
           </div>
         </div>
       </section>

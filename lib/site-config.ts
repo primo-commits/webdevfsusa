@@ -18,6 +18,7 @@ export const company = {
   email: "info@feeslayers.com",
   url: "https://www.feeslayers.com",
   leadMagnet: "https://merchants.feeslayers.com",
+  booking: "https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A",
 } as const;
 
 /** Ordered deliberately: revenue first, margin protection last. */
