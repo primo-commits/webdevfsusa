@@ -85,11 +85,12 @@ export default function LandingPage() {
       <header className="bg-[#1B3A5C] px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="100" height="100" rx="16" fill="#F9F6F1" />
-              <text y="72" x="10" fontSize="62" fontFamily="serif" fill="#1B3A5C" fontWeight="700">F</text>
-              <path d="M60 20 L80 50 L60 80" stroke="#C9A84C" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              <line x1="60" y1="20" x2="60" y2="80" stroke="#C9A84C" strokeWidth="7" strokeLinecap="round" />
+            {/* FeeSlayers F + S lettermark logo */}
+            <svg width="80" height="28" viewBox="0 0 80 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* F - navy */}
+              <text x="0" y="23" fontSize="26" fontFamily="Georgia, serif" fill="#F9F6F1" fontWeight="700">F</text>
+              {/* S - gold */}
+              <text x="22" y="23" fontSize="26" fontFamily="Georgia, serif" fill="#C9A84C" fontWeight="700">S</text>
             </svg>
             <span className="text-[#F9F6F1] font-bold text-lg tracking-tight">FeeSlayers</span>
           </Link>
@@ -271,13 +272,8 @@ export default function LandingPage() {
 
           {/* Trust signals */}
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-            {[
-              { label: "30-minute call" },
-              { label: "Custom plan" },
-              { label: "No obligation" },
-            ].map(({ label }) => (
+            {["30-minute call", "Custom plan", "No obligation"].map((label) => (
               <div key={label} className="bg-white rounded-xl border border-[#E8DFD0] py-3 px-2">
-                <div className="text-sm font-bold text-[#C9A84C] mb-1">[ok]</div>
                 <p className="text-xs text-[#6B5B4B] font-medium">{label}</p>
               </div>
             ))}
