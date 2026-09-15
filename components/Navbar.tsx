@@ -38,7 +38,7 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
             <Link href="/us#how-it-works" className={`text-sm font-medium ${textColor} hover:text-gold transition-colors`}>
               How It Works
             </Link>
-            <Link href="/us#contact" className="btn-gold text-sm">
+            <Link href="/landing" className="btn-gold text-sm">
               Book a Call
             </Link>
           </div>
@@ -77,7 +77,7 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
           <Link href="/us#how-it-works" className={`block text-base font-medium ${textColor}`} onClick={() => setMobileOpen(false)}>
             How It Works
           </Link>
-          <Link href="/us#contact" className="btn-gold w-full justify-center mt-2" onClick={() => setMobileOpen(false)}>
+          <Link href="/landing" className="btn-gold w-full justify-center mt-2" onClick={() => setMobileOpen(false)}>
             Book a Call
           </Link>
         </div>
