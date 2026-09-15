@@ -5,10 +5,10 @@ import Footer from "@/components/Footer";
 export default function UsPage() {
   return (
     <>
-      <Navbar theme="dark" />
+      <Navbar theme="dark" languages={["en", "es"]} />
       <main className="flex-1 pt-16 lg:pt-20">
 
-        {/* ── HERO ─────────────────────────────────────────────── */}
+        {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="section-navy relative overflow-hidden">
           {/* Decorative blobs */}
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold/5 blur-3xl pointer-events-none" />
@@ -17,11 +17,11 @@ export default function UsPage() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
             <div className="max-w-4xl mx-auto text-center">
 
-              {/* Free trial badge — the main hook */}
+              {/* Free trial badge â€” the main hook */}
               <div className="inline-flex items-center gap-2 bg-gold text-navy text-xs font-extrabold uppercase tracking-widest px-5 py-2 rounded-full mb-8">
                 <span>2 Weeks Free</span>
                 <span className="opacity-60">|</span>
-                <span className="font-normal opacity-80">Facebook marketing trial — you pay only the ad budget</span>
+                <span className="font-normal opacity-80">Facebook marketing trial â€” you pay only the ad budget</span>
               </div>
 
               {/* Headline */}
@@ -32,7 +32,7 @@ export default function UsPage() {
               </h1>
 
               <p className="text-xl text-cream/60 mb-10 max-w-2xl mx-auto leading-relaxed">
-                The full growth bundle at <span className="text-gold font-bold">$99/month</span>: Google presence, payment processing, consumer financing, business capital, and Clover hardware. Plus Facebook and Meta advertising — 2 weeks free. You pay only the ad budget. We handle everything else.
+                The full growth bundle at <span className="text-gold font-bold">$99/month</span>: Google presence, payment processing, consumer financing, business capital, and Clover hardware. Plus Facebook and Meta advertising â€” 2 weeks free. You pay only the ad budget. We handle everything else.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -50,14 +50,14 @@ export default function UsPage() {
               {/* Price anchor */}
               <div className="mt-10 inline-flex flex-col items-center gap-1">
                 <div className="text-5xl font-extrabold text-gold">$99</div>
-                <div className="text-cream/40 text-sm">per month · cancel anytime</div>
+                <div className="text-cream/40 text-sm">per month Â· cancel anytime</div>
               </div>
 
             </div>
           </div>
         </section>
 
-        {/* ── THE ULTIMATE PAYMENT STACK ──────────────────────── */}
+        {/* â”€â”€ THE ULTIMATE PAYMENT STACK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="services" className="bg-cream-light py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -167,7 +167,7 @@ export default function UsPage() {
           </div>
         </section>
 
-        {/* ── HOW IT WORKS ─────────────────────────────────────── */}
+        {/* â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="how-it-works" className="section-navy py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -211,7 +211,7 @@ export default function UsPage() {
           </div>
         </section>
 
-        {/* ── FINANCING SECTION ───────────────────────────────── */}
+        {/* â”€â”€ FINANCING SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="financing" className="bg-cream-light py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
@@ -236,7 +236,7 @@ export default function UsPage() {
 
               <div className="bg-navy rounded-2xl p-8 space-y-4">
                 {[
-                  { label: "Consumer loans", value: "$1K – $100K" },
+                  { label: "Consumer loans", value: "$1K â€“ $100K" },
                   { label: "Decision time", value: "Seconds" },
                   { label: "Funding speed", value: "As fast as next business day" },
                   { label: "Lenders in network", value: "35+" },
@@ -254,7 +254,7 @@ export default function UsPage() {
           </div>
         </section>
 
-        {/* ── WHO THIS IS FOR ─────────────────────────────────── */}
+        {/* â”€â”€ WHO THIS IS FOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="section-navy py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-14">
@@ -286,7 +286,7 @@ export default function UsPage() {
           </div>
         </section>
 
-        {/* ── CONTACT ─────────────────────────────────────────── */}
+        {/* â”€â”€ CONTACT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="contact" className="bg-cream-light py-20">
           <div className="max-w-xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
