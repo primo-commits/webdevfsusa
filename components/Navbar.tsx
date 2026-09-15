@@ -1,20 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import FeeSlayerLogo from "./FeeSlayerLogo";
 
 interface NavbarProps {
   theme?: "light" | "dark";
+  languages?: ("en" | "fr" | "es")[];
 }
 
-export default function Navbar({ theme = "light" }: NavbarProps) {
+export default function Navbar({ theme = "light", languages = ["en"] }: NavbarProps) {
   const isDark = theme === "dark";
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lang, setLang] = useState<string>("en");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("fs_lang") ?? "en";
+    setLang(saved);
+  }, []);
+
+  const switchLang = (l: string) => {
+    setLang(l);
+    localStorage.setItem("fs_lang", l);
+    window.location.reload();
+  };
 
   const textColor = isDark ? "text-cream" : "text-navy";
   const borderColor = isDark ? "border-navy-soft/30" : "border-cream-dark";
   const bgColor = isDark ? "bg-navy" : "bg-cream-light";
+
+  const langBtn = (l: "en" | "fr" | "es", label: string) => {
+    const active = lang === l;
+    return (
+      <button
+        onClick={() => switchLang(l)}
+        style={{
+          background: active ? (isDark ? "#C9A84C" : "#1B3A5C") : "transparent",
+          color: active
+            ? isDark ? "#1B3A5C" : "#fff"
+            : isDark ? "#F9F6F1" : "#1B3A5C",
+          border: `1.5px solid ${active ? "transparent" : (isDark ? "rgba(249,246,241,0.35)" : "#1B3A5C")}`,
+          borderRadius: 6,
+          padding: "4px 10px",
+          fontSize: 12,
+          fontWeight: 700,
+          cursor: "pointer",
+          letterSpacing: "0.5px",
+          transition: "all 0.15s",
+        }}
+      >
+        {label}
+      </button>
+    );
+  };
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 ${bgColor} ${isDark ? "border-b border-white/10" : "border-b border-cream-dark/50"}`}>
@@ -38,6 +76,16 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
             <Link href="/us#how-it-works" className={`text-sm font-medium ${textColor} hover:text-gold transition-colors`}>
               How It Works
             </Link>
+
+            {/* Language toggle */}
+            {languages.length > 1 && (
+              <div style={{ display: "flex", gap: 4 }}>
+                {languages.includes("en") && langBtn("en", "EN")}
+                {languages.includes("fr") && langBtn("fr", "FR")}
+                {languages.includes("es") && langBtn("es", "ES")}
+              </div>
+            )}
+
             <Link href="/landing" className="btn-gold text-sm">
               Book a Call
             </Link>
@@ -77,6 +125,52 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
           <Link href="/us#how-it-works" className={`block text-base font-medium ${textColor}`} onClick={() => setMobileOpen(false)}>
             How It Works
           </Link>
+
+          {/* Language toggle â€” mobile */}
+          {languages.length > 1 && (
+            <div style={{ display: "flex", gap: 8, paddingTop: 4 }}>
+              {languages.includes("en") && (
+                <button
+                  onClick={() => { switchLang("en"); setMobileOpen(false); }}
+                  style={{
+                    background: lang === "en" ? (isDark ? "#C9A84C" : "#1B3A5C") : "transparent",
+                    color: lang === "en" ? (isDark ? "#1B3A5C" : "#fff") : (isDark ? "#F9F6F1" : "#1B3A5C"),
+                    border: `1.5px solid ${lang === "en" ? "transparent" : (isDark ? "rgba(249,246,241,0.35)" : "#1B3A5C")}`,
+                    borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                  }}
+                >
+                  English
+                </button>
+              )}
+              {languages.includes("fr") && (
+                <button
+                  onClick={() => { switchLang("fr"); setMobileOpen(false); }}
+                  style={{
+                    background: lang === "fr" ? (isDark ? "#C9A84C" : "#1B3A5C") : "transparent",
+                    color: lang === "fr" ? (isDark ? "#1B3A5C" : "#fff") : (isDark ? "#F9F6F1" : "#1B3A5C"),
+                    border: `1.5px solid ${lang === "fr" ? "transparent" : (isDark ? "rgba(249,246,241,0.35)" : "#1B3A5C")}`,
+                    borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                  }}
+                >
+                  Francais
+                </button>
+              )}
+              {languages.includes("es") && (
+                <button
+                  onClick={() => { switchLang("es"); setMobileOpen(false); }}
+                  style={{
+                    background: lang === "es" ? (isDark ? "#C9A84C" : "#1B3A5C") : "transparent",
+                    color: lang === "es" ? (isDark ? "#1B3A5C" : "#fff") : (isDark ? "#F9F6F1" : "#1B3A5C"),
+                    border: `1.5px solid ${lang === "es" ? "transparent" : (isDark ? "rgba(249,246,241,0.35)" : "#1B3A5C")}`,
+                    borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                  }}
+                >
+                  Espanol
+                </button>
+              )}
+            </div>
+          )}
+
           <Link href="/landing" className="btn-gold w-full justify-center mt-2" onClick={() => setMobileOpen(false)}>
             Book a Call
           </Link>
