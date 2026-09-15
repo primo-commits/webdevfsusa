@@ -1,317 +1,295 @@
-import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import SavingsCalculator from "@/components/SavingsCalculator";
-import { industries } from "@/lib/industries";
+"use client";
 
-/* â”€â”€ Industry priority tiers (based on Facebook Ads prospect quality) â”€â”€â”€â”€â”€â”€ */
-/* Only industries that exist in lib/industries.ts are listed here. */
-const PRIORITY = {
-  green: [
-    "auto-repair",
-    "hvac",
-    "plumbing",
-    "electrical",
-    "roofing",
-    "home-renovation",
-    "veterinary",
-    "fitness",
-  ],
-  yellow: [
-    "professional-services",
-    "dentistry",
-  ],
-  red: [],
+import { useState, useEffect } from "react";
+import Navbar from "../../../components/Navbar";
+
+const t = {
+  en: {
+    badge: "FOR CANADIAN AUTO REPAIR SHOPS",
+    h1: "Your Shop Deserves More Leads.",
+    h2: "Not Just Listings. Real Calls from Customers Who Need What You Offer.",
+    p1: "FeeSlayers builds your complete digital presence — Google Business Profile optimization, targeted ads, and a smart chatbot that books appointments while you sleep.",
+    btn: "Get Your Free Strategy Call",
+    or: "or call us at",
+    trust: "Trusted by auto repair shops across Canada",
+    guarantee: "30-Day Guarantee",
+    guaranteeDesc: "If you don't see measurable results in your first 30 days, we'll work for free until you do.",
+    howTitle: "How It Works",
+    step1Title: "We Build Your Digital Presence",
+    step1Desc: "We optimize your Google Business Profile, create professional ads, and set up your smart booking chatbot — all in one place.",
+    step2Title: "Customers Find & Book You",
+    step2Desc: "When someone searches 'auto repair near me,' they find you. They can book a service appointment without ever picking up the phone.",
+    step3Title: "You Grow & Scale",
+    step3Desc: "More bookings. Better reviews. Higher revenue. We handle the marketing while you focus on what you do best — fixing cars.",
+    whyTitle: "Why FeeSlayers?",
+    whyP1: "Most marketing agencies take your money and disappear. We take a stake in your success.",
+    whyP2: "Our model is simple: we win when you win. That means real strategy, real execution, and real results.",
+    pricingTitle: "Simple, Transparent Pricing",
+    pricingBadge: "MOST POPULAR",
+    pricingPlan: "The Growth Bundle",
+    pricingPrice: "$99",
+    pricingPeriod: "/month",
+    pricingDesc: "Everything you need to attract more customers and grow your auto repair shop.",
+    pricingFeature1: "Google Business Profile Optimization",
+    pricingFeature2: "Targeted Facebook & Google Ads",
+    pricingFeature3: "AI-Powered Appointment Chatbot",
+    pricingFeature4: "Client Financing Options",
+    pricingFeature5: "Clover POS Hardware",
+    pricingFeature6: "Dedicated Account Manager",
+    pricingNote: "Setup fee applies. Cancel anytime.",
+    ctaTitle: "Ready to Fill Your Calendar?",
+    ctaP: "Book a free 30-minute strategy call. No pressure. No obligations. Just a real conversation about how to grow your shop.",
+    ctaBtn: "Book Your Free Call",
+    ctaOr: "or call",
+    footerRights: "\u00a9 2026 FeeSlayer. All rights reserved.",
+    footerPhone: "(888) 411-0000",
+  },
+  fr: {
+    badge: "POUR LES ATELIERS DE R\u00c9PARATION AUTOMOBILE AU CANADA",
+    h1: "Votre Atelier M\u00e9rite Plus de Clients.",
+    h2: "Pas Juste des R\u00e9f\u00e9rences. De V\u00e9ritables Appels de Clients qui Ont Besoin de Vos Services.",
+    p1: "FeeSlayer b\u00e2tit votre pr\u00e9sence num\u00e9rique compl\u00e8te — optimisation de votre fiche Google Business Profile, publicit\u00e9s cibl\u00e9es et chatbot intelligent qui prend des rendez-vous pendant que vous dormez.",
+    btn: "Obtenez Votre Appel Strat\u00e9gique Gratuit",
+    or: "ou appelez-nous au",
+    trust: "Des ateliers de r\u00e9paration automobile \u00e0 travers le Canada nous font confiance",
+    guarantee: "Garantie de 30 Jours",
+    guaranteeDesc: "Si vous ne voyez pas de r\u00e9sultats mesurables dans vos 30 premiers jours, nous travaillerons gratuitement jusqu'\u00e0 ce que vous le fassiez.",
+    howTitle: "Comment \u00e7a Marche",
+    step1Title: "Nous B\u00e2tissons Votre Pr\u00e9sence Num\u00e9rique",
+    step1Desc: "Nous optimisons votre fiche Google Business, cr\u00e9ons des publicit\u00e9s professionnelles et configurons votre chatbot de r\u00e9servation intelligent — tout au m\u00eame endroit.",
+    step2Title: "Les Clients Vous Trouvent et Prennent Rendez-Vous",
+    step2Desc: "Quand quelqu'un cherche 'r\u00e9paration auto pr\u00e8s de chez moi', il vous trouve. Il peut r\u00e9server sans jamais d\u00e9crocher le t\u00e9l\u00e9phone.",
+    step3Title: "Vous Grandissez et Vous Vous D\u00e9veloppez",
+    step3Desc: "Plus de r\u00e9servations. Meilleures critiques. Revenus plus \u00e9lev\u00e9s. Nous g\u00e9rons le marketing pendant que vous vous concentrez sur ce que vous faites de mieux — r\u00e9parer des voitures.",
+    whyTitle: "Pourquoi FeeSlayer?",
+    whyP1: "La plupart des agences de marketing prennent votre argent et disparaissent. Nous misons sur votre succ\u00e8s.",
+    whyP2: "Notre mod\u00e8le est simple: nous gagnons quand vous gagnez. Cela signifie une strat\u00e9gie r\u00e9elle, une ex\u00e9cution r\u00e9elle et des r\u00e9sultats r\u00e9els.",
+    pricingTitle: "Tarification Simple et Transparente",
+    pricingBadge: "LE PLUS POPULAIRE",
+    pricingPlan: "L'Ensemble de Croissance",
+    pricingPrice: "99 $",
+    pricingPeriod: "/mois",
+    pricingDesc: "Tout ce dont vous avez besoin pour attirer plus de clients et d\u00e9velopper votre atelier de r\u00e9paration automobile.",
+    pricingFeature1: "Optimisation Google Business Profile",
+    pricingFeature2: "Publicit\u00e9s Cibl\u00e9es Facebook et Google",
+    pricingFeature3: "Chatbot de Rendez-Vous avec Intelligence Artificielle",
+    pricingFeature4: "Options de Financement pour Clients",
+    pricingFeature5: "Mat\u00e9riel Clover POS",
+    pricingFeature6: "Gestionnaire de Compte D\u00e9di\u00e9",
+    pricingNote: "Des frais de configuration s'appliquent. Annulez \u00e0 tout moment.",
+    ctaTitle: "Pr\u00eat \u00e0 Remplir Votre Calendrier?",
+    ctaP: "R\u00e9servez un appel strat\u00e9gique gratuit de 30 minutes. Pas de pression. Pas d'obligations. Juste une vraie conversation sur la fa\u00e7on de d\u00e9velopper votre atelier.",
+    ctaBtn: "R\u00e9servez Votre Appel Gratuit",
+    ctaOr: "ou appelez le",
+    footerRights: "\u00a9 2026 FeeSlayer. Tous droits r\u00e9serv\u00e9s.",
+    footerPhone: "(888) 411-0000",
+  },
 };
 
-function tierSort(a: { id: string }, b: { id: string }) {
-  if (PRIORITY.green.includes(a.id) && !PRIORITY.green.includes(b.id)) return -1;
-  if (!PRIORITY.green.includes(a.id) && PRIORITY.green.includes(b.id)) return 1;
-  if (PRIORITY.yellow.includes(a.id) && !PRIORITY.yellow.includes(b.id)) return -1;
-  if (!PRIORITY.yellow.includes(a.id) && PRIORITY.yellow.includes(b.id)) return 1;
-  return 0;
-}
-
-const sorted = [...industries].sort(tierSort);
-
 export default function CanadaPage() {
+  const [lang, setLang] = useState<"en" | "fr">("en");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("fs_lang") as "en" | "fr" | null;
+    if (stored === "en" || stored === "fr") setLang(stored);
+  }, []);
+
+  const content = t[lang];
+
   return (
-    <>
-      <Navbar theme="light" languages={["en", "fr"]} />
-      <main className="flex-1 pt-16 lg:pt-20">
+    <main className="min-h-screen bg-bkg">
+      <Navbar languages={["en", "fr"]} />
 
-        {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <section className="bg-navy relative overflow-hidden">
-          {/* Decorative blobs */}
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold/5 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-navy-soft/50 blur-3xl pointer-events-none" />
+      {/* Hero */}
+      <section className="bg-nav px-6 py-20 text-center">
+        <div className="max-w-4xl mx-auto">
+          <span className="text-xs font-bold tracking-widest text-ylo uppercase mb-6 block">
+            {content.badge}
+          </span>
+          <h1 className="text-4xl md:text-6xl font-bold text-ylo mb-4 leading-tight">
+            {content.h1}
+          </h1>
+          <h2 className="text-xl md:text-2xl text-wht font-medium mb-8 leading-relaxed">
+            {content.h2}
+          </h2>
+          <p className="text-wht/80 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+            {content.p1}
+          </p>
+          <a
+            href="#contact"
+            className="inline-block bg-ylo text-nav font-bold text-lg px-10 py-4 rounded hover:bg-ylo/90 transition"
+          >
+            {content.btn}
+          </a>
+          <p className="text-wht/60 text-sm mt-4">
+            {content.or}{" "}
+            <a href="tel:+18884110000" className="underline hover:text-ylo">
+              {content.footerPhone}
+            </a>
+          </p>
+        </div>
+      </section>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-            <div className="max-w-4xl mx-auto text-center">
+      {/* Trust Strip */}
+      <section className="bg-ylo/10 border-y border-ylo/20 py-6 text-center">
+        <p className="text-wht/60 text-sm tracking-widest uppercase font-medium">
+          {content.trust}
+        </p>
+      </section>
 
-              {/* Free trial badge â€” the main hook */}
-              <div className="inline-flex items-center gap-2 bg-gold text-navy text-xs font-extrabold uppercase tracking-widest px-5 py-2 rounded-full mb-8">
-                <span>2 Weeks Free</span>
-                <span className="opacity-60">|</span>
-                <span className="font-normal opacity-80">Facebook marketing trial â€” you pay only the ad budget</span>
-              </div>
-
-              {/* Headline */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-cream leading-tight tracking-tight mb-6">
-                More leads.<br />
-                <span className="wordmark-slayers">More jobs.</span><br />
-                More growth.
-              </h1>
-
-              <p className="text-xl text-cream/60 mb-10 max-w-2xl mx-auto leading-relaxed">
-                FeeSlayer gives Canadian service businesses the full growth toolkit: Facebook advertising, Google presence, payment solutions, and capital. Try it free for 2 weeks. You pay only the ad budget. We handle everything else.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="#services" className="btn-gold">
-                  Start my free trial
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-                <Link href="#contact" className="btn-outline-gold">
-                  Book a call
-                </Link>
-              </div>
-
-              {/* Trust line */}
-              <p className="mt-8 text-cream/40 text-sm">
-                No contracts. Cancel anytime. Setup at no cost.
-              </p>
-
-            </div>
+      {/* Guarantee */}
+      <section className="bg-bkg py-12 px-6">
+        <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-6 bg-card border border-ylo/20 rounded-xl p-8">
+          <div className="text-4xl">&#x1F6E1;</div>
+          <div>
+            <h3 className="text-ylo font-bold text-xl mb-2">{content.guarantee}</h3>
+            <p className="text-wht/70 leading-relaxed">{content.guaranteeDesc}</p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* â”€â”€ WHAT WE OFFER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <section id="services" className="section-cream py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
-                Everything your business needs to grow
-              </h2>
-              <p className="text-navy/60 text-lg max-w-xl mx-auto">
-                We are not just a payment company. We are your growth team â€” handling the marketing, the lead flow, and the financial tools to close more business.
-              </p>
-            </div>
+      {/* How It Works */}
+      <section className="bg-bkg py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-ylo text-center mb-16">
+            {content.howTitle}
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                n: "01",
+                t: content.step1Title,
+                d: content.step1Desc,
+              },
+              {
+                n: "02",
+                t: content.step2Title,
+                d: content.step2Desc,
+              },
+              {
+                n: "03",
+                t: content.step3Title,
+                d: content.step3Desc,
+              },
+            ].map((step) => (
+              <div key={step.n} className="bg-card border border-ylo/20 rounded-xl p-8">
+                <span className="text-ylo text-5xl font-black opacity-40">{step.n}</span>
+                <h3 className="text-ylo font-bold text-xl mt-4 mb-3">{step.t}</h3>
+                <p className="text-wht/70 leading-relaxed">{step.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {/* Why FeeSlayer */}
+      <section className="bg-card py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-ylo mb-8">
+            {content.whyTitle}
+          </h2>
+          <p className="text-wht/80 text-lg leading-relaxed mb-6">
+            {content.whyP1}
+          </p>
+          <p className="text-wht/80 text-lg leading-relaxed">
+            {content.whyP2}
+          </p>
+        </div>
+      </section>
 
-              {/* Advertising â€” primary hook */}
-              <div className="bg-navy rounded-2xl p-8 flex flex-col gap-4 lg:col-span-2">
-                <div className="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-cream mb-1">Facebook &amp; Meta Advertising</h3>
-                  <span className="inline-block text-xs font-bold text-gold uppercase tracking-widest mt-1">
-                    2 Weeks Free
+      {/* Pricing */}
+      <section className="bg-bkg py-20 px-6" id="pricing">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-ylo text-center mb-4">
+            {content.pricingTitle}
+          </h2>
+          <div className="max-w-md mx-auto mt-12">
+            <div className="bg-card border-2 border-ylo rounded-2xl overflow-hidden">
+              <div className="bg-ylo/10 border-b border-ylo/20 px-6 py-3">
+                <span className="text-ylo text-xs font-bold tracking-widest uppercase">
+                  {content.pricingBadge}
+                </span>
+              </div>
+              <div className="p-8">
+                <h3 className="text-ylo font-bold text-2xl mb-2">
+                  {content.pricingPlan}
+                </h3>
+                <div className="flex items-end gap-2 mb-4">
+                  <span className="text-5xl font-black text-wht">
+                    {content.pricingPrice}
+                  </span>
+                  <span className="text-wht/60 text-xl mb-1">
+                    {content.pricingPeriod}
                   </span>
                 </div>
-                <p className="text-cream/60 text-sm leading-relaxed">
-                  We run your Facebook and Meta campaigns end-to-end. You pay only the ad budget. We handle creative, targeting, optimization, and lead delivery. 2 weeks free â€” no upfront cost for our management.
+                <p className="text-wht/60 text-sm mb-8">
+                  {content.pricingDesc}
                 </p>
-                <p className="text-cream/40 text-xs leading-relaxed">
-                  Works for: auto repair, roofing, HVAC, plumbing, home renovation, landscaping, med spas, gyms, and any service business with a clear offer and a service area.
-                </p>
-                <Link href="#industries" className="inline-flex items-center gap-2 text-gold text-sm font-semibold hover:gap-3 transition-all mt-2">
-                  See which industries we target
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-              </div>
-
-              {/* Google Presence */}
-              <div className="bg-white border border-cream-dark rounded-2xl p-7 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold text-navy">Google Presence</h3>
-                <p className="text-navy/60 text-sm leading-relaxed">
-                  GBP optimization, local SEO, and search visibility so you show up when people search for your service in your city.
-                </p>
-                <span className="text-xs font-bold text-gold uppercase tracking-widest mt-auto">Included</span>
-              </div>
-
-              {/* Payment Processing / Surcharge */}
-              <div className="bg-white border border-cream-dark rounded-2xl p-7 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold text-navy">Payment Processing</h3>
-                <p className="text-navy/60 text-sm leading-relaxed">
-                  Compliant surcharge program. Your customers pay the card fee â€” not you. Zero cost on card transactions. Government-authorized.
-                </p>
-                <span className="text-xs font-bold text-gold uppercase tracking-widest mt-auto">Available</span>
-              </div>
-
-              {/* Consumer Financing */}
-              <div className="bg-white border border-cream-dark rounded-2xl p-7 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold text-navy">Consumer Financing</h3>
-                <p className="text-navy/60 text-sm leading-relaxed">
-                  Help your customers say yes to big-ticket jobs. We connect them to financing so high-ticket estimates close faster.
-                </p>
-                <span className="text-xs font-bold text-navy/50 uppercase tracking-widest mt-auto italic">Under development</span>
-              </div>
-
-              {/* Business Capital */}
-              <div className="bg-white border border-cream-dark rounded-2xl p-7 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold text-navy">Business Capital</h3>
-                <p className="text-navy/60 text-sm leading-relaxed">
-                  MCAs and business loans underwritten off your business revenue â€” not your credit score. Capital to bridge cash flow gaps and take on bigger jobs.
-                </p>
-                <span className="text-xs font-bold text-gold uppercase tracking-widest mt-auto">Available</span>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* â”€â”€ INDUSTRIES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <section id="industries" className="section-navy py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl sm:text-4xl font-bold text-cream mb-4">
-                Built for service businesses like yours
-              </h2>
-              <p className="text-cream/60 text-lg max-w-xl mx-auto">
-                Our Facebook advertising works best for service businesses with a clear offer, a defined service area, and tickets of $500 or more. Here is where we focus.
-              </p>
-            </div>
-
-            {/* Industries grid â€” no priority tiers visible to public */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sorted.map((ind) => (
-                <Link
-                  key={ind.id}
-                  href={`/canada/${ind.id}`}
-                  className="bg-navy-soft border border-white/5 rounded-xl p-5 text-center hover:border-gold/40 hover:bg-navy/80 transition-all group"
+                <ul className="space-y-4 mb-8">
+                  {[
+                    content.pricingFeature1,
+                    content.pricingFeature2,
+                    content.pricingFeature3,
+                    content.pricingFeature4,
+                    content.pricingFeature5,
+                    content.pricingFeature6,
+                  ].map((f) => (
+                    <li key={f} className="flex items-center gap-3 text-wht/80">
+                      <span className="text-ylo font-bold">&#10003;</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#contact"
+                  className="block text-center bg-ylo text-nav font-bold py-4 rounded hover:bg-ylo/90 transition"
                 >
-                  <p className="text-cream font-semibold text-sm group-hover:text-gold transition-colors">{ind.name}</p>
-                  <p className="text-cream/40 text-xs mt-1 leading-snug">{ind.tagline}</p>
-                </Link>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <p className="text-cream/40 text-sm mb-5 max-w-lg mx-auto">
-                Not sure if your industry is a fit? Book a call and we will tell you straight.
-              </p>
-              <Link href="#contact" className="btn-gold">
-                Book a free consultation
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* â”€â”€ CALCULATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <section id="calculator" className="bg-cream-light py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
-                What are card fees costing you?
-              </h2>
-              <p className="text-navy/60 text-lg max-w-xl mx-auto">
-                Most Canadian businesses do not realize how much they are paying. Run the numbers.
-              </p>
-            </div>
-            <SavingsCalculator />
-          </div>
-        </section>
-
-        {/* â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <section id="how-it-works" className="section-cream py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
-                Getting started is easy
-              </h2>
-              <p className="text-navy/60 text-lg max-w-xl mx-auto">
-                We do the heavy lifting. You just run your business.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-
-              {[
-                {
-                  step: "1",
-                  title: "Book a call",
-                  desc: "Tell us about your business and what you are trying to grow. 20 minutes, no pressure.",
-                },
-                {
-                  step: "2",
-                  title: "We build it out",
-                  desc: "Ad campaigns, GBP optimization, financing integrations, payment setup. We handle the full stack.",
-                },
-                {
-                  step: "3",
-                  title: "You grow",
-                  desc: "More calls, more closed jobs, more capital to reinvest. The bundle pays for itself.",
-                },
-              ].map((item) => (
-                <div key={item.step} className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-gold text-navy font-extrabold text-2xl flex items-center justify-center mx-auto mb-5">
-                    {item.step}
-                  </div>
-                  <h3 className="text-xl font-bold text-navy mb-3">{item.title}</h3>
-                  <p className="text-navy/60 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-
-            </div>
-          </div>
-        </section>
-
-        {/* â”€â”€ CONTACT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <section id="contact" className="section-navy py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-xl mx-auto text-center">
-              <h2 className="text-3xl sm:text-4xl font-bold text-cream mb-4">
-                Ready to grow?
-              </h2>
-              <p className="text-cream/60 text-lg mb-8">
-                20-minute call. We figure out what is holding you back and whether FeeSlayers is the right fit.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <a href="tel:+13025205447" className="btn-gold">
-                  Book a call
+                  {content.btn}
                 </a>
-                <a href="mailto:info@feeslayers.com" className="btn-outline-gold">
-                  Email us
-                </a>
+                <p className="text-center text-wht/40 text-xs mt-3">
+                  {content.pricingNote}
+                </p>
               </div>
-              <p className="text-xs text-cream/30">
-                FeeSlayer Canada operates across all provinces except Quebec. Services vary by province. Financing subject to lender approval.
-              </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-      </main>
-      <Footer />
-    </>
+      {/* CTA */}
+      <section className="bg-ylo py-20 px-6 text-center" id="contact">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-nav text-3xl md:text-4xl font-black mb-6">
+            {content.ctaTitle}
+          </h2>
+          <p className="text-nav/80 text-lg mb-10 leading-relaxed">
+            {content.ctaP}
+          </p>
+          <a
+            href="https://app.clicksure.com/book/PrimoBlatnik"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-nav text-ylo font-bold text-lg px-10 py-4 rounded hover:bg-nav/90 transition"
+          >
+            {content.ctaBtn}
+          </a>
+          <p className="text-nav/60 text-sm mt-4">
+            {content.ctaOr}{" "}
+            <a href="tel:+18884110000" className="underline">
+              {content.footerPhone}
+            </a>
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-nav py-8 px-6 text-center">
+        <p className="text-wht/40 text-sm">
+          {content.footerRights}
+        </p>
+        <p className="text-wht/30 text-xs mt-2">
+          FeeSlayer is not a lender and does not make credit decisions.
+        </p>
+      </footer>
+    </main>
   );
 }
