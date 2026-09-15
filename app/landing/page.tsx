@@ -110,7 +110,7 @@ export default function LandingPage() {
                         : "border-[#4A6B8A] text-[#A8C0D8] hover:border-[#C9A84C]/60"
                     }`}
                   >
-                    {c === "US" ? "ðŸ‡ºðŸ‡¸ United States" : "ðŸ‡¨ðŸ‡¦ Canada"}
+                    {c === "US" ? "US \u2014 United States" : "CA \u2014 Canada"}
                   </button>
                 ))}
               </div>
@@ -213,12 +213,12 @@ export default function LandingPage() {
           {/* Trust signals */}
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
             {[
-              { icon: "ðŸ•", label: "30-minute call" },
-              { icon: "ðŸ’¡", label: "Custom plan" },
-              { icon: "ðŸ”’", label: "No obligation" },
-            ].map(({ icon, label }) => (
+              { label: "30-minute call" },
+              { label: "Custom plan" },
+              { label: "No obligation" },
+            ].map(({ label }) => (
               <div key={label} className="bg-white rounded-xl border border-[#E8DFD0] py-3 px-2">
-                <div className="text-lg mb-0.5">{icon}</div>
+                <div className="text-sm font-bold text-[#C9A84C] mb-1">[ok]</div>
                 <p className="text-xs text-[#6B5B4B] font-medium">{label}</p>
               </div>
             ))}
