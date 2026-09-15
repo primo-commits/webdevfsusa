@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-type Language = 'en' | 'es';
+type Language = 'en' | 'es' | 'fr';
 type Step = 1 | 2 | 3;
 
 interface FormData {
@@ -106,6 +106,39 @@ const translations: Record<Language, Translation> = {
       services: 'Servicios',
     },
   },
+  fr: {
+    heroTitle: 'Reservez un Appel Strategique Gratuit',
+    heroSubtitle: 'Decouvrez comment FeeSlayers peut vous apporter plus de clients — sans frais initiaux.',
+    step1Title: 'Parlez-nous de votre entreprise',
+    step1Subtitle: 'Cela ne prend que 30 secondes.',
+    businessNamePlaceholder: 'Le nom de votre entreprise',
+    emailPlaceholder: 'Votre adresse courriel',
+    phonePlaceholder: 'Votre numero de telephone',
+    servicesLabel: 'De quoi avez-vous besoin?',
+    serviceOptions: [
+      { value: 'google', label: 'Plus d\'appels et d\'avis Google' },
+      { value: 'facebook', label: 'Publicites Facebook et Instagram' },
+      { value: 'financing', label: 'Options de financement client' },
+      { value: 'processing', label: 'Traitement des cartes de credit' },
+      { value: 'crm', label: 'Automatisation CRM et suivi' },
+      { value: 'all', label: 'Tout — forfait croissance complet' },
+    ],
+    nextButton: 'Etape Suivante',
+    backButton: 'Retour',
+    calendarTitle: 'Choisissez un moment qui vous convient',
+    calendarSubtitle: 'Nous vous appellerons au numero que vous avez fourni.',
+    loadingCalendar: 'Chargement du calendrier...',
+    confirmationTitle: 'Vous etes inscrit!',
+    confirmationMessage: 'Verifiez votre boite de reception — nous vous avons envoye une invitation avec tous les details. A bientot.',
+    footerDisclaimer: 'FeeSlayers n\'est pas un preteur et ne prend pas de decisions de credit.',
+    validationError: 'Veuillez remplir tous les champs.',
+    formLabels: {
+      businessName: 'Nom de l\'entreprise',
+      email: 'Courriel',
+      phone: 'Telephone',
+      services: 'Services',
+    },
+  },
 };
 
 declare global {
@@ -135,7 +168,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const saved = localStorage.getItem('fs_lang') as Language | null;
-    if (saved === 'en' || saved === 'es') setLang(saved);
+    if (saved === 'en' || saved === 'es' || saved === 'fr') setLang(saved);
   }, []);
 
   const toggleLang = (l: Language) => {
@@ -229,8 +262,9 @@ export default function LandingPage() {
             <span style={{ fontWeight: 700, fontSize: 18, color: '#1B3A5C' }}>FeeSlayers</span>
           </div>
           <div style={{ display: 'flex', gap: 4 }}>
-            <button onClick={() => toggleLang('en')} style={{ background: lang === 'en' ? '#1B3A5C' : 'transparent', color: lang === 'en' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 12px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>EN</button>
-            <button onClick={() => toggleLang('es')} style={{ background: lang === 'es' ? '#1B3A5C' : 'transparent', color: lang === 'es' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 12px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>ES</button>
+            <button onClick={() => toggleLang('en')} style={{ background: lang === 'en' ? '#1B3A5C' : 'transparent', color: lang === 'en' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 10px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>EN</button>
+            <button onClick={() => toggleLang('fr')} style={{ background: lang === 'fr' ? '#1B3A5C' : 'transparent', color: lang === 'fr' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 10px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>FR</button>
+            <button onClick={() => toggleLang('es')} style={{ background: lang === 'es' ? '#1B3A5C' : 'transparent', color: lang === 'es' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 10px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>ES</button>
           </div>
         </div>
 
