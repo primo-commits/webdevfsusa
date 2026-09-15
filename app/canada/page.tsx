@@ -74,7 +74,7 @@ export default function CanadaPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
-                <Link href="#contact" className="btn-outline-gold">
+                <Link href="/landing" className="btn-outline-gold">
                   Book a call
                 </Link>
               </div>
@@ -219,7 +219,7 @@ export default function CanadaPage() {
               <p className="text-cream/40 text-sm mb-5 max-w-lg mx-auto">
                 Not sure if your industry is a fit? Book a call and we will tell you straight.
               </p>
-              <Link href="#contact" className="btn-gold">
+              <Link href="/landing" className="btn-gold">
                 Book a free consultation
               </Link>
             </div>
