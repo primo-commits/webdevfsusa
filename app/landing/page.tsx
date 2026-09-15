@@ -5,118 +5,34 @@ import Link from "next/link";
 
 const GHL_BOOKING_URL = "https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A";
 
-const US_INDUSTRIES = [
-  "Auto Repair",
-  "Home Services / Contracting",
-  "HVAC",
-  "Plumbing",
-  "Electrical",
-  "Roofing",
-  "Home Renovation",
-  "Healthcare / Dental",
-  "Other",
-];
-
-const CA_INDUSTRIES = [
-  "Auto Repair",
-  "HVAC",
-  "Plumbing",
-  "Electrical",
-  "Roofing",
-  "Home Renovation",
-  "Other",
-];
-
-const US_SERVICES = [
-  { id: "google_presence", label: "Google Business Profile", description: "Show up when local customers search for you" },
-  { id: "consumer_financing", label: "Consumer Financing", description: "Help customers say yes to big jobs with installment plans" },
-  { id: "payment_processing", label: "Payment Processing", description: "Stop paying to collect your own money" },
-  { id: "business_capital", label: "Business Capital", description: "Access growth capital without jumping through bank hoops" },
-  { id: "clover_hardware", label: "Clover Hardware", description: "Modern point-of-sale hardware that just works" },
-  { id: "facebook_advertising", label: "Facebook / Meta Advertising", description: "Targeted ads that bring real leads, not vanity metrics" },
-];
-
-const CA_SERVICES = [
-  { id: "facebook_advertising", label: "Facebook / Meta Advertising", description: "Targeted ads that bring real leads, not vanity metrics" },
-  { id: "google_presence", label: "Google Business Profile", description: "Show up in local searches with a polished profile" },
-  { id: "payment_surcharging", label: "Payment Surcharging", description: "Collect every dollar you're owed, compliant by province" },
-  { id: "consumer_financing", label: "Consumer Financing", description: "Help customers approve the work they need", badge: "Coming Soon" },
-];
-
-function ServiceToggle({
-  service,
-  checked,
-  onChange,
-  disabled,
-}: {
-  service: { id: string; label: string; description: string; badge?: string };
-  checked: boolean;
-  onChange: (id: string, checked: boolean) => void;
-  disabled?: boolean;
-}) {
-  return (
-    <label
-      className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all duration-150 ${
-        disabled
-          ? "border-[#E8DFD0] bg-[#F9F6F1] opacity-60 cursor-not-allowed"
-          : checked
-          ? "border-[#1B3A5C] bg-[#F9F6F1]"
-          : "border-[#E8DFD0] bg-white hover:border-[#1B3A5C]/40"
-      }`}
-    >
-      <input
-        type="checkbox"
-        checked={checked}
-        disabled={disabled}
-        onChange={(e) => onChange(service.id, e.target.checked)}
-        className="mt-1 w-5 h-5 rounded border-[#C4B49A] text-[#1B3A5C] focus:ring-[#1B3A5C] accent-[#1B3A5C] flex-shrink-0"
-      />
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className={`font-semibold text-sm ${disabled ? "text-[#8B7B6B]" : "text-[#1B3A5C]"}`}>
-            {service.label}
-          </span>
-          {service.badge && (
-            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#1B3A5C] text-[#F9F6F1]">
-              {service.badge}
-            </span>
-          )}
-        </div>
-        <p className="text-xs text-[#6B5B4B] mt-0.5 leading-relaxed">{service.description}</p>
-      </div>
-    </label>
-  );
-}
-
 export default function LandingPage() {
   const [country, setCountry] = useState<"US" | "CA">("US");
   const [businessName, setBusinessName] = useState("");
-  const [industry, setIndustry] = useState("");
-  const [selectedServices, setSelectedServices] = useState<Record<string, boolean>>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const industries = country === "US" ? US_INDUSTRIES : CA_INDUSTRIES;
-  const services = country === "US" ? US_SERVICES : CA_SERVICES;
-
-  // Reset dependent fields when country changes
   function handleCountryChange(c: "US" | "CA") {
     setCountry(c);
-    setIndustry("");
-    setSelectedServices({});
+    setBusinessName("");
+    setEmail("");
+    setPhone("");
     setErrors({});
-  }
-
-  function handleServiceChange(id: string, checked: boolean) {
-    setSelectedServices((prev) => ({ ...prev, [id]: checked }));
   }
 
   function validate() {
     const errs: Record<string, string> = {};
     if (!businessName.trim()) errs.businessName = "Business name is required";
-    if (!industry) errs.industry = "Please select your industry";
-    if (Object.values(selectedServices).filter(Boolean).length === 0)
-      errs.services = "Select at least one service you're interested in";
+    if (!email.trim()) {
+      errs.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errs.email = "Please enter a valid email address";
+    }
+    if (!phone.trim()) {
+      errs.phone = "Phone number is required";
+    } else if (!/^\+?[\d\s\-().]{7,}$/.test(phone.trim())) {
+      errs.phone = "Please enter a valid phone number";
+    }
     return errs;
   }
 
@@ -125,23 +41,17 @@ export default function LandingPage() {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
-      // Scroll to first error
       const firstError = document.querySelector("[data-error='true']");
       firstError?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
     setErrors({});
 
-    const selected = Object.entries(selectedServices)
-      .filter(([, v]) => v)
-      .map(([k]) => k)
-      .join(",");
-
     const params = new URLSearchParams({
       country,
       business: businessName.trim(),
-      industry,
-      services: selected,
+      email: email.trim(),
+      phone: phone.trim(),
     });
 
     window.location.href = `${GHL_BOOKING_URL}?${params.toString()}`;
@@ -155,7 +65,7 @@ export default function LandingPage() {
           <Link href="/" className="flex items-center gap-2">
             <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="100" height="100" rx="16" fill="#F9F6F1" />
-              <text y="72" x="10" fontSize="62" fontFamily="serif" fill="#1B3A5C]" fontWeight="700">F</text>
+              <text y="72" x="10" fontSize="62" fontFamily="serif" fill="#1B3A5C" fontWeight="700">F</text>
               <path d="M60 20 L80 50 L60 80" stroke="#C9A84C" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               <line x1="60" y1="20" x2="60" y2="80" stroke="#C9A84C" strokeWidth="7" strokeLinecap="round" />
             </svg>
@@ -172,7 +82,7 @@ export default function LandingPage() {
             Free 30-Minute Strategy Call
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-[#F9F6F1] leading-tight mb-4">
-            See exactly how FeeSlayers can grow your business
+            More leads. More jobs. More growth.
           </h1>
           <p className="text-[#C4B49A] text-base md:text-lg leading-relaxed">
             Tell us about your business and what you&apos;re looking to improve. We&apos;ll put together a custom plan and show you exactly what&apos;s available for your situation.
@@ -230,56 +140,45 @@ export default function LandingPage() {
                 )}
               </div>
 
-              {/* Industry */}
+              {/* Email */}
               <div>
-                <label htmlFor="industry" className="block text-sm font-semibold text-[#1B3A5C] mb-1.5">
-                  Industry <span className="text-red-500">*</span>
+                <label htmlFor="email" className="block text-sm font-semibold text-[#1B3A5C] mb-1.5">
+                  Email Address <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <select
-                    id="industry"
-                    value={industry}
-                    onChange={(e) => { setIndustry(e.target.value); setErrors((p) => ({ ...p, industry: "" })); }}
-                    data-error={!!errors.industry}
-                    className={`w-full appearance-none px-4 py-3 pr-10 rounded-xl border-2 text-[#1B3A5C] bg-[#F9F6F1] focus:outline-none focus:border-[#1B3A5C] transition-colors text-sm ${
-                      errors.industry ? "border-red-400" : "border-[#E8DFD0]"
-                    }`}
-                  >
-                    <option value="" disabled>Select your industry</option>
-                    {industries.map((ind) => (
-                      <option key={ind} value={ind}>{ind}</option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6B5B4B]">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </div>
-                </div>
-                {errors.industry && (
-                  <p className="mt-1 text-xs text-red-500 font-medium">{errors.industry}</p>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setErrors((p) => ({ ...p, email: "" })); }}
+                  placeholder="you@yourbusiness.com"
+                  data-error={!!errors.email}
+                  className={`w-full px-4 py-3 rounded-xl border-2 text-[#1B3A5C] bg-[#F9F6F1] placeholder-[#A8C0D8] focus:outline-none focus:border-[#1B3A5C] transition-colors text-sm ${
+                    errors.email ? "border-red-400" : "border-[#E8DFD0]"
+                  }`}
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-500 font-medium">{errors.email}</p>
                 )}
               </div>
 
-              {/* Services */}
+              {/* Phone */}
               <div>
-                <p className="block text-sm font-semibold text-[#1B3A5C] mb-1">
-                  Which services interest you? <span className="text-red-500">*</span>
-                </p>
-                <p className="text-xs text-[#6B5B4B] mb-3">Select all that apply</p>
-                <div className="space-y-2.5">
-                  {services.map((service) => (
-                    <ServiceToggle
-                      key={service.id}
-                      service={service}
-                      checked={!!selectedServices[service.id]}
-                      onChange={handleServiceChange}
-                      disabled={"badge" in service && !!service.badge}
-                    />
-                  ))}
-                </div>
-                {errors.services && (
-                  <p className="mt-2 text-xs text-red-500 font-medium">{errors.services}</p>
+                <label htmlFor="phone" className="block text-sm font-semibold text-[#1B3A5C] mb-1.5">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => { setPhone(e.target.value); setErrors((p) => ({ ...p, phone: "" })); }}
+                  placeholder="(555) 867-5309"
+                  data-error={!!errors.phone}
+                  className={`w-full px-4 py-3 rounded-xl border-2 text-[#1B3A5C] bg-[#F9F6F1] placeholder-[#A8C0D8] focus:outline-none focus:border-[#1B3A5C] transition-colors text-sm ${
+                    errors.phone ? "border-red-400" : "border-[#E8DFD0]"
+                  }`}
+                />
+                {errors.phone && (
+                  <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone}</p>
                 )}
               </div>
 
