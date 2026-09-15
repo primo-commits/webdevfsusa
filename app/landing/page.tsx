@@ -37,9 +37,10 @@ const US_SERVICES = [
 ];
 
 const CA_SERVICES = [
+  { id: "facebook_advertising", label: "Facebook / Meta Advertising", description: "Targeted ads that bring real leads, not vanity metrics" },
+  { id: "google_presence", label: "Google Business Profile", description: "Show up in local searches with a polished profile" },
   { id: "payment_surcharging", label: "Payment Surcharging", description: "Collect every dollar you're owed, compliant by province" },
   { id: "consumer_financing", label: "Consumer Financing", description: "Help customers approve the work they need", badge: "Coming Soon" },
-  { id: "google_presence", label: "Google Business Profile", description: "Show up in local searches with a polished profile" },
 ];
 
 function ServiceToggle({
@@ -174,7 +175,7 @@ export default function LandingPage() {
             See exactly how FeeSlayers can grow your business
           </h1>
           <p className="text-[#C4B49A] text-base md:text-lg leading-relaxed">
-            Tell us about your business and what you're looking to improve. We'll put together a custom plan and show you exactly what's available for your situation.
+            Tell us about your business and what you&apos;re looking to improve. We&apos;ll put together a custom plan and show you exactly what&apos;s available for your situation.
           </p>
         </div>
       </section>
@@ -199,7 +200,7 @@ export default function LandingPage() {
                         : "border-[#4A6B8A] text-[#A8C0D8] hover:border-[#C9A84C]/60"
                     }`}
                   >
-                    {c === "US" ? "🇺🇸 United States" : "🇨🇦 Canada"}
+                    {c === "US" ? "ðŸ‡ºðŸ‡¸ United States" : "ðŸ‡¨ðŸ‡¦ Canada"}
                   </button>
                 ))}
               </div>
@@ -313,9 +314,9 @@ export default function LandingPage() {
           {/* Trust signals */}
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
             {[
-              { icon: "🕐", label: "30-minute call" },
-              { icon: "💡", label: "Custom plan" },
-              { icon: "🔒", label: "No obligation" },
+              { icon: "ðŸ•", label: "30-minute call" },
+              { icon: "ðŸ’¡", label: "Custom plan" },
+              { icon: "ðŸ”’", label: "No obligation" },
             ].map(({ icon, label }) => (
               <div key={label} className="bg-white rounded-xl border border-[#E8DFD0] py-3 px-2">
                 <div className="text-lg mb-0.5">{icon}</div>
