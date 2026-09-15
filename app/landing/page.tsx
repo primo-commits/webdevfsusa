@@ -1,285 +1,339 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, useEffect, useRef } from 'react';
 
-const GHL_BOOKING_URL = "https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A";
+type Language = 'en' | 'es';
+type Step = 1 | 2 | 3;
 
-const SERVICES = [
-  "Google Business Profile",
-  "Website Development",
-  "Facebook & Meta Advertising",
-  "Payment Processing",
-  "Consumer Financing",
-  "Business Capital",
-  "Clover Hardware",
-] as const;
+interface FormData {
+  businessName: string;
+  email: string;
+  phone: string;
+  services: string[];
+}
+
+interface Translation {
+  heroTitle: string;
+  heroSubtitle: string;
+  step1Title: string;
+  step1Subtitle: string;
+  businessNamePlaceholder: string;
+  emailPlaceholder: string;
+  phonePlaceholder: string;
+  servicesLabel: string;
+  serviceOptions: { value: string; label: string }[];
+  nextButton: string;
+  backButton: string;
+  calendarTitle: string;
+  calendarSubtitle: string;
+  loadingCalendar: string;
+  confirmationTitle: string;
+  confirmationMessage: string;
+  footerDisclaimer: string;
+  validationError: string;
+  formLabels: {
+    businessName: string;
+    email: string;
+    phone: string;
+    services: string;
+  };
+}
+
+const translations: Record<Language, Translation> = {
+  en: {
+    heroTitle: 'Book a Free Strategy Call',
+    heroSubtitle: 'See how FeeSlayers can bring you more customers — with zero upfront cost.',
+    step1Title: 'Tell us about your business',
+    step1Subtitle: 'It only takes 30 seconds.',
+    businessNamePlaceholder: "Your shop's name",
+    emailPlaceholder: 'Your email address',
+    phonePlaceholder: 'Your phone number',
+    servicesLabel: 'What do you need?',
+    serviceOptions: [
+      { value: 'google', label: 'More Google calls & reviews' },
+      { value: 'facebook', label: 'Facebook & Instagram ads' },
+      { value: 'financing', label: 'Customer financing options' },
+      { value: 'processing', label: 'Credit card processing' },
+      { value: 'crm', label: 'CRM & follow-up automation' },
+      { value: 'all', label: 'Everything — full growth bundle' },
+    ],
+    nextButton: 'Next Step',
+    backButton: 'Back',
+    calendarTitle: 'Pick a time that works for you',
+    calendarSubtitle: "We'll call you at the number you provided.",
+    loadingCalendar: 'Loading calendar...',
+    confirmationTitle: "You're booked!",
+    confirmationMessage: "Check your inbox — we've sent you a calendar invite with all the details. Talk soon.",
+    footerDisclaimer: 'FeeSlayers is not a lender and does not make credit decisions.',
+    validationError: 'Please fill in all fields.',
+    formLabels: {
+      businessName: 'Business Name',
+      email: 'Email',
+      phone: 'Phone',
+      services: 'Services',
+    },
+  },
+  es: {
+    heroTitle: 'Reserva una Llamada de Estrategia Gratis',
+    heroSubtitle: 'Descubre cómo FeeSlayers puede traerte más clientes — sin costo inicial.',
+    step1Title: 'Cuéntanos sobre tu negocio',
+    step1Subtitle: 'Solo toma 30 segundos.',
+    businessNamePlaceholder: 'Nombre de tu negocio',
+    emailPlaceholder: 'Tu correo electrónico',
+    phonePlaceholder: 'Tu número de teléfono',
+    servicesLabel: '¿Qué necesitas?',
+    serviceOptions: [
+      { value: 'google', label: 'Más llamadas y reseñas en Google' },
+      { value: 'facebook', label: 'Anuncios en Facebook e Instagram' },
+      { value: 'financing', label: 'Opciones de financiamiento para clientes' },
+      { value: 'processing', label: 'Procesamiento de tarjetas de crédito' },
+      { value: 'crm', label: 'Automatización de CRM y seguimiento' },
+      { value: 'all', label: 'Todo — paquete completo de crecimiento' },
+    ],
+    nextButton: 'Siguiente Paso',
+    backButton: 'Atrás',
+    calendarTitle: 'Elige un horario que te funcione',
+    calendarSubtitle: 'Te llamaremos al número que proporcionaste.',
+    loadingCalendar: 'Cargando calendario...',
+    confirmationTitle: '¡Estás reservado!',
+    confirmationMessage: 'Revisa tu bandeja de entrada — te enviamos una invitación con todos los detalles. Hablamos pronto.',
+    footerDisclaimer: 'FeeSlayers no es un prestamista y no toma decisiones de crédito.',
+    validationError: 'Por favor completa todos los campos.',
+    formLabels: {
+      businessName: 'Nombre del Negocio',
+      email: 'Correo',
+      phone: 'Teléfono',
+      services: 'Servicios',
+    },
+  },
+};
+
+declare global {
+  interface Window {
+    GoHighLevel?: {
+      Calendar?: {
+        init: (options: { containerId: string; locationId: string }) => { open: () => void };
+      };
+    };
+  }
+}
 
 export default function LandingPage() {
-  const [country, setCountry] = useState<"US" | "CA">("US");
-  const [businessName, setBusinessName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [lang, setLang] = useState<Language>('en');
+  const [step, setStep] = useState<Step>(1);
+  const [formData, setFormData] = useState<FormData>({
+    businessName: '',
+    email: '',
+    phone: '',
+    services: [],
+  });
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, boolean>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const calendarContainerRef = useRef<HTMLDivElement>(null);
+  const calendarInitializedRef = useRef(false);
+  const t = translations[lang];
 
-  function handleCountryChange(c: "US" | "CA") {
-    setCountry(c);
-    setBusinessName("");
-    setEmail("");
-    setPhone("");
-    setSelectedServices([]);
-    setErrors({});
-  }
+  useEffect(() => {
+    const saved = localStorage.getItem('fs_lang') as Language | null;
+    if (saved === 'en' || saved === 'es') setLang(saved);
+  }, []);
 
-  function toggleService(service: string) {
-    setSelectedServices((prev) =>
-      prev.includes(service)
-        ? prev.filter((s) => s !== service)
-        : [...prev, service]
-    );
-  }
+  const toggleLang = (l: Language) => {
+    setLang(l);
+    localStorage.setItem('fs_lang', l);
+  };
 
-  function validate() {
-    const errs: Record<string, string> = {};
-    if (!businessName.trim()) errs.businessName = "Business name is required";
-    if (!email.trim()) {
-      errs.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      errs.email = "Please enter a valid email address";
-    }
-    if (!phone.trim()) {
-      errs.phone = "Phone number is required";
-    } else if (!/^\+?[\d\s\-().]{7,}$/.test(phone.trim())) {
-      errs.phone = "Please enter a valid phone number";
-    }
-    return errs;
-  }
+  const toggleService = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      services: prev.services.includes(value)
+        ? prev.services.filter((s) => s !== value)
+        : [...prev.services, value],
+    }));
+  };
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      const firstError = document.querySelector("[data-error='true']");
-      firstError?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-    setErrors({});
+  const validateStep1 = () => {
+    const newErrors: Partial<Record<keyof FormData, boolean>> = {};
+    if (!formData.businessName.trim()) newErrors.businessName = true;
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = true;
+    if (!formData.phone.trim() || formData.phone.replace(/\D/g, '').length < 10) newErrors.phone = true;
+    if (formData.services.length === 0) newErrors.services = true;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-    const params = new URLSearchParams({
-      country,
-      business: businessName.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-    });
+  const handleNext = async () => {
+    if (!validateStep1()) return;
+    setIsSubmitting(true);
+    setStep(2);
 
-    selectedServices.forEach((s) => params.append("services", s));
+    // Inject contact fields into GHL calendar URL
+    const phoneParam = encodeURIComponent(formData.phone);
+    const emailParam = encodeURIComponent(formData.email);
+    const nameParam = encodeURIComponent(formData.businessName);
+    const serviceParam = formData.services.join(',');
+    const calendarUrl = `https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A?phone=${phoneParam}&email=${emailParam}&first_name=${nameParam}&customQuestion=${serviceParam}`;
 
-    window.location.href = `${GHL_BOOKING_URL}?${params.toString()}`;
-  }
+    await new Promise((r) => setTimeout(r, 500));
+
+    const checkGHL = setInterval(() => {
+      if (calendarInitializedRef.current) return;
+      const container = document.getElementById('ghl-calendar-container');
+      if (!container || container.querySelector('iframe, .ghl-widget')) return;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = calendarUrl;
+      iframe.style.width = '100%';
+      iframe.style.minHeight = '600px';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.allow = 'camera; microphone';
+      container.appendChild(iframe);
+      calendarInitializedRef.current = true;
+      setIsSubmitting(false);
+      clearInterval(checkGHL);
+    }, 300);
+
+    setTimeout(() => {
+      clearInterval(checkGHL);
+      if (!calendarInitializedRef.current) {
+        const container = document.getElementById('ghl-calendar-container');
+        if (container && !container.querySelector('iframe')) {
+          const iframe = document.createElement('iframe');
+          iframe.src = calendarUrl;
+          iframe.style.width = '100%';
+          iframe.style.minHeight = '600px';
+          iframe.style.border = 'none';
+          iframe.style.borderRadius = '12px';
+          iframe.allow = 'camera; microphone';
+          container.appendChild(iframe);
+        }
+        setIsSubmitting(false);
+        calendarInitializedRef.current = true;
+      }
+    }, 4000);
+  };
+
+  const handleConfirmation = () => setStep(3);
 
   return (
-    <div className="min-h-screen bg-[#F9F6F1]">
-      {/* Minimal Header */}
-      <header className="bg-[#1B3A5C] px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            {/* FeeSlayers F + S lettermark logo */}
-            <svg width="80" height="28" viewBox="0 0 80 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* F - navy */}
-              <text x="0" y="23" fontSize="26" fontFamily="Georgia, serif" fill="#F9F6F1" fontWeight="700">F</text>
-              {/* S - gold */}
-              <text x="22" y="23" fontSize="26" fontFamily="Georgia, serif" fill="#C9A84C" fontWeight="700">S</text>
+    <div style={{ background: '#F9F6F1', minHeight: '100vh', fontFamily: 'system-ui, sans-serif' }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 20px' }}>
+        {/* Header */}
+        <div style={{ paddingTop: 24, paddingBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="8" fill="#1B3A5C" />
+              <path d="M9 22L13 10L16 18L19 14L23 22" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span className="text-[#F9F6F1] font-bold text-lg tracking-tight">FeeSlayers</span>
-          </Link>
-          <span className="text-[#C9A84C] text-sm font-medium">Book a Free Strategy Call</span>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="bg-[#1B3A5C] px-6 pt-12 pb-16">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-block mb-4 px-3 py-1 rounded-full bg-[#C9A84C]/20 border border-[#C9A84C]/40 text-[#C9A84C] text-xs font-semibold tracking-wide uppercase">
-            Free 30-Minute Strategy Call
+            <span style={{ fontWeight: 700, fontSize: 18, color: '#1B3A5C' }}>FeeSlayers</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#F9F6F1] leading-tight mb-4">
-            More leads. More jobs. More growth.
-          </h1>
-          <p className="text-[#C4B49A] text-base md:text-lg leading-relaxed">
-            Tell us about your business and what you&apos;re looking to improve. We&apos;ll put together a custom plan and show you exactly what&apos;s available for your situation.
-          </p>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <button onClick={() => toggleLang('en')} style={{ background: lang === 'en' ? '#1B3A5C' : 'transparent', color: lang === 'en' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 12px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>EN</button>
+            <button onClick={() => toggleLang('es')} style={{ background: lang === 'es' ? '#1B3A5C' : 'transparent', color: lang === 'es' ? '#fff' : '#1B3A5C', border: '1.5px solid #1B3A5C', borderRadius: 6, padding: '5px 12px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>ES</button>
+          </div>
         </div>
-      </section>
 
-      {/* Form Card */}
-      <section className="px-6 -mt-6 pb-20">
-        <div className="max-w-xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl border border-[#E8DFD0] overflow-hidden">
+        {/* Progress Bar */}
+        <div style={{ display: 'flex', gap: 8, marginTop: 16, marginBottom: 28 }}>
+          {[1, 2, 3].map((s) => (
+            <div key={s} style={{ flex: 1, height: 4, borderRadius: 99, background: step >= s ? '#1B3A5C' : '#d1ccc5' }} />
+          ))}
+        </div>
 
-            {/* Country Selector */}
-            <div className="bg-[#1B3A5C] px-6 py-5">
-              <p className="text-[#C4B49A] text-xs font-semibold uppercase tracking-wider mb-3">Where is your business located?</p>
-              <div className="flex gap-3">
-                {(["US", "CA"] as const).map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => handleCountryChange(c)}
-                    className={`flex-1 py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all duration-150 ${
-                      country === c
-                        ? "border-[#C9A84C] bg-[#C9A84C] text-[#1B3A5C]"
-                        : "border-[#4A6B8A] text-[#A8C0D8] hover:border-[#C9A84C]/60"
-                    }`}
-                  >
-                    {c === "US" ? "US \u2014 United States" : "CA \u2014 Canada"}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Step 1: Form */}
+        {step === 1 && (
+          <div style={{ background: '#fff', borderRadius: 20, padding: '36px 32px', boxShadow: '0 2px 16px rgba(27,58,92,0.08)', border: '1px solid #ede9e2' }}>
+            <h1 style={{ fontSize: 24, fontWeight: 800, color: '#1B3A5C', marginBottom: 4, lineHeight: 1.2 }}>{t.step1Title}</h1>
+            <p style={{ color: '#6b6560', fontSize: 15, marginBottom: 28 }}>{t.step1Subtitle}</p>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="px-6 py-6 space-y-5">
-
-              {/* Business Name */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <label htmlFor="businessName" className="block text-sm font-semibold text-[#1B3A5C] mb-1.5">
-                  Business Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="businessName"
-                  type="text"
-                  value={businessName}
-                  onChange={(e) => { setBusinessName(e.target.value); setErrors((p) => ({ ...p, businessName: "" })); }}
-                  placeholder="e.g. Apex Auto Repair"
-                  data-error={!!errors.businessName}
-                  className={`w-full px-4 py-3 rounded-xl border-2 text-[#1B3A5C] bg-[#F9F6F1] placeholder-[#A8C0D8] focus:outline-none focus:border-[#1B3A5C] transition-colors text-sm ${
-                    errors.businessName ? "border-red-400" : "border-[#E8DFD0]"
-                  }`}
-                />
-                {errors.businessName && (
-                  <p className="mt-1 text-xs text-red-500 font-medium">{errors.businessName}</p>
-                )}
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>{t.formLabels.businessName}</label>
+                <input type="text" placeholder={t.businessNamePlaceholder} value={formData.businessName} onChange={(e) => setFormData((p) => ({ ...p, businessName: e.target.value }))} style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: errors.businessName ? '2px solid #e53e3e' : '1.5px solid #d4cfc7', fontSize: 15, boxSizing: 'border-box', outline: 'none', transition: 'border-color 0.15s', color: '#1B3A5C', background: '#fafaf8' }} onFocus={(e) => e.target.style.borderColor = '#C9A84C'} onBlur={(e) => e.target.style.borderColor = errors.businessName ? '#e53e3e' : '#d4cfc7'} />
               </div>
 
-              {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-[#1B3A5C] mb-1.5">
-                  Email Address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value); setErrors((p) => ({ ...p, email: "" })); }}
-                  placeholder="you@yourbusiness.com"
-                  data-error={!!errors.email}
-                  className={`w-full px-4 py-3 rounded-xl border-2 text-[#1B3A5C] bg-[#F9F6F1] placeholder-[#A8C0D8] focus:outline-none focus:border-[#1B3A5C] transition-colors text-sm ${
-                    errors.email ? "border-red-400" : "border-[#E8DFD0]"
-                  }`}
-                />
-                {errors.email && (
-                  <p className="mt-1 text-xs text-red-500 font-medium">{errors.email}</p>
-                )}
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>{t.formLabels.email}</label>
+                <input type="email" placeholder={t.emailPlaceholder} value={formData.email} onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))} style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: errors.email ? '2px solid #e53e3e' : '1.5px solid #d4cfc7', fontSize: 15, boxSizing: 'border-box', outline: 'none', transition: 'border-color 0.15s', color: '#1B3A5C', background: '#fafaf8' }} onFocus={(e) => e.target.style.borderColor = '#C9A84C'} onBlur={(e) => e.target.style.borderColor = errors.email ? '#e53e3e' : '#d4cfc7'} />
               </div>
 
-              {/* Phone */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-semibold text-[#1B3A5C] mb-1.5">
-                  Phone Number <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => { setPhone(e.target.value); setErrors((p) => ({ ...p, phone: "" })); }}
-                  placeholder="(555) 867-5309"
-                  data-error={!!errors.phone}
-                  className={`w-full px-4 py-3 rounded-xl border-2 text-[#1B3A5C] bg-[#F9F6F1] placeholder-[#A8C0D8] focus:outline-none focus:border-[#1B3A5C] transition-colors text-sm ${
-                    errors.phone ? "border-red-400" : "border-[#E8DFD0]"
-                  }`}
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone}</p>
-                )}
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>{t.formLabels.phone}</label>
+                <input type="tel" placeholder={t.phonePlaceholder} value={formData.phone} onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))} style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: errors.phone ? '2px solid #e53e3e' : '1.5px solid #d4cfc7', fontSize: 15, boxSizing: 'border-box', outline: 'none', transition: 'border-color 0.15s', color: '#1B3A5C', background: '#fafaf8' }} onFocus={(e) => e.target.style.borderColor = '#C9A84C'} onBlur={(e) => e.target.style.borderColor = errors.phone ? '#e53e3e' : '#d4cfc7'} />
               </div>
 
-              {/* Services */}
               <div>
-                <label className="block text-sm font-semibold text-[#1B3A5C] mb-2">
-                  Which services are you interested in? <span className="text-[#8B7B6B] font-normal text-xs">(select all that apply)</span>
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {SERVICES.map((service) => {
-                    const checked = selectedServices.includes(service);
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 8 }}>{t.servicesLabel}</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  {t.serviceOptions.map((opt) => {
+                    const checked = formData.services.includes(opt.value);
                     return (
-                      <button
-                        key={service}
-                        type="button"
-                        onClick={() => toggleService(service)}
-                        className={`py-2.5 px-3 rounded-xl border-2 text-xs font-medium text-left transition-all duration-150 ${
-                          checked
-                            ? "border-[#1B3A5C] bg-[#1B3A5C] text-[#F9F6F1]"
-                            : "border-[#E8DFD0] text-[#6B5B4B] hover:border-[#1B3A5C]/40"
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5">
-                          <span className={`flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
-                            checked ? "bg-[#C9A84C] border-[#C9A84C]" : "border-[#A8C0D8]"
-                          }`}>
-                            {checked && (
-                              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                                <path d="M2 5l2.5 2.5L8 3" stroke="#1B3A5C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                            )}
-                          </span>
-                          {service}
-                        </span>
+                      <button key={opt.value} type="button" onClick={() => toggleService(opt.value)} style={{ padding: '11px 14px', borderRadius: 10, border: checked ? '2px solid #1B3A5C' : '1.5px solid #d4cfc7', background: checked ? '#1B3A5C' : '#fafaf8', color: checked ? '#fff' : '#6b6560', fontSize: 14, cursor: 'pointer', textAlign: 'left', fontWeight: 500, transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div style={{ width: 18, height: 18, borderRadius: 4, border: checked ? 'none' : '1.5px solid #d4cfc7', background: checked ? '#C9A84C' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {checked && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>}
+                        </div>
+                        {opt.label}
                       </button>
                     );
                   })}
                 </div>
               </div>
+            </div>
 
-              {/* Submit */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  className="w-full bg-[#1B3A5C] hover:bg-[#2A4F75] text-[#F9F6F1] font-bold py-4 px-6 rounded-xl transition-colors text-sm tracking-wide flex items-center justify-center gap-2"
-                >
-                  Book Your Free Strategy Call
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </button>
-                <p className="text-center text-xs text-[#8B7B6B] mt-3">
-                  No commitment. No sales pressure. Just a real conversation about your business.
-                </p>
-              </div>
-            </form>
+            {Object.keys(errors).length > 0 && (
+              <p style={{ color: '#e53e3e', fontSize: 13, marginTop: 12 }}>{t.validationError}</p>
+            )}
 
-            {/* Footer note */}
-            <div className="px-6 pb-5">
-              <div className="border-t border-[#E8DFD0] pt-4 text-center">
-                <p className="text-xs text-[#8B7B6B]">
-                  FeeSlayers is not a lender and does not make credit decisions. Financing provided through third-party lenders.
-                </p>
+            <button onClick={handleNext} style={{ width: '100%', marginTop: 24, padding: '15px', background: '#1B3A5C', color: '#fff', border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700, cursor: 'pointer', letterSpacing: '0.3px' }}>{t.nextButton} →</button>
+          </div>
+        )}
+
+        {/* Step 2: Calendar */}
+        {step === 2 && (
+          <div>
+            <button onClick={() => setStep(1)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#6b6560', fontSize: 14, cursor: 'pointer', marginBottom: 16, padding: 0 }}>← {t.backButton}</button>
+            <div style={{ background: '#fff', borderRadius: 20, padding: '32px 28px', boxShadow: '0 2px 16px rgba(27,58,92,0.08)', border: '1px solid #ede9e2' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: '#1B3A5C', marginBottom: 4 }}>{t.calendarTitle}</h2>
+              <p style={{ color: '#6b6560', fontSize: 15, marginBottom: 24 }}>{t.calendarSubtitle}</p>
+              <div ref={calendarContainerRef} id="ghl-calendar-container" style={{ minHeight: 600, borderRadius: 12 }}>
+                {isSubmitting && (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 400, gap: 12 }}>
+                    <div style={{ width: 40, height: 40, border: '3px solid #ede9e2', borderTopColor: '#C9A84C', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                    <p style={{ color: '#6b6560', fontSize: 14 }}>{t.loadingCalendar}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
+        )}
 
-          {/* Trust signals */}
-          <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-            {["30-minute call", "Custom plan", "No obligation"].map((label) => (
-              <div key={label} className="bg-white rounded-xl border border-[#E8DFD0] py-3 px-2">
-                <p className="text-xs text-[#6B5B4B] font-medium">{label}</p>
-              </div>
-            ))}
+        {/* Step 3: Confirmation */}
+        {step === 3 && (
+          <div style={{ background: '#fff', borderRadius: 20, padding: '48px 36px', boxShadow: '0 2px 16px rgba(27,58,92,0.08)', border: '1px solid #ede9e2', textAlign: 'center' }}>
+            <div style={{ width: 72, height: 72, background: '#1B3A5C', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M8 16l6 6L24 10" stroke="#C9A84C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <h2 style={{ fontSize: 26, fontWeight: 800, color: '#1B3A5C', marginBottom: 12 }}>{t.confirmationTitle}</h2>
+            <p style={{ color: '#6b6560', fontSize: 16, lineHeight: 1.6, maxWidth: 420, margin: '0 auto 28px' }}>{t.confirmationMessage}</p>
+            <button onClick={() => window.location.href = '/us'} style={{ padding: '13px 28px', background: '#1B3A5C', color: '#fff', border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>← Back to feeslayers.com</button>
           </div>
-        </div>
-      </section>
+        )}
+
+        {/* Footer */}
+        {step !== 3 && (
+          <p style={{ textAlign: 'center', fontSize: 12, color: '#a09990', marginTop: 24, marginBottom: 8, lineHeight: 1.5 }}>{t.footerDisclaimer}</p>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        * { box-sizing: border-box; }
+        body { margin: 0; }
+        input::placeholder { color: #a09990; }
+      `}</style>
     </div>
   );
 }
