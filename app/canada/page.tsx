@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import { industries } from "@/lib/industries";
 
-/* ── Industry priority tiers (based on Facebook Ads prospect quality) ────── */
+/* â”€â”€ Industry priority tiers (based on Facebook Ads prospect quality) â”€â”€â”€â”€â”€â”€ */
 /* Only industries that exist in lib/industries.ts are listed here. */
 const PRIORITY = {
   green: [
@@ -37,10 +37,10 @@ const sorted = [...industries].sort(tierSort);
 export default function CanadaPage() {
   return (
     <>
-      <Navbar theme="light" />
+      <Navbar theme="light" languages={["en", "fr"]} />
       <main className="flex-1 pt-16 lg:pt-20">
 
-        {/* ── HERO ─────────────────────────────────────────────── */}
+        {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="bg-navy relative overflow-hidden">
           {/* Decorative blobs */}
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold/5 blur-3xl pointer-events-none" />
@@ -49,11 +49,11 @@ export default function CanadaPage() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
             <div className="max-w-4xl mx-auto text-center">
 
-              {/* Free trial badge — the main hook */}
+              {/* Free trial badge â€” the main hook */}
               <div className="inline-flex items-center gap-2 bg-gold text-navy text-xs font-extrabold uppercase tracking-widest px-5 py-2 rounded-full mb-8">
                 <span>2 Weeks Free</span>
                 <span className="opacity-60">|</span>
-                <span className="font-normal opacity-80">Facebook marketing trial — you pay only the ad budget</span>
+                <span className="font-normal opacity-80">Facebook marketing trial â€” you pay only the ad budget</span>
               </div>
 
               {/* Headline */}
@@ -88,7 +88,7 @@ export default function CanadaPage() {
           </div>
         </section>
 
-        {/* ── WHAT WE OFFER ───────────────────────────────────── */}
+        {/* â”€â”€ WHAT WE OFFER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="services" className="section-cream py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
@@ -96,13 +96,13 @@ export default function CanadaPage() {
                 Everything your business needs to grow
               </h2>
               <p className="text-navy/60 text-lg max-w-xl mx-auto">
-                We are not just a payment company. We are your growth team — handling the marketing, the lead flow, and the financial tools to close more business.
+                We are not just a payment company. We are your growth team â€” handling the marketing, the lead flow, and the financial tools to close more business.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
 
-              {/* Advertising — primary hook */}
+              {/* Advertising â€” primary hook */}
               <div className="bg-navy rounded-2xl p-8 flex flex-col gap-4 lg:col-span-2">
                 <div className="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +116,7 @@ export default function CanadaPage() {
                   </span>
                 </div>
                 <p className="text-cream/60 text-sm leading-relaxed">
-                  We run your Facebook and Meta campaigns end-to-end. You pay only the ad budget. We handle creative, targeting, optimization, and lead delivery. 2 weeks free — no upfront cost for our management.
+                  We run your Facebook and Meta campaigns end-to-end. You pay only the ad budget. We handle creative, targeting, optimization, and lead delivery. 2 weeks free â€” no upfront cost for our management.
                 </p>
                 <p className="text-cream/40 text-xs leading-relaxed">
                   Works for: auto repair, roofing, HVAC, plumbing, home renovation, landscaping, med spas, gyms, and any service business with a clear offer and a service area.
@@ -152,7 +152,7 @@ export default function CanadaPage() {
                 </div>
                 <h3 className="text-base font-bold text-navy">Payment Processing</h3>
                 <p className="text-navy/60 text-sm leading-relaxed">
-                  Compliant surcharge program. Your customers pay the card fee — not you. Zero cost on card transactions. Government-authorized.
+                  Compliant surcharge program. Your customers pay the card fee â€” not you. Zero cost on card transactions. Government-authorized.
                 </p>
                 <span className="text-xs font-bold text-gold uppercase tracking-widest mt-auto">Available</span>
               </div>
@@ -180,7 +180,7 @@ export default function CanadaPage() {
                 </div>
                 <h3 className="text-base font-bold text-navy">Business Capital</h3>
                 <p className="text-navy/60 text-sm leading-relaxed">
-                  MCAs and business loans underwritten off your business revenue — not your credit score. Capital to bridge cash flow gaps and take on bigger jobs.
+                  MCAs and business loans underwritten off your business revenue â€” not your credit score. Capital to bridge cash flow gaps and take on bigger jobs.
                 </p>
                 <span className="text-xs font-bold text-gold uppercase tracking-widest mt-auto">Available</span>
               </div>
@@ -189,7 +189,7 @@ export default function CanadaPage() {
           </div>
         </section>
 
-        {/* ── INDUSTRIES ──────────────────────────────────────── */}
+        {/* â”€â”€ INDUSTRIES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="industries" className="section-navy py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
@@ -201,7 +201,7 @@ export default function CanadaPage() {
               </p>
             </div>
 
-            {/* Industries grid — no priority tiers visible to public */}
+            {/* Industries grid â€” no priority tiers visible to public */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {sorted.map((ind) => (
                 <Link
@@ -226,7 +226,7 @@ export default function CanadaPage() {
           </div>
         </section>
 
-        {/* ── CALCULATOR ───────────────────────────────────────── */}
+        {/* â”€â”€ CALCULATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="calculator" className="bg-cream-light py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -241,7 +241,7 @@ export default function CanadaPage() {
           </div>
         </section>
 
-        {/* ── HOW IT WORKS ─────────────────────────────────────── */}
+        {/* â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="how-it-works" className="section-cream py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -285,7 +285,7 @@ export default function CanadaPage() {
           </div>
         </section>
 
-        {/* ── CONTACT ─────────────────────────────────────────── */}
+        {/* â”€â”€ CONTACT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="contact" className="section-navy py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-xl mx-auto text-center">
