@@ -5,11 +5,22 @@ import Link from "next/link";
 
 const GHL_BOOKING_URL = "https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A";
 
+const SERVICES = [
+  "Google Business Profile",
+  "Website Development",
+  "Facebook & Meta Advertising",
+  "Payment Processing",
+  "Consumer Financing",
+  "Business Capital",
+  "Clover Hardware",
+] as const;
+
 export default function LandingPage() {
   const [country, setCountry] = useState<"US" | "CA">("US");
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function handleCountryChange(c: "US" | "CA") {
@@ -17,7 +28,16 @@ export default function LandingPage() {
     setBusinessName("");
     setEmail("");
     setPhone("");
+    setSelectedServices([]);
     setErrors({});
+  }
+
+  function toggleService(service: string) {
+    setSelectedServices((prev) =>
+      prev.includes(service)
+        ? prev.filter((s) => s !== service)
+        : [...prev, service]
+    );
   }
 
   function validate() {
@@ -53,6 +73,8 @@ export default function LandingPage() {
       email: email.trim(),
       phone: phone.trim(),
     });
+
+    selectedServices.forEach((s) => params.append("services", s));
 
     window.location.href = `${GHL_BOOKING_URL}?${params.toString()}`;
   }
@@ -180,6 +202,43 @@ export default function LandingPage() {
                 {errors.phone && (
                   <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone}</p>
                 )}
+              </div>
+
+              {/* Services */}
+              <div>
+                <label className="block text-sm font-semibold text-[#1B3A5C] mb-2">
+                  Which services are you interested in? <span className="text-[#8B7B6B] font-normal text-xs">(select all that apply)</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {SERVICES.map((service) => {
+                    const checked = selectedServices.includes(service);
+                    return (
+                      <button
+                        key={service}
+                        type="button"
+                        onClick={() => toggleService(service)}
+                        className={`py-2.5 px-3 rounded-xl border-2 text-xs font-medium text-left transition-all duration-150 ${
+                          checked
+                            ? "border-[#1B3A5C] bg-[#1B3A5C] text-[#F9F6F1]"
+                            : "border-[#E8DFD0] text-[#6B5B4B] hover:border-[#1B3A5C]/40"
+                        }`}
+                      >
+                        <span className="flex items-center gap-1.5">
+                          <span className={`flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+                            checked ? "bg-[#C9A84C] border-[#C9A84C]" : "border-[#A8C0D8]"
+                          }`}>
+                            {checked && (
+                              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                <path d="M2 5l2.5 2.5L8 3" stroke="#1B3A5C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            )}
+                          </span>
+                          {service}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Submit */}
