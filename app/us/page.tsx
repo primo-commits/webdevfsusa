@@ -96,9 +96,14 @@ export default function USPage() {
 
   const content = t[lang];
 
+  const handleLangChange = (l: string) => {
+    localStorage.setItem("fs_lang", l);
+    setLang(l as "en" | "es");
+  };
+
   return (
     <main className="min-h-screen bg-bkg">
-      <Navbar languages={["en", "es"]} />
+      <Navbar languages={["en", "es"]} lang={lang} onLangChange={handleLangChange} />
 
       {/* Hero */}
       <section className="bg-nav px-6 py-20 text-center">

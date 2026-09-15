@@ -1,28 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import FeeSlayerLogo from "./FeeSlayerLogo";
 
 interface NavbarProps {
   theme?: "light" | "dark";
   languages?: ("en" | "fr" | "es")[];
+  lang?: string;
+  onLangChange?: (l: string) => void;
 }
 
-export default function Navbar({ theme = "light", languages = ["en"] }: NavbarProps) {
+export default function Navbar({
+  theme = "light",
+  languages = ["en"],
+  lang = "en",
+  onLangChange,
+}: NavbarProps) {
   const isDark = theme === "dark";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [lang, setLang] = useState<string>("en");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("fs_lang") ?? "en";
-    setLang(saved);
-  }, []);
 
   const switchLang = (l: string) => {
-    setLang(l);
     localStorage.setItem("fs_lang", l);
-    window.location.reload();
+    if (onLangChange) {
+      onLangChange(l);
+    } else {
+      window.location.reload();
+    }
   };
 
   const textColor = isDark ? "text-cream" : "text-navy";
@@ -126,7 +130,7 @@ export default function Navbar({ theme = "light", languages = ["en"] }: NavbarPr
             How It Works
           </Link>
 
-          {/* Language toggle â€” mobile */}
+          {/* Language toggle — mobile */}
           {languages.length > 1 && (
             <div style={{ display: "flex", gap: 8, paddingTop: 4 }}>
               {languages.includes("en") && (

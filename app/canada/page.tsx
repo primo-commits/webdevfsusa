@@ -96,9 +96,14 @@ export default function CanadaPage() {
 
   const content = t[lang];
 
+  const handleLangChange = (l: string) => {
+    localStorage.setItem("fs_lang", l);
+    setLang(l as "en" | "fr");
+  };
+
   return (
     <main className="min-h-screen bg-bkg">
-      <Navbar languages={["en", "fr"]} />
+      <Navbar languages={["en", "fr"]} lang={lang} onLangChange={handleLangChange} />
 
       {/* Hero */}
       <section className="bg-nav px-6 py-20 text-center">
