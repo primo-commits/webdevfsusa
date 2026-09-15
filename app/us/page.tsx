@@ -42,7 +42,7 @@ export default function UsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
-                <Link href="/landing" className="btn-outline-gold">
+                <Link href="#contact" className="btn-outline-gold">
                   Book a call
                 </Link>
               </div>
@@ -229,7 +229,7 @@ export default function UsPage() {
                 <p className="text-navy/60 text-lg mb-8 leading-relaxed">
                   Need business capital yourself? CashBuoy MCAs are underwritten off your business statements, not your credit score.
                 </p>
-                <Link href="/landing" className="btn-gold">
+                <Link href="#contact" className="btn-gold">
                   Learn about financing options
                 </Link>
               </div>
