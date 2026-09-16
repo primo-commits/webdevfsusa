@@ -5,12 +5,6 @@ import { useState, useEffect } from 'react';
 type Language = 'en' | 'fr' | 'es';
 type Country = 'us' | 'ca';
 
-// ─── GHL BOOKING CALENDAR URLs ──────────────────────────────────────────────
-const GHL_BOOKING_URLS = {
-  us: 'https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A',
-  ca: 'https://api.leadconnectorhq.com/widget/booking/DAMM5jUOXgVRPv0Hs8P6',
-};
-
 // ─── MAKE.COM WEBHOOK ─────────────────────────────────────────────────────
 const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/da5qk1gavr3omjp4498gimo6onok271m';
 
@@ -22,10 +16,16 @@ const SERVICES = [
   'consumer_financing',
   'payment_processing',
   'business_capital',
-  'clover_hardware',
   'website_development',
 ] as const;
 type ServiceValue = typeof SERVICES[number];
+
+// ─── GHL CALENDAR IDs ─────────────────────────────────────────────────────────
+const GHL_CALENDAR_IDS = {
+  us: '6Y4RUBqnucK62JXW4J8A',
+  ca: 'DAMM5jUOXgVRPv0Hs8P6',
+};
+const GHL_WIDGET_LOADER = 'https://link.leadconnectorhq.com/widget/booking/widget-loader.js';
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 interface Translation {
@@ -52,6 +52,9 @@ interface Translation {
   langEn: string;
   langFr: string;
   langEs: string;
+  calendarStepLabel: string;
+  calendarStepLabelFr: string;
+  calendarStepLabelEs: string;
 }
 
 const t: Record<Language, Translation> = {
@@ -72,7 +75,6 @@ const t: Record<Language, Translation> = {
       { value: 'google_business_profile', label: 'Google Business Profile' },
       { value: 'facebook_meta_advertising', label: 'Facebook & Meta Advertising' },
       { value: 'consumer_financing', label: 'Consumer Financing' },
-      { value: 'clover_hardware', label: 'Clover Hardware' },
       { value: 'website_development', label: 'Website Development' },
       { value: 'payment_processing', label: 'Payment Processing' },
       { value: 'business_capital', label: 'Business Capital' },
@@ -87,6 +89,9 @@ const t: Record<Language, Translation> = {
     langEn: 'EN',
     langFr: 'FR',
     langEs: 'ES',
+    calendarStepLabel: 'SELECT A TIME FOR YOUR STRATEGY CALL',
+    calendarStepLabelFr: 'SÉLECTIONNEZ UNE HEURE POUR VOTRE APPEL STRATÉGIQUE',
+    calendarStepLabelEs: 'SELECCIONE UNA HORA PARA SU LLAMADA ESTRATÉGICA',
   },
   fr: {
     introTitle: 'Parlez-nous de votre entreprise et de ce que vous souhaitez améliorer.',
@@ -105,7 +110,6 @@ const t: Record<Language, Translation> = {
       { value: 'google_business_profile', label: 'Google Business Profile' },
       { value: 'facebook_meta_advertising', label: 'Publicité Facebook et Meta' },
       { value: 'consumer_financing', label: 'Financement aux consommateurs' },
-      { value: 'clover_hardware', label: 'Matériel Clover' },
       { value: 'website_development', label: 'Développement de sites web' },
       { value: 'payment_processing', label: 'Traitement des paiements' },
       { value: 'business_capital', label: 'Capital d\'affaires' },
@@ -120,6 +124,9 @@ const t: Record<Language, Translation> = {
     langEn: 'EN',
     langFr: 'FR',
     langEs: 'ES',
+    calendarStepLabel: 'SELECT A TIME FOR YOUR STRATEGY CALL',
+    calendarStepLabelFr: 'SÉLECTIONNEZ UNE HEURE POUR VOTRE APPEL STRATÉGIQUE',
+    calendarStepLabelEs: 'SELECCIONE UNA HORA PARA SU LLAMADA ESTRATÉGICA',
   },
   es: {
     introTitle: 'Cuéntanos sobre tu negocio y lo que te gustaría mejorar.',
@@ -138,7 +145,6 @@ const t: Record<Language, Translation> = {
       { value: 'google_business_profile', label: 'Google Business Profile' },
       { value: 'facebook_meta_advertising', label: 'Publicidad Facebook y Meta' },
       { value: 'consumer_financing', label: 'Financiamiento al consumidor' },
-      { value: 'clover_hardware', label: 'Hardware Clover' },
       { value: 'website_development', label: 'Desarrollo web' },
       { value: 'payment_processing', label: 'Procesamiento de pagos' },
       { value: 'business_capital', label: 'Capital de negocio' },
@@ -153,12 +159,18 @@ const t: Record<Language, Translation> = {
     langEn: 'EN',
     langFr: 'FR',
     langEs: 'ES',
+    calendarStepLabel: 'SELECT A TIME FOR YOUR STRATEGY CALL',
+    calendarStepLabelFr: 'SÉLECTIONNEZ UNE HEURE POUR VOTRE APPEL STRATÉGIQUE',
+    calendarStepLabelEs: 'SELECCIONE UNA HORA PARA SU LLAMADA ESTRATÉGICA',
   },
 };
 
 // ─── COMPONENT ────────────────────────────────────────────────────────────────
+type Step = 'form' | 'calendar';
+
 export default function LandingPage() {
   const [lang, setLang] = useState<Language>('en');
+  const [step, setStep] = useState<Step>('form');
   const [country, setCountry] = useState<Country>('us');
   const [businessName, setBusinessName] = useState('');
   const [email, setEmail] = useState('');
@@ -230,19 +242,30 @@ export default function LandingPage() {
       // Fail silently — user should still get to booking
     }
 
-    // Route to the correct GHL booking calendar
-    const bookingBase = GHL_BOOKING_URLS[country];
+    // Pre-fill GHL widget with contact data via URL params
+    const calendarId = GHL_CALENDAR_IDS[country];
     const ghlUrl =
-      `${bookingBase}` +
+      `https://app.leadconnectorhq.com/booking/${calendarId}` +
       `?phone=${encodeURIComponent(phone)}` +
       `&email=${encodeURIComponent(email)}` +
       `&first_name=${encodeURIComponent(firstName)}` +
       `&customQuestion=${encodeURIComponent(selectedServices.join(','))}`;
 
-    // Small delay for UX feedback before redirect
-    await new Promise((r) => setTimeout(r, 600));
+    // Inject the GHL widget-loader script — renders inline, no redirect
+    const container = document.getElementById('ghl-calendar-container');
+    if (container) {
+      container.innerHTML = '';
+      const script = document.createElement('script');
+      script.src = GHL_WIDGET_LOADER;
+      script.setAttribute('data-url', ghlUrl);
+      script.setAttribute('data-container', 'ghl-calendar-container');
+      script.setAttribute('data-orientation', 'portrait');
+      script.setAttribute('data-width', '100%');
+      script.setAttribute('data-height', '600px');
+      container.appendChild(script);
+    }
 
-    window.location.href = ghlUrl;
+    setStep('calendar');
   };
 
   const inputStyle = (hasError: boolean): React.CSSProperties => ({
@@ -473,7 +496,7 @@ export default function LandingPage() {
               {isSubmitting ? (
                 <>
                   <div style={{ width: 18, height: 18, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
-                  Redirecting...
+                  Loading your calendar...
                 </>
               ) : (
                 <> {txt.ctaButton} →</>
@@ -486,6 +509,33 @@ export default function LandingPage() {
             </p>
           </div>
         </form>
+
+        {/* Step 2 — Inline GHL Booking Widget */}
+        {step === 'calendar' && (
+          <div style={{ marginTop: 28 }}>
+            {/* Calendar label */}
+            <div style={{ marginBottom: 14 }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#1B3A5C', letterSpacing: '0.06em', margin: 0 }}>
+                {lang === 'en' ? txt.calendarStepLabel : lang === 'fr' ? txt.calendarStepLabelFr : txt.calendarStepLabelEs}
+              </p>
+            </div>
+            {/* GHL widget renders here — no redirect, stays on this page */}
+            <div
+              id="ghl-calendar-container"
+              style={{
+                background: '#fff',
+                borderRadius: 20,
+                overflow: 'hidden',
+                border: '1px solid #ede9e2',
+                boxShadow: '0 2px 16px rgba(27,58,92,0.08)',
+                minHeight: 520,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
+          </div>
+        )}
 
         {/* Disclaimer */}
         <p style={{ textAlign: 'center', fontSize: 12, color: '#b0a89e', marginTop: 20, lineHeight: 1.6 }}>
