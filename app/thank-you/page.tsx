@@ -32,10 +32,10 @@ const t: Record<Language, {
     ctaNote: "No commitment required.",
     footer: "FeeSlayers is not a lender and does not make credit decisions. Financing provided through third-party lenders.",
     industries: [
-      { label: 'Auto Repair', pain: 'You built a website in 2010. It still shows your old address — and customers can\'t find you.' },
+      { label: 'Auto Repair', pain: "You built a website in 2010. It still shows your old address and customers can't find you." },
       { label: 'Home Services', pain: 'You tried Facebook Ads. Spent $300. Got 3 likes from your cousin and your mom.' },
-      { label: 'HVAC & Plumbing', pain: 'Your Google listing looks exactly like every other contractor in your zip code.' },
-      { label: 'Any Service Business', pain: "You're too busy running the business to figure out online marketing — and agencies have burned you before." },
+      { label: 'HVAC & Plumbing', pain: "Your Google listing looks exactly like every other contractor in your zip code." },
+      { label: 'Any Service Business', pain: "You're too busy running the business to figure out online marketing and agencies have burned you before." },
     ],
   },
   fr: {
@@ -51,10 +51,10 @@ const t: Record<Language, {
     ctaNote: 'Aucun engagement requis.',
     footer: "FeeSlayers n'est pas un prêteur et ne prend pas de décisions de crédit. Financement fourni par des prêteurs tiers.",
     industries: [
-      { label: 'Réparation auto', pain: "T'as fait ton site web en 2010. Il montre encore ton ancienne adresse — et les clients te trouvent pas." },
+      { label: 'Réparation auto', pain: "T'as fait ton site web en 2010. Il montre encore ton ancienne adresse et les clients te trouvent pas." },
       { label: 'Services à domicile', pain: "T'as essayé les Facebook Ads. Dépensé 300 $. Obtenu 3 mentions j'aime de ta cousine et ta mère." },
       { label: 'CVC & Plomberie', pain: "Ton annonce Google ressemble exactement à tous les autres entrepreneurs dans ton code postal." },
-      { label: "Toute entreprise de services", pain: "T'es trop occupé à gérer l'entreprise pour comprendre le marketing en ligne — et les agences t'ont déjà brûlé." },
+      { label: "Toute entreprise de services", pain: "T'es trop occupé à gérer l'entreprise pour comprendre le marketing en ligne et les agences t'ont déjà brûlé." },
     ],
   },
   es: {
@@ -70,10 +70,10 @@ const t: Record<Language, {
     ctaNote: 'Sin compromiso requerido.',
     footer: 'FeeSlayers no es un prestamista y no toma decisiones de crédito. Financiamiento proporcionado por prestamistas terceros.',
     industries: [
-      { label: 'Reparación de autos', pain: 'Hiciste tu sitio web en el 2010. Todavía muestra tu vieja dirección — y los clientes no te encuentran.' },
+      { label: 'Reparación de autos', pain: 'Hiciste tu sitio web en el 2010. Todavía muestra tu vieja dirección y los clientes no te encuentran.' },
       { label: 'Servicios para el hogar', pain: 'Intentaste Facebook Ads. Gastaste $300. Obtuviste 3 likes de tu prima y tu mamá.' },
       { label: 'HVAC y Plomería', pain: 'Tu perfil de Google se ve exactamente igual que todos los demás contratistas en tu código postal.' },
-      { label: 'Cualquier negocio de servicios', pain: 'Estás muy ocupado corriendo el negocio para entender el marketing en línea — y las agencias ya te han quemado antes.' },
+      { label: 'Cualquier negocio de servicios', pain: 'Estás muy ocupado corriendo el negocio para entender el marketing en línea y las agencias ya te han quemado antes.' },
     ],
   },
 };
@@ -171,6 +171,9 @@ export default function ThankYouPage() {
         </div>
       </div>
 
+      {/* Gold divider */}
+      <div style={{ height: 3, background: '#C9A84C' }} />
+
       {/* Pain Points */}
       <div style={{ background: '#F9F6F1', padding: '60px 24px' }}>
         <div style={{ maxWidth: 860, margin: '0 auto' }}>
@@ -221,10 +224,6 @@ export default function ThankYouPage() {
       {/* Bottom CTA strip */}
       <div style={{ background: '#C9A84C', padding: '40px 24px' }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-          <h3 style={{ fontSize: 22, fontWeight: 800, color: '#1B3A5C', margin: '0 0 8px' }}>
-            {lang === 'fr' ? 'Passez en revue vos options maintenant.' : lang === 'es' ? 'Revisa tus opciones ahora.' : 'Review your options now.'}
-          </h3>
-          <p style={{ fontSize: 14, color: '#1B3A5C', opacity: 0.7, margin: '0 0 24px' }}>{txt.ctaNote}</p>
           <Link
             href="/us"
             style={{
