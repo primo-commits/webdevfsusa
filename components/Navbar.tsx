@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import FeeSlayerLogo from "./FeeSlayerLogo";
+import { translations, type Language } from "@/lib/translations";
 
 interface NavbarProps {
   theme?: "light" | "dark";
@@ -69,16 +70,16 @@ export default function Navbar({
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
             <Link href="/canada" className={`text-sm font-medium ${textColor} hover:text-gold transition-colors`}>
-              Canada
+              {lang === "fr" ? translations.fr.nav.canada : lang === "es" ? translations.es.nav.canada : translations.en.nav.canada}
             </Link>
             <Link href="/us" className={`text-sm font-medium ${textColor} hover:text-gold transition-colors`}>
-              United States
+              {lang === "fr" ? "États-Unis" : lang === "es" ? "Estados Unidos" : "United States"}
             </Link>
             <Link href="/us#services" className={`text-sm font-medium ${textColor} hover:text-gold transition-colors`}>
-              Services
+              {lang === "fr" ? translations.fr.nav.services : lang === "es" ? translations.es.nav.services : translations.en.nav.services}
             </Link>
             <Link href="/us#how-it-works" className={`text-sm font-medium ${textColor} hover:text-gold transition-colors`}>
-              How It Works
+              {lang === "fr" ? "Comment ça marche" : lang === "es" ? "Cómo funciona" : "How It Works"}
             </Link>
 
             {/* Language toggle */}
@@ -91,7 +92,7 @@ export default function Navbar({
             )}
 
             <Link href="/landing" className="btn-gold text-sm">
-              Book a Call
+              {lang === "fr" ? translations.fr.nav.bookCall : lang === "es" ? translations.es.nav.bookCall : translations.en.nav.bookCall}
             </Link>
           </div>
 
@@ -118,16 +119,16 @@ export default function Navbar({
       {mobileOpen && (
         <div className={`md:hidden ${bgColor} border-t ${borderColor} px-4 py-4 space-y-3`}>
           <Link href="/canada" className={`block text-base font-medium ${textColor}`} onClick={() => setMobileOpen(false)}>
-            Canada
+            {lang === "fr" ? translations.fr.nav.canada : lang === "es" ? translations.es.nav.canada : translations.en.nav.canada}
           </Link>
           <Link href="/us" className={`block text-base font-medium ${textColor}`} onClick={() => setMobileOpen(false)}>
-            United States
+            {lang === "fr" ? "États-Unis" : lang === "es" ? "Estados Unidos" : "United States"}
           </Link>
           <Link href="/us#services" className={`block text-base font-medium ${textColor}`} onClick={() => setMobileOpen(false)}>
-            Services
+            {lang === "fr" ? translations.fr.nav.services : lang === "es" ? translations.es.nav.services : translations.en.nav.services}
           </Link>
           <Link href="/us#how-it-works" className={`block text-base font-medium ${textColor}`} onClick={() => setMobileOpen(false)}>
-            How It Works
+            {lang === "fr" ? "Comment ça marche" : lang === "es" ? "Cómo funciona" : "How It Works"}
           </Link>
 
           {/* Language toggle — mobile */}
@@ -156,7 +157,7 @@ export default function Navbar({
                     borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
                   }}
                 >
-                  Francais
+                  Français
                 </button>
               )}
               {languages.includes("es") && (
@@ -169,14 +170,14 @@ export default function Navbar({
                     borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
                   }}
                 >
-                  Espanol
+                  Español
                 </button>
               )}
             </div>
           )}
 
           <Link href="/landing" className="btn-gold w-full justify-center mt-2" onClick={() => setMobileOpen(false)}>
-            Book a Call
+            {lang === "fr" ? translations.fr.nav.bookCall : lang === "es" ? translations.es.nav.bookCall : translations.en.nav.bookCall}
           </Link>
         </div>
       )}

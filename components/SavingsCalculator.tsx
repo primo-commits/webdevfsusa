@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { translations } from "@/lib/translations";
 
-function formatCurrency(n: number) {
-  return new Intl.NumberFormat("en-CA", {
+function formatCurrency(n: number, lang: string) {
+  const locale = lang === "fr" ? "fr-CA" : lang === "es" ? "es-MX" : "en-CA";
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "CAD",
     minimumFractionDigits: 0,
@@ -12,14 +14,35 @@ function formatCurrency(n: number) {
 }
 
 export default function SavingsCalculator() {
+  const [lang, setLang] = useState<"en" | "fr" | "es">("en");
   const [monthlySales, setMonthlySales] = useState(50000);
   const [rate, setRate] = useState(2.5);
-  const [result, setResult] = useState({ current: 0, withFeeSlayer: 0, savings: 0, annual: 0, fiveYear: 0 });
+  const [result, setResult] = useState({
+    current: 0,
+    withFeeSlayer: 0,
+    savings: 0,
+    annual: 0,
+    fiveYear: 0,
+  });
+
+  useEffect(() => {
+    const stored = localStorage.getItem("fs_lang") as "en" | "fr" | "es" | null;
+    setLang(stored === "fr" || stored === "es" ? stored : "en");
+
+    const handleStorage = () => {
+      const s = localStorage.getItem("fs_lang") as "en" | "fr" | "es" | null;
+      setLang(s === "fr" || s === "es" ? s : "en");
+    };
+    window.addEventListener("storage", handleStorage);
+    const interval = setInterval(handleStorage, 500);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     const current = monthlySales * (rate / 100);
-    // Surcharge pass-through means merchant pays $0. We show the theoretical cost.
-    // Card networks retain ~1%, merchant keeps the rest via surcharge.
     const networkFee = monthlySales * 0.01;
     const savings = current - networkFee;
     setResult({
@@ -31,6 +54,7 @@ export default function SavingsCalculator() {
     });
   }, [monthlySales, rate]);
 
+  const t = translations[lang as 'en' | 'fr' | 'es'].canadaPage;
   const maxSales = 500000;
   const minSales = 5000;
 
@@ -45,9 +69,9 @@ export default function SavingsCalculator() {
           <div>
             <div className="flex justify-between items-center mb-3">
               <label className="text-sm font-semibold text-cream/80 uppercase tracking-wide">
-                Monthly card sales
+                {t.calcLabelSales}
               </label>
-              <span className="text-2xl font-bold text-gold">{formatCurrency(monthlySales)}</span>
+              <span className="text-2xl font-bold text-gold">{formatCurrency(monthlySales, lang)}</span>
             </div>
             <input
               type="range"
@@ -62,8 +86,8 @@ export default function SavingsCalculator() {
               }}
             />
             <div className="flex justify-between text-xs text-cream/40 mt-1.5">
-              <span>{formatCurrency(minSales)}</span>
-              <span>{formatCurrency(maxSales)}</span>
+              <span>{formatCurrency(minSales, lang)}</span>
+              <span>{formatCurrency(maxSales, lang)}</span>
             </div>
           </div>
 
@@ -71,7 +95,7 @@ export default function SavingsCalculator() {
           <div>
             <div className="flex justify-between items-center mb-3">
               <label className="text-sm font-semibold text-cream/80 uppercase tracking-wide">
-                Current processing rate
+                {t.calcLabelRate}
               </label>
               <span className="text-2xl font-bold text-cream">{rate.toFixed(1)}%</span>
             </div>
@@ -102,10 +126,10 @@ export default function SavingsCalculator() {
             {/* You currently pay */}
             <div className="bg-navy-soft rounded-xl p-5 text-center border border-white/5">
               <div className="text-xs font-bold uppercase tracking-widest text-cream/40 mb-2">
-                You currently pay
+                {t.calcResultCurrent}
               </div>
               <div className="text-3xl font-extrabold text-red-400">
-                {formatCurrency(result.current)}
+                {formatCurrency(result.current, lang)}
                 <span className="text-base font-normal text-cream/50">/mo</span>
               </div>
             </div>
@@ -113,10 +137,10 @@ export default function SavingsCalculator() {
             {/* With FeeSlayer */}
             <div className="bg-navy-soft rounded-xl p-5 text-center border border-white/5">
               <div className="text-xs font-bold uppercase tracking-widest text-cream/40 mb-2">
-                With FeeSlayer
+                {t.calcResultWithFeeSlayer}
               </div>
               <div className="text-3xl font-extrabold text-emerald-400">
-                {formatCurrency(result.withFeeSlayer)}
+                {formatCurrency(result.withFeeSlayer, lang)}
                 <span className="text-base font-normal text-cream/50">/mo</span>
               </div>
             </div>
@@ -124,10 +148,10 @@ export default function SavingsCalculator() {
             {/* Monthly savings */}
             <div className="bg-gold/15 rounded-xl p-5 text-center border border-gold/30">
               <div className="text-xs font-bold uppercase tracking-widest text-gold mb-2">
-                Monthly savings
+                {t.calcResultSavings}
               </div>
               <div className="text-3xl font-extrabold text-gold">
-                {formatCurrency(result.savings)}
+                {formatCurrency(result.savings, lang)}
                 <span className="text-base font-normal text-cream/50">/mo</span>
               </div>
             </div>
@@ -137,19 +161,27 @@ export default function SavingsCalculator() {
           {/* Multi-year savings */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-navy-soft rounded-xl p-4 text-center border border-white/5">
-              <div className="text-xs font-bold uppercase tracking-widest text-cream/40 mb-1">Annual savings</div>
-              <div className="text-2xl font-extrabold text-gold">{formatCurrency(result.annual)}</div>
+              <div className="text-xs font-bold uppercase tracking-widest text-cream/40 mb-1">
+                {t.calcResultAnnual}
+              </div>
+              <div className="text-2xl font-extrabold text-gold">
+                {formatCurrency(result.annual, lang)}
+              </div>
             </div>
             <div className="bg-navy-soft rounded-xl p-4 text-center border border-white/5">
-              <div className="text-xs font-bold uppercase tracking-widest text-cream/40 mb-1">5-Year savings</div>
-              <div className="text-2xl font-extrabold text-gold">{formatCurrency(result.fiveYear)}</div>
+              <div className="text-xs font-bold uppercase tracking-widest text-cream/40 mb-1">
+                {t.calcResultFiveYear}
+              </div>
+              <div className="text-2xl font-extrabold text-gold">
+                {formatCurrency(result.fiveYear, lang)}
+              </div>
             </div>
           </div>
 
           {/* CTA */}
           <div className="text-center">
             <a href="#contact" className="btn-gold inline-flex">
-              Start Saving This Month
+              {t.calcCta}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -158,8 +190,7 @@ export default function SavingsCalculator() {
 
           {/* Compliance note */}
           <p className="text-center text-xs text-cream/30 mt-5 leading-relaxed">
-            Surcharge program subject to approval. Surcharge rate capped at 2.4% in Canada; card networks retain ~1%. Quebec not eligible under the Consumer Protection Act.
-            This calculator is for illustrative purposes only. Actual savings may vary.
+            {t.calcDisclaimer}
           </p>
 
         </div>
