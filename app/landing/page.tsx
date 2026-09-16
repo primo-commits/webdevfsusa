@@ -6,13 +6,13 @@ type Language = 'en' | 'fr' | 'es';
 type Country = 'us' | 'ca';
 
 // ─── GHL LOCATION IDs ────────────────────────────────────────────────────────
-// TODO (Primo): Replace these with your actual GHL Location IDs from:
-// US:  Settings → Business Info → Location ID
-// CA:  Create a separate Canada location in GHL first, then add its ID here
 const GHL_LOCATION_IDS = {
-  us: 'YOUR_US_GHL_LOCATION_ID',
+  us: 'p05l3tBveztzKCJ14Z6C',
   ca: 'YOUR_CA_GHL_LOCATION_ID',
 };
+
+// ─── ZAPIER WEBHOOK ─────────────────────────────────────────────────────────
+const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/28871585/4dimp4a/';
 
 // ─── SERVICE OPTIONS ──────────────────────────────────────────────────────────
 // value = passed to GHL; label is per-language via translations below
@@ -210,17 +210,34 @@ export default function LandingPage() {
 
     setIsSubmitting(true);
 
-    // Route to the correct GHL location based on country
     const locationId = GHL_LOCATION_IDS[country];
     const firstName = businessName.trim().split(' ')[0];
-    const servicesParam = encodeURIComponent(selectedServices.join(','));
 
+    // POST to Zapier webhook so it can create the GHL contact
+    try {
+      await fetch(ZAPIER_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          email,
+          phone,
+          businessName,
+          country,
+          selectedServices,
+        }),
+      });
+    } catch {
+      // Fail silently — user should still get to booking
+    }
+
+    // Route to GHL booking widget
     const ghlUrl =
       `https://api.leadconnectorhq.com/widget/booking/${locationId}` +
       `?phone=${encodeURIComponent(phone)}` +
       `&email=${encodeURIComponent(email)}` +
       `&first_name=${encodeURIComponent(firstName)}` +
-      `&customQuestion=${servicesParam}`;
+      `&customQuestion=${encodeURIComponent(selectedServices.join(','))}`;
 
     // Small delay for UX feedback before redirect
     await new Promise((r) => setTimeout(r, 600));
