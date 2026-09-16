@@ -25,7 +25,6 @@ const GHL_CALENDAR_IDS = {
   us: '6Y4RUBqnucK62JXW4J8A',
   ca: 'DAMM5jUOXgVRPv0Hs8P6',
 };
-const GHL_WIDGET_LOADER = 'https://link.leadconnectorhq.com/widget/booking/widget-loader.js';
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 interface Translation {
@@ -251,21 +250,22 @@ export default function LandingPage() {
       `&first_name=${encodeURIComponent(firstName)}` +
       `&customQuestion=${encodeURIComponent(selectedServices.join(','))}`;
 
-    // Inject the GHL widget-loader script — renders inline, no redirect
-    const container = document.getElementById('ghl-calendar-container');
-    if (container) {
-      container.innerHTML = '';
-      const script = document.createElement('script');
-      script.src = GHL_WIDGET_LOADER;
-      script.setAttribute('data-url', ghlUrl);
-      script.setAttribute('data-container', 'ghl-calendar-container');
-      script.setAttribute('data-orientation', 'portrait');
-      script.setAttribute('data-width', '100%');
-      script.setAttribute('data-height', '600px');
-      container.appendChild(script);
-    }
-
+    // Render the GHL booking page inline via iframe — no redirect
     setStep('calendar');
+
+    // Inject iframe after step state flips so the DOM element exists
+    setTimeout(() => {
+      const container = document.getElementById('ghl-calendar-container');
+      if (!container) return;
+      container.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = ghlUrl;
+      iframe.style.border = 'none';
+      iframe.style.width = '100%';
+      iframe.style.height = '600px';
+      iframe.style.display = 'block';
+      container.appendChild(iframe);
+    }, 50);
   };
 
   const inputStyle = (hasError: boolean): React.CSSProperties => ({
