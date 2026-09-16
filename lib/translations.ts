@@ -10,8 +10,8 @@ export const translations = {
       about: "About",
       contact: "Contact",
       getStarted: "Get Started",
-      us: "For US Shops",
-      canada: "For Canadian Shops",
+      us: "United States",
+      canada: "Canada · United States",
       bookCall: "Book a Call",
     },
 
@@ -222,7 +222,7 @@ export const translations = {
       headlineLine2: "More jobs.",
       headlineLine3: "More growth.",
       heroSubtitle:
-        "The full growth bundle at $99/month: Google presence, payment processing, consumer financing, business capital, and Clover hardware. Plus Facebook and Meta advertising — 2 weeks free. You pay only the ad budget. We handle everything else.",
+        "The payment growth bundle at $99/month: payment processing, consumer financing, and business capital. Advertising is quoted separately based on your goals — and Facebook/Meta comes with 2 weeks free. You pay only the ad budget.",
       heroCta: "See the full bundle",
       heroSubCta: "Book a call",
       priceAnchor: "$99",
@@ -260,11 +260,7 @@ export const translations = {
           desc: "CashBuoy MCAs underwritten off your business statements, not your credit score. Grow without the credit gate.",
           highlight: "Via CashBuoy",
         },
-        {
-          title: "Clover Hardware",
-          desc: "Clover Flex terminal. No lease, no hidden fees. Your customers can pay however they want.",
-          highlight: "No lease",
-        },
+
       ],
 
       // How It Works (US page version)
@@ -370,7 +366,7 @@ export const translations = {
       heroLine2: "More jobs.",
       heroLine3: "More growth.",
       heroSubtitle:
-        "FeeSlayer gives Canadian service businesses the full growth toolkit: Facebook advertising, Google presence, payment solutions, and capital. Try it free for 2 weeks. You pay only the ad budget. We handle everything else.",
+        "We use Facebook and Google advertising to fill your pipeline. Join our 2-week free trial — you pay only the ad budget. On top of that, we offer payment solutions and business capital to help your business grow.",
       heroCta: "Start my free trial",
       heroSubCta: "Book a call",
       heroTrust: "No contracts. Cancel anytime. Setup at no cost.",

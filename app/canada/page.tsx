@@ -98,14 +98,11 @@ export default function CanadaPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="#services" className="btn-gold">
+                <Link href="/landing" className="btn-gold">
                   {t.heroCta}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </Link>
-                <Link href="/landing" className="btn-outline-gold">
-                  {t.heroSubCta}
                 </Link>
               </div>
 
@@ -180,18 +177,6 @@ export default function CanadaPage() {
                 <h3 className="text-base font-bold text-navy">{t.paymentTitle}</h3>
                 <p className="text-navy/60 text-sm leading-relaxed">{t.paymentDesc}</p>
                 <span className="text-xs font-bold text-gold uppercase tracking-widest mt-auto">{t.available}</span>
-              </div>
-
-              {/* Consumer Financing */}
-              <div className="bg-white border border-cream-dark rounded-2xl p-7 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold text-navy">{t.financingTitle}</h3>
-                <p className="text-navy/60 text-sm leading-relaxed">{t.financingDesc}</p>
-                <span className="text-xs font-bold text-navy/50 uppercase tracking-widest mt-auto italic">{t.underDev}</span>
               </div>
 
               {/* Business Capital */}
@@ -305,12 +290,9 @@ export default function CanadaPage() {
                 {t.contactSubtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <a href="tel:+13025205447" className="btn-gold">
+                <Link href="/landing" className="btn-gold">
                   {t.contactCta}
-                </a>
-                <a href="mailto:info@feeslayers.com" className="btn-outline-gold">
-                  {t.contactEmail}
-                </a>
+                </Link>
               </div>
               <p className="text-xs text-cream/30">
                 {t.contactDisclaimer}

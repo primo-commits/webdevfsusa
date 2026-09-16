@@ -51,7 +51,7 @@ export default function HomePage() {
                   We develop.<br />We build.<br />You sell.
                 </h2>
                 <p className="text-sm text-navy/60 mb-6">
-                  Facebook advertising, Google presence, consumer financing, and payment solutions for Canadian service businesses.
+                  Facebook and Google advertising, payment solutions, and business capital for Canadian service businesses. 2-week free trial on advertising.
                 </p>
                 <div className="inline-flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
                   Explore Canada
@@ -76,7 +76,7 @@ export default function HomePage() {
                   More customers.<br />More capital.<br />More growth.
                 </h2>
                 <p className="text-sm text-cream/60 mb-6">
-                  The full growth bundle at <span className="text-gold font-bold">$99/mo</span>: GBP, ads, financing, processing, capital &amp; Clover hardware.
+                  The payment growth bundle at <span className="text-gold font-bold">$99/mo</span>: processing, financing, and capital. Advertising quoted separately — Facebook/Meta comes with 2 weeks free.
                 </p>
                 <div className="inline-flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
                   Explore United States
