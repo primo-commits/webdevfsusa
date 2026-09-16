@@ -71,7 +71,7 @@ const t: Record<Language, Translation> = {
     servicesLabel: 'Which services are you interested in? (select all that apply)',
     services: [
       { value: 'google_business_profile', label: 'Google Business Profile' },
-      { value: 'facebook_meta_advertising', label: 'Facebook & Meta Advertising' },
+      { value: 'facebook_meta_advertising', label: 'Facebook & Meta Advertising (2-week free trial)' },
       { value: 'consumer_financing', label: 'Consumer Financing' },
       { value: 'website_development', label: 'Website Development' },
       { value: 'payment_processing', label: 'Payment Processing' },
@@ -109,7 +109,7 @@ const t: Record<Language, Translation> = {
     servicesLabel: 'Quels services vous intéressent? (sélectionnez tous ceux qui s\'appliquent)',
     services: [
       { value: 'google_business_profile', label: 'Google Business Profile' },
-      { value: 'facebook_meta_advertising', label: 'Publicité Facebook et Meta' },
+      { value: 'facebook_meta_advertising', label: 'Publicité Facebook et Meta (essai gratuit de 2 semaines)' },
       { value: 'consumer_financing', label: 'Financement aux consommateurs' },
       { value: 'website_development', label: 'Développement de sites web' },
       { value: 'payment_processing', label: 'Traitement des paiements' },
@@ -147,7 +147,7 @@ const t: Record<Language, Translation> = {
     servicesLabel: '¿Qué servicios te interesan? (selecciona todos los que apliquen)',
     services: [
       { value: 'google_business_profile', label: 'Google Business Profile' },
-      { value: 'facebook_meta_advertising', label: 'Publicidad Facebook y Meta' },
+      { value: 'facebook_meta_advertising', label: 'Publicidad Facebook y Meta (prueba gratuita de 2 semanas)' },
       { value: 'consumer_financing', label: 'Financiamiento al consumidor' },
       { value: 'website_development', label: 'Desarrollo web' },
       { value: 'payment_processing', label: 'Procesamiento de pagos' },
