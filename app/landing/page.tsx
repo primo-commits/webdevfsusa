@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 type Language = 'en' | 'fr' | 'es';
 type Country = 'us' | 'ca';
 
-// ─── MAKE.COM WEBHOOK ─────────────────────────────────────────────────────
-const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/da5qk1gavr3omjp4498gimo6onok271m';
+// ─── GHL INBOUND WEBHOOK ─────────────────────────────────────────────────
+const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/p05l3tBveztzKCJ14Z6C/webhook-trigger/5V1Bsd31tHBTytuV3b9i';
 
 // ─── SERVICE OPTIONS ──────────────────────────────────────────────────────────
 // value = passed to GHL; label is per-language via translations below
@@ -246,9 +246,9 @@ export default function LandingPage() {
 
     const firstName = businessName.trim().split(' ')[0];
 
-    // POST to Make.com webhook → creates GHL contact
+    // POST to GHL inbound webhook → creates contact in GHL
     try {
-      await fetch(MAKE_WEBHOOK_URL, {
+      await fetch(GHL_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
