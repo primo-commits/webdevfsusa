@@ -11,8 +11,8 @@ const GHL_BOOKING_URLS = {
   ca: 'https://api.leadconnectorhq.com/widget/booking/DAMM5jUOXgVRPv0Hs8P6',
 };
 
-// ─── ZAPIER WEBHOOK ────────────────────────────────────────────────────────
-const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/28871585/4dimp4a/';
+// ─── MAKE.COM WEBHOOK ─────────────────────────────────────────────────────
+const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/da5qk1gavr3omjp4498gimo6onok271m';
 
 // ─── SERVICE OPTIONS ──────────────────────────────────────────────────────────
 // value = passed to GHL; label is per-language via translations below
@@ -212,9 +212,9 @@ export default function LandingPage() {
 
     const firstName = businessName.trim().split(' ')[0];
 
-    // POST to Zapier webhook so it can create the GHL contact
+    // POST to Make.com webhook so it can create the GHL contact
     try {
-      await fetch(ZAPIER_WEBHOOK_URL, {
+      await fetch(MAKE_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
