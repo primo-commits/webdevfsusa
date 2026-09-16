@@ -5,13 +5,13 @@ import { useState, useEffect } from 'react';
 type Language = 'en' | 'fr' | 'es';
 type Country = 'us' | 'ca';
 
-// ─── GHL LOCATION IDs ────────────────────────────────────────────────────────
-const GHL_LOCATION_IDS = {
-  us: 'p05l3tBveztzKCJ14Z6C',
-  ca: 'YOUR_CA_GHL_LOCATION_ID',
+// ─── GHL BOOKING CALENDAR URLs ──────────────────────────────────────────────
+const GHL_BOOKING_URLS = {
+  us: 'https://api.leadconnectorhq.com/widget/booking/6Y4RUBqnucK62JXW4J8A',
+  ca: 'https://api.leadconnectorhq.com/widget/booking/DAMM5jUOXgVRPv0Hs8P6',
 };
 
-// ─── ZAPIER WEBHOOK ─────────────────────────────────────────────────────────
+// ─── ZAPIER WEBHOOK ────────────────────────────────────────────────────────
 const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/28871585/4dimp4a/';
 
 // ─── SERVICE OPTIONS ──────────────────────────────────────────────────────────
@@ -210,7 +210,6 @@ export default function LandingPage() {
 
     setIsSubmitting(true);
 
-    const locationId = GHL_LOCATION_IDS[country];
     const firstName = businessName.trim().split(' ')[0];
 
     // POST to Zapier webhook so it can create the GHL contact
@@ -231,9 +230,10 @@ export default function LandingPage() {
       // Fail silently — user should still get to booking
     }
 
-    // Route to GHL booking widget
+    // Route to the correct GHL booking calendar
+    const bookingBase = GHL_BOOKING_URLS[country];
     const ghlUrl =
-      `https://api.leadconnectorhq.com/widget/booking/${locationId}` +
+      `${bookingBase}` +
       `?phone=${encodeURIComponent(phone)}` +
       `&email=${encodeURIComponent(email)}` +
       `&first_name=${encodeURIComponent(firstName)}` +
