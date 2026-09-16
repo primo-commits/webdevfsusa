@@ -77,7 +77,7 @@ const t: Record<Language, Translation> = {
       { value: 'payment_processing', label: 'Payment Processing' },
       { value: 'business_capital', label: 'Business Capital' },
     ],
-    ctaButton: 'Request Your Free Strategy Call',
+    ctaButton: 'Confirm Your Free Strategy Call',
     ctaSubtext: 'No commitment. No sales pressure. Just a real conversation about your business.',
     disclaimer: 'FeeSlayers is not a lender and does not make credit decisions. Financing provided through third-party lenders.',
     validationError: 'Please fill in all required fields.',
@@ -265,7 +265,8 @@ export default function LandingPage() {
       // Fail silently — user still sees confirmation
     }
 
-    setStep('confirmed');
+    // Redirect to branded thank-you page
+    window.location.href = '/thank-you?date=' + encodeURIComponent(callDate);
     setIsSubmitting(false);
   };
 
