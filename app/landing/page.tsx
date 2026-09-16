@@ -244,7 +244,7 @@ export default function LandingPage() {
     // Pre-fill GHL widget with contact data via URL params
     const calendarId = GHL_CALENDAR_IDS[country];
     const ghlUrl =
-      `https://app.leadconnectorhq.com/booking/${calendarId}` +
+      `https://api.leadconnectorhq.com/widget/booking/${calendarId}` +
       `?phone=${encodeURIComponent(phone)}` +
       `&email=${encodeURIComponent(email)}` +
       `&first_name=${encodeURIComponent(firstName)}` +
@@ -253,11 +253,12 @@ export default function LandingPage() {
     // Render the GHL booking page inline via iframe — no redirect
     setStep('calendar');
 
-    // Inject iframe after step state flips so the DOM element exists
+    // Inject iframe + form-enhancement script after step state flips so the DOM element exists
     setTimeout(() => {
       const container = document.getElementById('ghl-calendar-container');
       if (!container) return;
       container.innerHTML = '';
+
       const iframe = document.createElement('iframe');
       iframe.src = ghlUrl;
       iframe.style.border = 'none';
@@ -265,6 +266,12 @@ export default function LandingPage() {
       iframe.style.height = '600px';
       iframe.style.display = 'block';
       container.appendChild(iframe);
+
+      // Load GHL's form-enhancement script (handles widget sizing + communication)
+      const script = document.createElement('script');
+      script.src = 'https://link.msgsndr.com/js/form_embed.js';
+      script.type = 'text/javascript';
+      container.appendChild(script);
     }, 50);
   };
 
