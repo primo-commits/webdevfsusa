@@ -23,7 +23,7 @@ const t: Record<Language, {
     eyebrow: 'Your request is confirmed.',
     title: "We'll be in touch soon.",
     subtitle: "Thanks for reaching out. A FeeSlayers advisor will call between 8:00 AM – 5:00 PM on your selected date to walk through your situation.",
-    dateNote: "Check your inbox — we've sent a confirmation email.",
+    dateNote: "Check your inbox, we've sent a confirmation email.",
     painTitle: "Sound familiar?",
     painSubtitle: "These are the exact problems keeping service businesses stuck.",
     servicesTitle: "What we help with",

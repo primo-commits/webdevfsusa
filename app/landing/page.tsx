@@ -320,9 +320,9 @@ export default function LandingPage() {
 
           <div style={{ background: '#F9F6F1', borderRadius: 12, padding: '16px 20px', marginBottom: 24, textAlign: 'left' }}>
             <p style={{ fontSize: 13, color: '#6b6560', margin: 0, fontFamily: 'inherit', lineHeight: 1.6 }}>
-              {lang === 'fr' ? 'Surveillez votre boîte de réception — nous vous enverrons un courriel de confirmation sous peu.' :
-               lang === 'es' ? 'Revisa tu bandeja de entrada — te enviaremos un correo de confirmación en breve.' :
-               'Check your inbox — we\'ll send a confirmation email shortly.'}
+              {lang === 'fr' ? 'Surveillez votre boîte de réception, nous vous enverrons un courriel de confirmation sous peu.' :
+               lang === 'es' ? 'Revisa tu bandeja de entrada, te enviaremos un correo de confirmación en breve.' :
+               'Check your inbox, we\'ll send a confirmation email shortly.'}
             </p>
           </div>
 
