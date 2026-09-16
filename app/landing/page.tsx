@@ -326,14 +326,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <button
-            onClick={() => { setStep('form'); setBusinessName(''); setEmail(''); setPhone(''); setCallDate(''); setSelectedServices([]); setErrors({}); }}
-            style={{ background: 'none', border: 'none', color: '#C9A84C', fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline' }}
-          >
-            {lang === 'fr' ? 'Soumettre une autre demande' :
-             lang === 'es' ? 'Enviar otra solicitud' :
-             'Submit another request'}
-          </button>
+
         </div>
 
         <style>{`
