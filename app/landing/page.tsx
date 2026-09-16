@@ -296,11 +296,13 @@ export default function LandingPage() {
         {/* Header */}
         <div style={{ paddingTop: 24, paddingBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect width="32" height="32" rx="8" fill="#1B3A5C" />
-              <path d="M9 22L13 10L16 18L19 14L23 22" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="38" height="38" rx="8" fill="#1B3A5C" />
+              <path d="M32 0 H38 V6 Q38 0 32 0 Z" fill="#C9A84C" />
+              <text x="6" y="27" fontFamily="Inter, Helvetica, Arial, sans-serif" fontWeight="700" fontSize="19" fill="#F5F0E8" letterSpacing="-0.5">F</text>
+              <text x="20" y="27" fontFamily="Inter, Helvetica, Arial, sans-serif" fontWeight="700" fontSize="19" fill="#C9A84C" letterSpacing="-0.5">S</text>
             </svg>
-            <span style={{ fontWeight: 700, fontSize: 18, color: '#1B3A5C' }}>FeeSlayers</span>
+            <span style={{ fontWeight: 700, fontSize: 18, color: '#1B3A5C' }}>Fee</span><span style={{ fontWeight: 700, fontSize: 18, color: '#C9A84C' }}>Slayers</span>
           </div>
           <div style={{ display: 'flex', gap: 4 }}>
             {(['en', 'fr', 'es'] as Language[]).map((l) => (
