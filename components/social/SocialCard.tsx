@@ -78,6 +78,7 @@ function Monogram({ size }: { size: number }) {
 
 function Header({ post, k, c }: { post: Post; k: number; c: Palette }) {
   const cfg = REGIONS[post.region];
+  // The tag names both markets on every card — the wordmark carries the region.
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 18 * k }}>
@@ -99,7 +100,7 @@ function Header({ post, k, c }: { post: Post; k: number; c: Palette }) {
           padding: `${10 * k}px ${22 * k}px`,
         }}
       >
-        {cfg.label}
+        {BRAND.markets}
       </span>
     </div>
   );
@@ -308,11 +309,11 @@ function TrialCard({ post, k, c }: { post: Post; k: number; c: Palette }) {
             alignSelf: "flex-start",
             background: BRAND.gold,
             color: BRAND.navy,
-            fontSize: 32 * k,
+            fontSize: 28 * k,
             fontWeight: 800,
             letterSpacing: "-0.01em",
             borderRadius: 14 * k,
-            padding: `${20 * k}px ${36 * k}px`,
+            padding: `${20 * k}px ${32 * k}px`,
           }}
         >
           {trial.cta}

@@ -28,6 +28,8 @@ export const BRAND = {
   site: "feeslayers.com",
   /** One site serves both markets — it goes on the footer of every card. */
   tagline: "Two countries. One website.",
+  /** Header tag. Every card names both markets, whichever region it is for. */
+  markets: "United States and Canada",
 } as const;
 
 export type Theme = "navy" | "cream";
@@ -150,7 +152,7 @@ const TRIAL: TrialCopy = {
     "Leads sent straight to you",
   ],
   // The domain already sits in the footer — repeating it here reads as a slip.
-  cta: "Start your free trial",
+  cta: "Start your free trial by clicking the link below",
   fine: "No contracts. Cancel anytime. Setup at no cost.",
 };
 
