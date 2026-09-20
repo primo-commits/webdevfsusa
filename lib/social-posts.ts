@@ -26,7 +26,60 @@ export const BRAND = {
   monogramNavy: "#1B3A5C",
   monogramGold: "#C9A84C",
   site: "feeslayers.com",
+  /** One site serves both markets — it goes on the footer of every card. */
+  tagline: "Two countries. One website.",
 } as const;
+
+export type Theme = "navy" | "cream";
+
+/** Two colourways drawn from the same tokens, for feed variety and ad A/B tests. */
+export const THEMES: Record<
+  Theme,
+  {
+    bg: string;
+    ink: string;
+    inkMuted: string;
+    inkFaint: string;
+    accent: string;
+    wordmarkHead: string;
+    rule: string;
+    pillBorder: string;
+    tileBg: string;
+    tileBorder: string;
+    glow: string;
+    wash: string;
+  }
+> = {
+  navy: {
+    bg: BRAND.navy,
+    ink: BRAND.cream,
+    inkMuted: "rgba(245,240,232,0.62)",
+    inkFaint: "rgba(245,240,232,0.34)",
+    accent: BRAND.gold,
+    wordmarkHead: BRAND.cream,
+    rule: "rgba(245,240,232,0.14)",
+    pillBorder: "rgba(245,240,232,0.18)",
+    tileBg: "rgba(200,146,42,0.14)",
+    tileBorder: "rgba(200,146,42,0.3)",
+    glow: "rgba(200,146,42,0.13)",
+    wash: "rgba(26,46,66,0.85)",
+  },
+  cream: {
+    bg: BRAND.cream,
+    ink: BRAND.navy,
+    // Gold is too light for body copy on cream, so text accents step down a shade.
+    inkMuted: "rgba(13,27,42,0.66)",
+    inkFaint: "rgba(13,27,42,0.4)",
+    accent: BRAND.goldDark,
+    wordmarkHead: BRAND.navy,
+    rule: "rgba(13,27,42,0.14)",
+    pillBorder: "rgba(13,27,42,0.2)",
+    tileBg: "rgba(200,146,42,0.16)",
+    tileBorder: "rgba(166,118,32,0.4)",
+    glow: "rgba(200,146,42,0.22)",
+    wash: "rgba(232,223,208,0.9)",
+  },
+};
 
 /** Canvas sizes. All 1080 wide so one type scale reads correctly across the set. */
 export const SIZES: Record<SizeKey, { w: number; h: number; label: string }> = {
@@ -54,6 +107,8 @@ export const ICONS = {
     "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
   trend:
     "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6",
+  check:
+    "M5 13l4 4L19 7",
 } as const;
 
 export type IconKey = keyof typeof ICONS;
@@ -72,6 +127,33 @@ export interface Offer {
   desc: string;
 }
 
+export interface TrialCopy {
+  badge: string;
+  headline: [string, string, string];
+  hook: string;
+  points: string[];
+  cta: string;
+  fine: string;
+}
+
+/**
+ * The 2-week advertising trial ad. Deliberately short: this is paid creative,
+ * and every extra line costs attention in the feed.
+ */
+const TRIAL: TrialCopy = {
+  badge: "Free Trial",
+  headline: ["2 weeks of", "Facebook ads,", "on us."],
+  hook: "You pay only the ad budget.",
+  points: [
+    "We build the creative",
+    "We target and optimize",
+    "Leads sent straight to you",
+  ],
+  // The domain already sits in the footer — repeating it here reads as a slip.
+  cta: "Start your free trial",
+  fine: "No contracts. Cancel anytime. Setup at no cost.",
+};
+
 export interface RegionConfig {
   region: Region;
   /** "FeeSlayers" for the US, "FeeSlayer" for Canada — the two are distinct marks. */
@@ -85,6 +167,7 @@ export interface RegionConfig {
   };
   /** Small print along the bottom edge of the overview card. */
   disclaimer: string;
+  trial: TrialCopy;
   offers: Offer[];
 }
 
@@ -99,6 +182,7 @@ const US: RegionConfig = {
     sub: "Five ways we help service businesses grow — all under one roof.",
   },
   disclaimer: "Available to US businesses. Financing subject to lender approval.",
+  trial: TRIAL,
   offers: [
     {
       id: "advertising",
@@ -154,6 +238,7 @@ const CA: RegionConfig = {
     sub: "Five ways we help Canadian service businesses grow — all under one roof.",
   },
   disclaimer: "All provinces except Quebec. Services vary by province.",
+  trial: TRIAL,
   offers: [
     {
       id: "advertising",
@@ -200,16 +285,30 @@ const CA: RegionConfig = {
 
 export const REGIONS: Record<Region, RegionConfig> = { us: US, ca: CA };
 
-export type Post =
-  | { id: string; region: Region; kind: "overview" }
-  | { id: string; region: Region; kind: "offer"; offerId: string };
+interface PostBase {
+  id: string;
+  region: Region;
+  theme: Theme;
+}
 
-/** Every post we generate: one overview per region, plus one card per offer. */
+export type Post =
+  | (PostBase & { kind: "overview" })
+  | (PostBase & { kind: "offer"; offerId: string })
+  | (PostBase & { kind: "trial" });
+
+/**
+ * Every post we generate, per region: the awareness overview, one card per
+ * offer, and the advertising-trial ad in both colourways so the two can be
+ * split-tested against each other.
+ */
 export const POSTS: Post[] = (Object.keys(REGIONS) as Region[]).flatMap((region) => [
-  { id: `${region}-overview`, region, kind: "overview" as const },
+  { id: `${region}-overview`, region, theme: "navy" as const, kind: "overview" as const },
+  { id: `${region}-trial`, region, theme: "navy" as const, kind: "trial" as const },
+  { id: `${region}-trial-light`, region, theme: "cream" as const, kind: "trial" as const },
   ...REGIONS[region].offers.map((offer) => ({
     id: `${region}-${offer.id}`,
     region,
+    theme: "navy" as const,
     kind: "offer" as const,
     offerId: offer.id,
   })),

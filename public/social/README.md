@@ -14,9 +14,17 @@ No third-party company is named in any of these images.
 
 ## FeeSlayers — United States
 
-### Everything we offer (lead post)
+### Everything we offer (awareness lead post)
 
 Files: `us-overview-square.png`, `us-overview-portrait.png`, `us-overview-story.png`
+
+### 2-week advertising trial — ad creative, navy colourway
+
+Files: `us-trial-square.png`, `us-trial-portrait.png`, `us-trial-story.png`
+
+### 2-week advertising trial — ad creative, cream colourway
+
+Files: `us-trial-light-square.png`, `us-trial-light-portrait.png`, `us-trial-light-story.png`
 
 ### Facebook & Meta Advertising
 
@@ -40,9 +48,17 @@ Files: `us-business-capital-square.png`, `us-business-capital-portrait.png`, `us
 
 ## FeeSlayer — Canada
 
-### Everything we offer (lead post)
+### Everything we offer (awareness lead post)
 
 Files: `ca-overview-square.png`, `ca-overview-portrait.png`, `ca-overview-story.png`
+
+### 2-week advertising trial — ad creative, navy colourway
+
+Files: `ca-trial-square.png`, `ca-trial-portrait.png`, `ca-trial-story.png`
+
+### 2-week advertising trial — ad creative, cream colourway
+
+Files: `ca-trial-light-square.png`, `ca-trial-light-portrait.png`, `ca-trial-light-story.png`
 
 ### Facebook & Meta Advertising
 

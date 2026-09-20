@@ -151,8 +151,10 @@ function buildReadme(): string {
     for (const post of POSTS.filter((p) => p.region === region)) {
       const title =
         post.kind === "overview"
-          ? "Everything we offer (lead post)"
-          : (getOffer(region, post.offerId)?.title ?? post.id);
+          ? "Everything we offer (awareness lead post)"
+          : post.kind === "trial"
+            ? `2-week advertising trial — ad creative, ${post.theme} colourway`
+            : (getOffer(region, post.offerId)?.title ?? post.id);
       lines.push(
         `### ${title}`,
         "",

@@ -4,16 +4,30 @@ import {
   REGIONS,
   SAFE_AREA,
   SIZES,
+  THEMES,
   getOffer,
   type IconKey,
   type Post,
   type SizeKey,
+  type Theme,
 } from "@/lib/social-posts";
 
 /* Type scale per canvas. Square is the tightest, so it steps down a little. */
-const SCALE: Record<SizeKey, number> = { square: 0.92, portrait: 1, story: 1.04 };
+const SCALE: Record<SizeKey, number> = { square: 0.84, portrait: 1, story: 1.04 };
 
-function Icon({ name, size, color }: { name: IconKey; size: number; color: string }) {
+type Palette = (typeof THEMES)[Theme];
+
+function Icon({
+  name,
+  size,
+  color,
+  weight = 1.6,
+}: {
+  name: IconKey;
+  size: number;
+  color: string;
+  weight?: number;
+}) {
   return (
     <svg
       width={size}
@@ -21,7 +35,7 @@ function Icon({ name, size, color }: { name: IconKey; size: number; color: strin
       viewBox="0 0 24 24"
       fill="none"
       stroke={color}
-      strokeWidth={1.6}
+      strokeWidth={weight}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -62,22 +76,15 @@ function Monogram({ size }: { size: number }) {
   );
 }
 
-function Header({ post, k }: { post: Post; k: number }) {
+function Header({ post, k, c }: { post: Post; k: number; c: Palette }) {
   const cfg = REGIONS[post.region];
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 18 * k }}>
         <Monogram size={64 * k} />
-        <span
-          style={{
-            fontSize: 38 * k,
-            fontWeight: 800,
-            letterSpacing: "-0.02em",
-            lineHeight: 1,
-          }}
-        >
-          <span style={{ color: BRAND.cream }}>{cfg.wordmarkHead}</span>
-          <span style={{ color: BRAND.gold }}>{cfg.wordmarkTail}</span>
+        <span style={{ fontSize: 38 * k, fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1 }}>
+          <span style={{ color: c.wordmarkHead }}>{cfg.wordmarkHead}</span>
+          <span style={{ color: c.accent }}>{cfg.wordmarkTail}</span>
         </span>
       </div>
       <span
@@ -86,8 +93,8 @@ function Header({ post, k }: { post: Post; k: number }) {
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.16em",
-          color: "rgba(245,240,232,0.55)",
-          border: "2px solid rgba(245,240,232,0.18)",
+          color: c.inkFaint,
+          border: `2px solid ${c.pillBorder}`,
           borderRadius: 999,
           padding: `${10 * k}px ${22 * k}px`,
         }}
@@ -98,39 +105,39 @@ function Header({ post, k }: { post: Post; k: number }) {
   );
 }
 
-function Footer({ post, k, note }: { post: Post; k: number; note?: string }) {
+/**
+ * feeslayers.com and the tagline sit on every card — one site serves both
+ * markets, so the footer says so. `note` carries any regional small print.
+ */
+function Footer({ k, c, note }: { k: number; c: Palette; note?: string }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 * k }}>
-      <div style={{ height: 2, background: "rgba(245,240,232,0.12)" }} />
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span
-          style={{
-            fontSize: 26 * k,
-            fontWeight: 600,
-            color: BRAND.gold,
-            letterSpacing: "0.02em",
-          }}
-        >
+      <div style={{ height: 2, background: c.rule }} />
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 24 * k }}>
+        <span style={{ fontSize: 26 * k, fontWeight: 700, color: c.accent, letterSpacing: "0.01em" }}>
           {BRAND.site}
         </span>
-        {note ? (
-          <span
-            style={{
-              fontSize: 19 * k,
-              color: "rgba(245,240,232,0.32)",
-              textAlign: "right",
-              maxWidth: 620 * k,
-            }}
-          >
-            {note}
-          </span>
-        ) : null}
+        <span
+          style={{
+            fontSize: 20 * k,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "0.14em",
+            color: c.inkFaint,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {BRAND.tagline}
+        </span>
       </div>
+      {note ? (
+        <span style={{ fontSize: 19 * k, color: c.inkFaint, opacity: 0.75, lineHeight: 1.35 }}>{note}</span>
+      ) : null}
     </div>
   );
 }
 
-function Pill({ children, k }: { children: React.ReactNode; k: number }) {
+function Pill({ children, k, c }: { children: React.ReactNode; k: number; c: Palette }) {
   return (
     <span
       style={{
@@ -150,11 +157,31 @@ function Pill({ children, k }: { children: React.ReactNode; k: number }) {
   );
 }
 
-function Overview({ post, k }: { post: Post; k: number }) {
+function IconTile({ name, k, c, size = 68 }: { name: IconKey; k: number; c: Palette; size?: number }) {
+  return (
+    <div
+      style={{
+        width: size * k,
+        height: size * k,
+        flexShrink: 0,
+        borderRadius: size * k * 0.26,
+        background: c.tileBg,
+        border: `2px solid ${c.tileBorder}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Icon name={name} size={size * k * 0.5} color={c.accent} />
+    </div>
+  );
+}
+
+function Overview({ post, k, c }: { post: Post; k: number; c: Palette }) {
   const cfg = REGIONS[post.region];
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 34 * k }}>
-      <Pill k={k}>{cfg.overview.badge}</Pill>
+      <Pill k={k} c={c}>{cfg.overview.badge}</Pill>
 
       <h1
         style={{
@@ -163,51 +190,27 @@ function Overview({ post, k }: { post: Post; k: number }) {
           fontWeight: 800,
           lineHeight: 1.04,
           letterSpacing: "-0.03em",
-          color: BRAND.cream,
+          color: c.ink,
         }}
       >
         {cfg.overview.headline[0]}
         <br />
-        <span style={{ color: BRAND.gold }}>{cfg.overview.headline[1]}</span>
+        <span style={{ color: c.accent }}>{cfg.overview.headline[1]}</span>
       </h1>
 
-      <p
-        style={{
-          margin: 0,
-          fontSize: 32 * k,
-          lineHeight: 1.4,
-          color: "rgba(245,240,232,0.6)",
-          maxWidth: 820 * k,
-        }}
-      >
+      <p style={{ margin: 0, fontSize: 32 * k, lineHeight: 1.4, color: c.inkMuted, maxWidth: 820 * k }}>
         {cfg.overview.sub}
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 20 * k, marginTop: 8 * k }}>
         {cfg.offers.map((offer) => (
           <div key={offer.id} style={{ display: "flex", alignItems: "center", gap: 24 * k }}>
-            <div
-              style={{
-                width: 68 * k,
-                height: 68 * k,
-                flexShrink: 0,
-                borderRadius: 18 * k,
-                background: "rgba(200,146,42,0.14)",
-                border: "1px solid rgba(200,146,42,0.28)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Icon name={offer.icon} size={34 * k} color={BRAND.gold} />
-            </div>
+            <IconTile name={offer.icon} k={k} c={c} />
             <div style={{ display: "flex", flexDirection: "column", gap: 4 * k }}>
-              <span style={{ fontSize: 33 * k, fontWeight: 700, color: BRAND.cream, letterSpacing: "-0.01em" }}>
+              <span style={{ fontSize: 33 * k, fontWeight: 700, color: c.ink, letterSpacing: "-0.01em" }}>
                 {offer.title}
               </span>
-              <span style={{ fontSize: 25 * k, color: "rgba(245,240,232,0.5)", lineHeight: 1.3 }}>
-                {offer.line}
-              </span>
+              <span style={{ fontSize: 25 * k, color: c.inkMuted, lineHeight: 1.3 }}>{offer.line}</span>
             </div>
           </div>
         ))}
@@ -216,28 +219,13 @@ function Overview({ post, k }: { post: Post; k: number }) {
   );
 }
 
-function OfferCard({ post, k }: { post: Extract<Post, { kind: "offer" }>; k: number }) {
+function OfferCard({ post, k, c }: { post: Extract<Post, { kind: "offer" }>; k: number; c: Palette }) {
   const offer = getOffer(post.region, post.offerId);
   if (!offer) return null;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 38 * k }}>
-      <div
-        style={{
-          width: 128 * k,
-          height: 128 * k,
-          borderRadius: 32 * k,
-          background: "rgba(200,146,42,0.14)",
-          border: "2px solid rgba(200,146,42,0.3)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Icon name={offer.icon} size={64 * k} color={BRAND.gold} />
-      </div>
-
-      <Pill k={k}>{offer.badge}</Pill>
-
+      <IconTile name={offer.icon} k={k} c={c} size={128} />
+      <Pill k={k} c={c}>{offer.badge}</Pill>
       <h1
         style={{
           margin: 0,
@@ -245,24 +233,92 @@ function OfferCard({ post, k }: { post: Extract<Post, { kind: "offer" }>; k: num
           fontWeight: 800,
           lineHeight: 1.04,
           letterSpacing: "-0.03em",
-          color: BRAND.cream,
+          color: c.ink,
           maxWidth: 900 * k,
         }}
       >
         {offer.title}
       </h1>
-
-      <p
-        style={{
-          margin: 0,
-          fontSize: 36 * k,
-          lineHeight: 1.45,
-          color: "rgba(245,240,232,0.62)",
-          maxWidth: 880 * k,
-        }}
-      >
+      <p style={{ margin: 0, fontSize: 36 * k, lineHeight: 1.45, color: c.inkMuted, maxWidth: 880 * k }}>
         {offer.desc}
       </p>
+    </div>
+  );
+}
+
+/**
+ * Paid ad creative for the 2-week advertising trial. Built to be read in the
+ * time it takes to scroll past: one big claim, the catch, three proof points,
+ * one destination.
+ */
+function TrialCard({ post, k, c }: { post: Post; k: number; c: Palette }) {
+  const { trial } = REGIONS[post.region];
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 32 * k }}>
+      <Pill k={k} c={c}>{trial.badge}</Pill>
+
+      <h1
+        style={{
+          margin: 0,
+          fontSize: 92 * k,
+          fontWeight: 800,
+          lineHeight: 1.0,
+          letterSpacing: "-0.035em",
+          color: c.ink,
+        }}
+      >
+        {trial.headline[0]}
+        <br />
+        {trial.headline[1]}
+        <br />
+        <span style={{ color: c.accent }}>{trial.headline[2]}</span>
+      </h1>
+
+      {/* The catch, stated up front — it is the whole offer. */}
+      <div
+        style={{
+          alignSelf: "flex-start",
+          display: "flex",
+          alignItems: "center",
+          gap: 18 * k,
+          background: c.tileBg,
+          border: `2px solid ${c.tileBorder}`,
+          borderRadius: 20 * k,
+          padding: `${20 * k}px ${28 * k}px`,
+        }}
+      >
+        <Icon name="coin" size={36 * k} color={c.accent} />
+        <span style={{ fontSize: 34 * k, fontWeight: 700, color: c.ink, letterSpacing: "-0.01em" }}>
+          {trial.hook}
+        </span>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 * k }}>
+        {trial.points.map((point) => (
+          <div key={point} style={{ display: "flex", alignItems: "center", gap: 16 * k }}>
+            <Icon name="check" size={32 * k} color={c.accent} weight={2.6} />
+            <span style={{ fontSize: 31 * k, color: c.inkMuted }}>{point}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 * k, marginTop: 4 * k }}>
+        <span
+          style={{
+            alignSelf: "flex-start",
+            background: BRAND.gold,
+            color: BRAND.navy,
+            fontSize: 32 * k,
+            fontWeight: 800,
+            letterSpacing: "-0.01em",
+            borderRadius: 14 * k,
+            padding: `${20 * k}px ${36 * k}px`,
+          }}
+        >
+          {trial.cta}
+        </span>
+        <span style={{ fontSize: 22 * k, color: c.inkFaint }}>{trial.fine}</span>
+      </div>
     </div>
   );
 }
@@ -271,6 +327,7 @@ export default function SocialCard({ post, size }: { post: Post; size: SizeKey }
   const { w, h } = SIZES[size];
   const pad = SAFE_AREA[size];
   const k = SCALE[size];
+  const c = THEMES[post.theme];
   const cfg = REGIONS[post.region];
 
   return (
@@ -281,7 +338,7 @@ export default function SocialCard({ post, size }: { post: Post; size: SizeKey }
         height: h,
         position: "relative",
         overflow: "hidden",
-        background: BRAND.navy,
+        background: c.bg,
         fontFamily: "Inter, system-ui, sans-serif",
         lineHeight: 1.25,
         display: "flex",
@@ -300,7 +357,7 @@ export default function SocialCard({ post, size }: { post: Post; size: SizeKey }
           width: 760,
           height: 760,
           borderRadius: "50%",
-          background: "rgba(200,146,42,0.13)",
+          background: c.glow,
           filter: "blur(150px)",
           pointerEvents: "none",
         }}
@@ -313,7 +370,7 @@ export default function SocialCard({ post, size }: { post: Post; size: SizeKey }
           width: 680,
           height: 680,
           borderRadius: "50%",
-          background: "rgba(26,46,66,0.85)",
+          background: c.wash,
           filter: "blur(140px)",
           pointerEvents: "none",
         }}
@@ -330,16 +387,22 @@ export default function SocialCard({ post, size }: { post: Post; size: SizeKey }
         }}
       />
 
-      <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 0 }}>
-        <Header post={post} k={k} />
+      <div style={{ position: "relative" }}>
+        <Header post={post} k={k} c={c} />
       </div>
 
       <div style={{ position: "relative" }}>
-        {post.kind === "overview" ? <Overview post={post} k={k} /> : <OfferCard post={post} k={k} />}
+        {post.kind === "overview" ? (
+          <Overview post={post} k={k} c={c} />
+        ) : post.kind === "trial" ? (
+          <TrialCard post={post} k={k} c={c} />
+        ) : (
+          <OfferCard post={post} k={k} c={c} />
+        )}
       </div>
 
       <div style={{ position: "relative" }}>
-        <Footer post={post} k={k} note={post.kind === "overview" ? cfg.disclaimer : undefined} />
+        <Footer k={k} c={c} note={post.kind === "overview" ? cfg.disclaimer : undefined} />
       </div>
     </div>
   );
