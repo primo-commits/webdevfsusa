@@ -59,7 +59,6 @@ interface Translation {
   trustOwn: string;
   confirmedTitle: string;
   confirmedSubtitle: string;
-  checkInbox: string;
   validationError: string;
   validationPhone: string;
   validationCallDate: string;
@@ -116,7 +115,6 @@ const translations: Record<Language, Translation> = {
     trustOwn: "You own your ad accounts",
     confirmedTitle: "You're in.",
     confirmedSubtitle: "We'll call between 8:00 AM -- 5:00 PM on",
-    checkInbox: "Check your inbox, we will send a confirmation email shortly.",
     validationError: "Please fill in all required fields.",
     validationPhone: "Please enter a valid phone number.",
     validationCallDate: "Please select a date.",
@@ -171,7 +169,6 @@ const translations: Record<Language, Translation> = {
     trustOwn: "Vous gardez vos comptes",
     confirmedTitle: "C'est en route.",
     confirmedSubtitle: "Nous appellerons entre 8h00 et 17h00 le",
-    checkInbox: "Surveillez votre boite de reception, nous vous enverrons un courriel de confirmation sous peu.",
     validationError: "Veuillez remplir tous les champs requis.",
     validationPhone: "Veuillez entrer un numero de telephone valide.",
     validationCallDate: "Veuillez selectionner une date.",
@@ -226,7 +223,6 @@ const translations: Record<Language, Translation> = {
     trustOwn: "Tus cuentas te pertenecen",
     confirmedTitle: "Listo.",
     confirmedSubtitle: "Llamaremos entre 8:00 AM y 5:00 PM el",
-    checkInbox: "Revisa tu bandeja de entrada, te enviaremos un correo de confirmacion en breve.",
     validationError: "Por favor completa todos los campos requeridos.",
     validationPhone: "Por favor ingresa un numero de telefono valido.",
     validationCallDate: "Por favor selecciona una fecha.",
@@ -316,9 +312,6 @@ export default function LandingPage() {
           <h2 className="confirmed-title">{t.confirmedTitle}</h2>
           <p className="confirmed-sub">{t.confirmedSubtitle}</p>
           <p className="confirmed-date">{formatDate(callDate, lang)}</p>
-          <div className="confirmed-inbox">
-            <p>{t.checkInbox}</p>
-          </div>
         </div>
       </div>
 

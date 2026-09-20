@@ -362,9 +362,7 @@
 .landing-root .confirmed-check { width: 64px; height: 64px; border-radius: 50%; background: rgba(16,185,129,0.1); border: 2px solid rgba(16,185,129,0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
 .landing-root .confirmed-title { font-size: 2rem; font-weight: 800; color: white; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; }
 .landing-root .confirmed-sub { font-size: 1rem; color: var(--text-secondary); margin-bottom: 4px; font-family: 'Inter', sans-serif; }
-.landing-root .confirmed-date { font-size: 1.25rem; font-weight: 700; color: var(--gold); margin-bottom: 24px; font-family: 'Inter', sans-serif; text-transform: capitalize; }
-.landing-root .confirmed-inbox { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; text-align: left; }
-.landing-root .confirmed-inbox p { font-size: 0.875rem; color: var(--text-secondary); margin: 0; font-family: 'Inter', sans-serif; line-height: 1.6; }
+.landing-root .confirmed-date { font-size: 1.25rem; font-weight: 700; color: var(--gold); margin-bottom: 0; font-family: 'Inter', sans-serif; text-transform: capitalize; }
 
 .landing-root .main-wrapper { display: block; }
 .landing-root .main-wrapper.hide { display: none; }
