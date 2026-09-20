@@ -39,3 +39,6 @@ next-env.d.ts
 *.swo
 
 .vercel
+
+# Local pre-edit snapshots (working safety net, not project history)
+.snapshots/
