@@ -1,600 +1,565 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
+import './landing.css';
+
+// ─── GHL INBOUND WEBHOOK ──────────────────────────────────────────────────────
+const GHL_WEBHOOK_URL =
+  'https://services.leadconnectorhq.com/hooks/p05l3tBveztzKCJ14Z6C/webhook-trigger/5V1Bsd31tHBTytuV3b9i';
 
 type Language = 'en' | 'fr' | 'es';
 type Country = 'us' | 'ca';
 
-// ─── GHL INBOUND WEBHOOK ─────────────────────────────────────────────────
-const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/p05l3tBveztzKCJ14Z6C/webhook-trigger/5V1Bsd31tHBTytuV3b9i';
-
-// ─── SERVICE OPTIONS ──────────────────────────────────────────────────────────
-// value = passed to GHL; label is per-language via translations below
-const SERVICES = [
-  'google_business_profile',
-  'facebook_meta_advertising',
-  'consumer_financing',
-  'payment_processing',
-  'business_capital',
-  'website_development',
-] as const;
-type ServiceValue = typeof SERVICES[number];
-
-// ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 interface Translation {
-  introTitle: string;
-  introSubtitle: string;
+  topBar: string;
+  navHowItWorks: string;
+  navApply: string;
+  heroBadge: string;
+  heroTitle1: string;
+  heroTitle2: string;
+  heroTitle3: string;
+  heroDesc: string;
+  heroScarcity: string;
+  ctaButton: string;
+  statYouOwn: string;
+  statNoCc: string;
+  statDays: string;
+  dashboardLabel: string;
+  dashboardBusiness: string;
+  dashboardLocation: string;
+  caseStudyLabel: string;
+  appointmentsLabel: string;
+  cplLabel: string;
+  spendLabel: string;
+  howItWorksLabel: string;
+  howItWorksTitle: string;
+  howItWorksSub: string;
+  step1Title: string;
+  step1Desc: string;
+  step2Title: string;
+  step2Desc: string;
+  step3Title: string;
+  step3Desc: string;
+  formTitle: string;
+  formSub: string;
   countryLabel: string;
   countryUs: string;
   countryCa: string;
   businessNameLabel: string;
   businessNamePlaceholder: string;
-  emailLabel: string;
-  emailPlaceholder: string;
   phoneLabel: string;
   phonePlaceholder: string;
   callDateLabel: string;
   callDateNote: string;
-  servicesLabel: string;
-  services: { value: ServiceValue; label: string }[];
-  ctaButton: string;
   ctaSubtext: string;
   disclaimer: string;
-  validationError: string;
-  validationEmail: string;
-  validationPhone: string;
-  validationServices: string;
-  validationCallDate: string;
-  langEn: string;
-  langFr: string;
-  langEs: string;
+  footerDisclaimer: string;
+  trustNoCc: string;
+  trustLeads: string;
+  trustOwn: string;
   confirmedTitle: string;
   confirmedSubtitle: string;
-  confirmedDateLabel: string;
+  checkInbox: string;
+  validationError: string;
+  validationPhone: string;
+  validationCallDate: string;
+  sendingButton: string;
 }
 
-const t: Record<Language, Translation> = {
+const translations: Record<Language, Translation> = {
   en: {
-    introTitle: 'Tell us about your business and what you\'re looking to improve.',
-    introSubtitle: 'We\'ll put together a custom plan and show you exactly what\'s available for your situation.',
-    countryLabel: 'WHERE IS YOUR BUSINESS LOCATED?',
-    countryUs: 'US — United States',
-    countryCa: 'CA — Canada',
-    businessNameLabel: 'Business Name',
-    businessNamePlaceholder: 'e.g. Apex Auto Repair',
-    emailLabel: 'Email Address',
-    emailPlaceholder: 'you@yourbusiness.com',
-    phoneLabel: 'Phone Number',
-    phonePlaceholder: '(555) 867-5309',
-    callDateLabel: 'Best day to call you',
-    callDateNote: 'We\'ll call between 8:00 AM – 5:00 PM',
-    servicesLabel: 'Which services are you interested in? (select all that apply)',
-    services: [
-      { value: 'google_business_profile', label: 'Google Business Profile' },
-      { value: 'facebook_meta_advertising', label: 'Facebook & Meta Advertising (2-week free trial)' },
-      { value: 'consumer_financing', label: 'Consumer Financing' },
-      { value: 'website_development', label: 'Website Development' },
-      { value: 'payment_processing', label: 'Payment Processing' },
-      { value: 'business_capital', label: 'Business Capital' },
-    ],
-    ctaButton: 'Confirm Your Free Strategy Call',
-    ctaSubtext: 'No commitment. No sales pressure. Just a real conversation about your business.',
-    disclaimer: 'FeeSlayers is not a lender and does not make credit decisions. Financing provided through third-party lenders.',
-    validationError: 'Please fill in all required fields.',
-    validationEmail: 'Please enter a valid email address.',
-    validationPhone: 'Please enter a valid phone number.',
-    validationServices: 'Please select at least one service.',
-    validationCallDate: 'Please select a date.',
-    langEn: 'EN',
-    langFr: 'FR',
-    langEs: 'ES',
-    confirmedTitle: 'You\'re in.',
-    confirmedSubtitle: 'We\'ll call between 8:00 AM – 5:00 PM on',
-    confirmedDateLabel: '',
+    topBar: "Limited free trials available each month -- we selectively onboard businesses that are the right fit",
+    navHowItWorks: "How It Works",
+    navApply: "Apply Free",
+    heroBadge: "Auto Repair, HVAC, Home Services",
+    heroTitle1: "2 Weeks of Facebook Ads.",
+    heroTitle2: "Free.",
+    heroTitle3: "No Strings.",
+    heroDesc: "See if FeeSlayers is the right fit for your business. We'll run your Facebook ads for 2 weeks at no cost. If you don't see results, you walk away.",
+    heroScarcity: "Only a handful of free trials available this month",
+    ctaButton: "Apply for Your Free Trial",
+    statYouOwn: "You own your accounts",
+    statNoCc: "No credit card required",
+    statDays: "Days free trial",
+    dashboardLabel: "Your Business",
+    dashboardBusiness: "NP Detailing",
+    dashboardLocation: "Phoenix, AZ",
+    caseStudyLabel: "Real result from a FeeSlayers client",
+    appointmentsLabel: "Appointments Last Month",
+    cplLabel: "Cost Per Lead",
+    spendLabel: "Facebook Ads Spend",
+    howItWorksLabel: "How It Works",
+    howItWorksTitle: "3 Steps to Your Free Trial",
+    howItWorksSub: "A simple path from application to seeing real results from your Facebook ads.",
+    step1Title: "Book Your Call",
+    step1Desc: "Tell us about your business and marketing goals. We'll review your current situation and identify the best opportunity.",
+    step2Title: "We Build Your Ads",
+    step2Desc: "Once approved, we build and launch your Facebook ad campaign using real data and a strategy built for your industry.",
+    step3Title: "See Real Results",
+    step3Desc: "After 2 weeks, you'll see exactly what kind of leads and calls are possible. No pressure, no obligation.",
+    formTitle: "Apply for Your Free Trial",
+    formSub: "Takes 60 seconds. No credit card required.",
+    countryLabel: "WHERE IS YOUR BUSINESS LOCATED?",
+    countryUs: "US -- United States",
+    countryCa: "CA -- Canada",
+    businessNameLabel: "Business Name",
+    businessNamePlaceholder: "Your shop or business name",
+    phoneLabel: "Phone Number",
+    phonePlaceholder: "(555) 000-0000",
+    callDateLabel: "Best day to call you",
+    callDateNote: "We'll call between 8:00 AM -- 5:00 PM",
+    ctaSubtext: "No commitment. No sales pressure. Just a real conversation about your business.",
+    disclaimer: "By applying, you agree to be contacted by FeeSlayers regarding your free trial. No payment information required. No obligation.",
+    footerDisclaimer: "FeeSlayers is not a lender and does not make credit decisions. Facebook ad management is separate from your ad spend budget, which you pay directly to Meta. Results may vary. This free trial offer is subject to eligibility and availability.",
+    trustNoCc: "No credit card required",
+    trustLeads: "Real leads, real calls",
+    trustOwn: "You own your ad accounts",
+    confirmedTitle: "You're in.",
+    confirmedSubtitle: "We'll call between 8:00 AM -- 5:00 PM on",
+    checkInbox: "Check your inbox, we will send a confirmation email shortly.",
+    validationError: "Please fill in all required fields.",
+    validationPhone: "Please enter a valid phone number.",
+    validationCallDate: "Please select a date.",
+    sendingButton: "Sending…",
   },
   fr: {
-    introTitle: 'Parlez-nous de votre entreprise et de ce que vous souhaitez améliorer.',
-    introSubtitle: "Nous élaborerons un plan personnalisé et vous montrerons exactement ce qui est disponible pour votre situation.",
-    countryLabel: 'OÙ EST SITUÉE VOTRE ENTREPRISE?',
-    countryUs: 'US — États-Unis',
-    countryCa: 'CA — Canada',
-    businessNameLabel: 'Nom de l\'entreprise',
-    businessNamePlaceholder: 'p. ex. Atelier Apex Réparation',
-    emailLabel: 'Adresse courriel',
-    emailPlaceholder: 'vous@votreentreprise.com',
-    phoneLabel: 'Numéro de téléphone',
-    phonePlaceholder: '(555) 867-5309',
-    callDateLabel: ' Meilleur jour pour vous appeler',
-    callDateNote: 'Nous appelerons entre 8h et 17h',
-    servicesLabel: 'Quels services vous intéressent? (sélectionnez tous ceux qui s\'appliquent)',
-    services: [
-      { value: 'google_business_profile', label: 'Google Business Profile' },
-      { value: 'facebook_meta_advertising', label: 'Publicité Facebook et Meta (essai gratuit de 2 semaines)' },
-      { value: 'consumer_financing', label: 'Financement aux consommateurs' },
-      { value: 'website_development', label: 'Développement de sites web' },
-      { value: 'payment_processing', label: 'Traitement des paiements' },
-      { value: 'business_capital', label: 'Capital d\'affaires' },
-    ],
-    ctaButton: 'Demander Votre Appel Stratégique Gratuit',
-    ctaSubtext: 'Aucun engagement. Aucune pression commerciale. Juste une vraie conversation sur votre entreprise.',
-    disclaimer: 'FeeSlayers n\'est pas un prêteur et ne prend pas de décisions de crédit. Financement fourni par des prêteurs tiers.',
-    validationError: 'Veuillez remplir tous les champs requis.',
-    validationEmail: 'Veuillez entrer une adresse courriel valide.',
-    validationPhone: 'Veuillez entrer un numéro de téléphone valide.',
-    validationServices: 'Veuillez sélectionner au moins un service.',
-    validationCallDate: 'Veuillez sélectionner une date.',
-    langEn: 'EN',
-    langFr: 'FR',
-    langEs: 'ES',
-    confirmedTitle: 'C\'est en route.',
-    confirmedSubtitle: 'Nous vous appellerons entre 8h et 17h le',
-    confirmedDateLabel: '',
+    topBar: "Essais gratuits limites chaque mois -- nous selectionnons les entreprises qui correspondent a notre approche",
+    navHowItWorks: "Comment ca marche",
+    navApply: "Appliquer",
+    heroBadge: "Reparation Auto, CVC, Services a Domicile",
+    heroTitle1: "2 semaines de publicite Facebook.",
+    heroTitle2: "Gratuit.",
+    heroTitle3: "Sans engagement.",
+    heroDesc: "Decouvrez si FeeSlayers vous convient. Nous gérons vos publicites Facebook pendant 2 semaines gratuitement. Si vous ne voyez pas de resultats, vous partez.",
+    heroScarcity: "Seulement quelques essais gratuits disponibles ce mois-ci",
+    ctaButton: "Postuler pour un Essai Gratuit",
+    statYouOwn: "Vous gardez vos comptes",
+    statNoCc: "Aucune carte requise",
+    statDays: "Jours d'essai gratuit",
+    dashboardLabel: "Votre Entreprise",
+    dashboardBusiness: "NP Detailing",
+    dashboardLocation: "Phoenix, AZ",
+    caseStudyLabel: "Resultat reel d'un client FeeSlayers",
+    appointmentsLabel: "Rendez-vous le mois dernier",
+    cplLabel: "Cout par Lead",
+    spendLabel: "Budget Facebook Ads",
+    howItWorksLabel: "Comment ca marche",
+    howItWorksTitle: "3 etapes vers votre essai gratuit",
+    howItWorksSub: "Un processus simple de la candidature a l'obtention de resultats concrets sur Facebook.",
+    step1Title: "Reservez Votre Appel",
+    step1Desc: "Parlez-nous de votre entreprise et de vos objectifs marketing. Nous analysons votre situation et identifions la meilleure opportunite.",
+    step2Title: "Nous Creons Vos Annonces",
+    step2Desc: "Une fois approuve, nous concevons et lancons votre campagne Facebook avec des donnees reelles et une strategie adaptee a votre secteur.",
+    step3Title: "Voyez les Resultats",
+    step3Desc: "Apres 2 semaines, vous verrez exactement quel type de leads et d'appels est possible. Pas de pression, pas d'obligation.",
+    formTitle: "Postuler pour un Essai Gratuit",
+    formSub: "Cela prend 60 secondes. Aucune carte de credit requise.",
+    countryLabel: "OU EST SITUEE VOTRE ENTREPRISE?",
+    countryUs: "US --Etats-Unis",
+    countryCa: "CA -- Canada",
+    businessNameLabel: "Nom de l'entreprise",
+    businessNamePlaceholder: "Le nom de votre entreprise",
+    phoneLabel: "Numero de telephone",
+    phonePlaceholder: "(555) 000-0000",
+    callDateLabel: "Meilleur jour pour vous appeler",
+    callDateNote: "Nous appellerons entre 8h00 et 17h00",
+    ctaSubtext: "Aucun engagement. Aucune pression commerciale. Juste une vraie conversation sur votre entreprise.",
+    disclaimer: "En postulant, vous acceptez d'etre contacté par FeeSlayers concernant votre essai gratuit. Aucune information de paiement requise. Aucune obligation.",
+    footerDisclaimer: "FeeSlayers n'est pas un preteur et ne prend pas de decisions de credit. La gestion des publicites Facebook est separate de votre budget publicitaire, que vous payez directement a Meta. Les resultats peuvent varier. Cette offre d'essai gratuit est soumise a l'eligibilite et a la disponibilite.",
+    trustNoCc: "Aucune carte requise",
+    trustLeads: "De vrais leads, de vrais appels",
+    trustOwn: "Vous gardez vos comptes",
+    confirmedTitle: "C'est en route.",
+    confirmedSubtitle: "Nous appellerons entre 8h00 et 17h00 le",
+    checkInbox: "Surveillez votre boite de reception, nous vous enverrons un courriel de confirmation sous peu.",
+    validationError: "Veuillez remplir tous les champs requis.",
+    validationPhone: "Veuillez entrer un numero de telephone valide.",
+    validationCallDate: "Veuillez selectionner une date.",
+    sendingButton: "Envoi…",
   },
   es: {
-    introTitle: 'Cuéntanos sobre tu negocio y lo que te gustaría mejorar.',
-    introSubtitle: 'Elaboraremos un plan personalizado y te mostraremos exactamente lo que está disponible para tu situación.',
-    countryLabel: '¿DÓNDE ESTÁ UBICADO TU NEGOCIO?',
-    countryUs: 'US — Estados Unidos',
-    countryCa: 'CA — Canadá',
-    businessNameLabel: 'Nombre del negocio',
-    businessNamePlaceholder: 'p. ej. Taller Apex Reparación',
-    emailLabel: 'Correo electrónico',
-    emailPlaceholder: 'tu@tunegocio.com',
-    phoneLabel: 'Número de teléfono',
-    phonePlaceholder: '(555) 867-5309',
-    callDateLabel: 'Mejor día para llamarte',
-    callDateNote: 'Llamaremos entre 8:00 AM y 5:00 PM',
-    servicesLabel: '¿Qué servicios te interesan? (selecciona todos los que apliquen)',
-    services: [
-      { value: 'google_business_profile', label: 'Google Business Profile' },
-      { value: 'facebook_meta_advertising', label: 'Publicidad Facebook y Meta (prueba gratuita de 2 semanas)' },
-      { value: 'consumer_financing', label: 'Financiamiento al consumidor' },
-      { value: 'website_development', label: 'Desarrollo web' },
-      { value: 'payment_processing', label: 'Procesamiento de pagos' },
-      { value: 'business_capital', label: 'Capital de negocio' },
-    ],
-    ctaButton: 'Solicita Tu Llamada Estratégica Gratis',
-    ctaSubtext: 'Sin compromiso. Sin presión de venta. Solo una conversación real sobre tu negocio.',
-    disclaimer: 'FeeSlayers no es un prestamista y no toma decisiones de crédito. Financiamiento proporcionado por prestamistas terceros.',
-    validationError: 'Por favor completa todos los campos requeridos.',
-    validationEmail: 'Por favor ingresa un correo electrónico válido.',
-    validationPhone: 'Por favor ingresa un número de teléfono válido.',
-    validationServices: 'Por favor selecciona al menos un servicio.',
-    validationCallDate: 'Por favor selecciona una fecha.',
-    langEn: 'EN',
-    langFr: 'FR',
-    langEs: 'ES',
-    confirmedTitle: 'Listo.',
-    confirmedSubtitle: 'Llamaremos entre 8:00 AM y 5:00 PM el',
-    confirmedDateLabel: '',
+    topBar: "Pruebas gratuitas limitadas cada mes -- aceptamos empresas que sean adecuadas para nosotros",
+    navHowItWorks: "Como Funciona",
+    navApply: "Aplicar",
+    heroBadge: "Reparacion de Autos, HVAC, Servicios a Domicilio",
+    heroTitle1: "2 semanas de Facebook Ads.",
+    heroTitle2: "Gratis.",
+    heroTitle3: "Sin compromisos.",
+    heroDesc: "Descubre si FeeSlayers es adecuado para tu negocio. Nosotros gestionamos tus anuncios de Facebook durante 2 semanas sin costo. Si no ves resultados, te vas.",
+    heroScarcity: "Solo un punado de pruebas gratuitas disponibles este mes",
+    ctaButton: "Aplica para tu Prueba Gratuita",
+    statYouOwn: "Tus cuentas te pertenecen",
+    statNoCc: "Sin tarjeta requerida",
+    statDays: "Dias de prueba gratis",
+    dashboardLabel: "Tu Negocio",
+    dashboardBusiness: "NP Detailing",
+    dashboardLocation: "Phoenix, AZ",
+    caseStudyLabel: "Resultado real de un cliente FeeSlayers",
+    appointmentsLabel: "Citas el Mes Pasado",
+    cplLabel: "Costo por Lead",
+    spendLabel: "Presupuesto Facebook Ads",
+    howItWorksLabel: "Como Funciona",
+    howItWorksTitle: "3 Pasos hacia tu Prueba Gratuita",
+    howItWorksSub: "Un camino simple desde la solicitud hasta ver resultados reales en Facebook.",
+    step1Title: "Reserva tu Llamada",
+    step1Desc: "Cuentanos sobre tu negocio y tus objetivos de marketing. Revisaremos tu situacion actual e identificaremos la mejor oportunidad.",
+    step2Title: "Creamos tus Anuncios",
+    step2Desc: "Una vez aprobado, construimos y lanzamos tu campana de Facebook con datos reales y una estrategia para tu industria.",
+    step3Title: "Ve Resultados Reales",
+    step3Desc: "Despues de 2 semanas, veras exactamente que tipo de leads y llamadas son posibles. Sin presion, sin obligacion.",
+    formTitle: "Aplica para tu Prueba Gratuita",
+    formSub: "Toma 60 segundos. No se requiere tarjeta de credito.",
+    countryLabel: "DONDE ESTA UBICADO TU NEGOCIO?",
+    countryUs: "US -- Estados Unidos",
+    countryCa: "CA -- Canada",
+    businessNameLabel: "Nombre del negocio",
+    businessNamePlaceholder: "El nombre de tu negocio",
+    phoneLabel: "Numero de telefono",
+    phonePlaceholder: "(555) 000-0000",
+    callDateLabel: "Mejor dia para llamarte",
+    callDateNote: "Llamaremos entre 8:00 AM y 5:00 PM",
+    ctaSubtext: "Sin compromiso. Sin presion de venta. Solo una conversacion real sobre tu negocio.",
+    disclaimer: "Al aplicar, aceptas ser contactado por FeeSlayers sobre tu prueba gratuita. No se requiere informacion de pago. Ninguna obligacion.",
+    footerDisclaimer: "FeeSlayers no es un prestamista y no toma decisiones de credito. La gestion de anuncios de Facebook es independiente de tu presupuesto publicitario, que pagas directamente a Meta. Los resultados pueden variar. Esta oferta de prueba gratuita esta sujeta a elegibilidad y disponibilidad.",
+    trustNoCc: "Sin tarjeta requerida",
+    trustLeads: "Leads reales, llamadas reales",
+    trustOwn: "Tus cuentas te pertenecen",
+    confirmedTitle: "Listo.",
+    confirmedSubtitle: "Llamaremos entre 8:00 AM y 5:00 PM el",
+    checkInbox: "Revisa tu bandeja de entrada, te enviaremos un correo de confirmacion en breve.",
+    validationError: "Por favor completa todos los campos requeridos.",
+    validationPhone: "Por favor ingresa un numero de telefono valido.",
+    validationCallDate: "Por favor selecciona una fecha.",
+    sendingButton: "Enviando…",
   },
 };
 
-// ─── COMPONENT ────────────────────────────────────────────────────────────────
-type Step = 'form' | 'confirmed';
+function formatDate(dateStr: string, lang: Language): string {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const d = new Date(year, month - 1, day);
+  if (lang === 'fr') return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  if (lang === 'es') return d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
 
 export default function LandingPage() {
   const [lang, setLang] = useState<Language>('en');
-  const [step, setStep] = useState<Step>('form');
   const [country, setCountry] = useState<Country>('us');
   const [businessName, setBusinessName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [callDate, setCallDate] = useState('');
-  const [selectedServices, setSelectedServices] = useState<ServiceValue[]>([]);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [confirmedDate, setConfirmedDate] = useState('');
+  const [errors, setErrors] = useState<{ businessName?: string; phone?: string; callDate?: string }>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const [minDate, setMinDate] = useState('');
 
-  const txt = t[lang];
-
-  // Persist language preference
+  // Set after mount so the prerendered HTML doesn't bake in the build date.
   useEffect(() => {
-    const saved = localStorage.getItem('fs_lang') as Language | null;
-    if (saved === 'en' || saved === 'fr' || saved === 'es') setLang(saved);
+    setMinDate(new Date().toISOString().split('T')[0]);
   }, []);
 
-  const toggleLang = (l: Language) => {
-    setLang(l);
-    localStorage.setItem('fs_lang', l);
-  };
+  const t = translations[lang];
 
-  const toggleService = (value: ServiceValue) => {
-    setSelectedServices((prev) =>
-      prev.includes(value) ? prev.filter((s) => s !== value) : [...prev, value]
-    );
-    setErrors((prev) => {
-      const next = { ...prev };
-      delete next.services;
-      return next;
-    });
-  };
-
-  const validate = () => {
-    const errs: Record<string, string> = {};
-    if (!businessName.trim()) errs.businessName = txt.validationError;
-    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = txt.validationEmail;
-    if (!phone.trim() || phone.replace(/\D/g, '').length < 10) errs.phone = txt.validationPhone;
-    if (!callDate) errs.callDate = txt.validationCallDate;
-    if (selectedServices.length === 0) errs.services = txt.validationServices;
-    return errs;
-  };
-
-  const formatDate = (dateStr: string): string => {
-    if (!dateStr) return '';
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const d = new Date(year, month - 1, day);
-    if (lang === 'fr') {
-      return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-    }
-    if (lang === 'es') {
-      return d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-    }
-    return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
 
-    setIsSubmitting(true);
-    setConfirmedDate(callDate);
+    const nextErrors: typeof errors = {};
+    if (!businessName.trim()) nextErrors.businessName = t.validationError;
+    if (!phone.trim() || phone.replace(/\D/g, '').length < 10) nextErrors.phone = t.validationPhone;
+    if (!callDate) nextErrors.callDate = t.validationCallDate;
 
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setSubmitting(true);
     const firstName = businessName.trim().split(' ')[0];
 
-    // POST to GHL inbound webhook → creates contact in GHL
     try {
       await fetch(GHL_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName,
-          email,
-          phone,
-          businessName,
+          phone: phone.trim(),
+          businessName: businessName.trim(),
           country,
-          selectedServices,
           callDate,
         }),
       });
     } catch {
-      // Fail silently — user still sees confirmation
+      // non-blocking: still show confirmation
     }
 
-    // Redirect to branded thank-you page
-    window.location.href = '/thank-you?date=' + encodeURIComponent(callDate);
-    setIsSubmitting(false);
-  };
+    setSubmitting(false);
+    setConfirmed(true);
+  }
 
-  const inputStyle = (hasError: boolean): React.CSSProperties => ({
-    width: '100%',
-    padding: '12px 14px',
-    borderRadius: 10,
-    border: `1.5px solid ${hasError ? '#e53e3e' : '#d4cfc7'}`,
-    fontSize: 15,
-    fontFamily: 'inherit',
-    color: '#0D1B2A',
-    background: '#fafaf8',
-    outline: 'none',
-    transition: 'border-color 0.15s',
-    boxSizing: 'border-box',
-  });
-
-  // Confirmed screen
-  if (step === 'confirmed') {
-    const formattedDate = formatDate(confirmedDate);
-    return (
-      <div style={{ minHeight: '100vh', background: '#F9F6F1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div style={{ background: '#fff', borderRadius: 20, padding: '40px 32px', maxWidth: 520, width: '100%', textAlign: 'center', boxShadow: '0 4px 24px rgba(27,58,92,0.08)' }}>
-
-          {/* Logo */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
-            <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  return (
+    <div className="landing-root">
+      {/* CONFIRMATION VIEW */}
+      <div className={confirmed ? 'confirmed-wrapper show' : 'confirmed-wrapper'}>
+        <div className="confirmed-card">
+          <div className="confirmed-logo">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
               <rect width="52" height="52" rx="10" fill="#1B3A5C" />
               <path d="M44 0 H52 V8 Q52 0 44 0 Z" fill="#C9A84C" />
               <text x="8" y="37" fontFamily="Inter, Helvetica, Arial, sans-serif" fontWeight="700" fontSize="26" fill="#F5F0E8" letterSpacing="-1">F</text>
               <text x="28" y="37" fontFamily="Inter, Helvetica, Arial, sans-serif" fontWeight="700" fontSize="26" fill="#C9A84C" letterSpacing="-1">S</text>
             </svg>
           </div>
-
-          {/* Checkmark */}
-          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#1B3A5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-            <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-              <path d="M6 15l6.5 7L24 9" stroke="#C9A84C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <div className="confirmed-check">
+            <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+              <path d="M6 15l6.5 7L24 9" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-
-          <h2 style={{ fontSize: 26, fontWeight: 800, color: '#1B3A5C', margin: '0 0 10px', fontFamily: 'inherit' }}>
-            {txt.confirmedTitle}
-          </h2>
-          <p style={{ fontSize: 16, color: '#6b6560', margin: '0 0 6px', fontFamily: 'inherit' }}>
-            {txt.confirmedSubtitle}
-          </p>
-          <p style={{ fontSize: 18, fontWeight: 700, color: '#1B3A5C', margin: '0 0 24px', fontFamily: 'inherit', textTransform: 'capitalize' }}>
-            {formattedDate}
-          </p>
-
-          <div style={{ background: '#F9F6F1', borderRadius: 12, padding: '16px 20px', marginBottom: 24, textAlign: 'left' }}>
-            <p style={{ fontSize: 13, color: '#6b6560', margin: 0, fontFamily: 'inherit', lineHeight: 1.6 }}>
-              {lang === 'fr' ? 'Surveillez votre boîte de réception, nous vous enverrons un courriel de confirmation sous peu.' :
-               lang === 'es' ? 'Revisa tu bandeja de entrada, te enviaremos un correo de confirmación en breve.' :
-               'Check your inbox, we\'ll send a confirmation email shortly.'}
-            </p>
+          <h2 className="confirmed-title">{t.confirmedTitle}</h2>
+          <p className="confirmed-sub">{t.confirmedSubtitle}</p>
+          <p className="confirmed-date">{formatDate(callDate, lang)}</p>
+          <div className="confirmed-inbox">
+            <p>{t.checkInbox}</p>
           </div>
-
-
         </div>
-
-        <style>{`
-          * { box-sizing: border-box; }
-          body { margin: 0; }
-        `}</style>
       </div>
-    );
-  }
 
-  // ── Form step ─────────────────────────────────────────────────────────────
-  return (
-    <div style={{ minHeight: '100vh', background: '#F9F6F1', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '24px 16px 60px' }}>
-      <div style={{ maxWidth: 600, margin: '0 auto' }}>
+      {/* MAIN VIEW */}
+      <div className={confirmed ? 'main-wrapper hide' : 'main-wrapper'}>
+        {/* Top Bar */}
+        <div className="top-bar">{t.topBar}</div>
 
         {/* Header */}
-        <div style={{ paddingTop: 24, paddingBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="38" height="38" rx="8" fill="#1B3A5C" />
-              <path d="M32 0 H38 V6 Q38 0 32 0 Z" fill="#C9A84C" />
-              <text x="6" y="27" fontFamily="Inter, Helvetica, Arial, sans-serif" fontWeight="700" fontSize="19" fill="#F5F0E8" letterSpacing="-0.5">F</text>
-              <text x="20" y="27" fontFamily="Inter, Helvetica, Arial, sans-serif" fontWeight="700" fontSize="19" fill="#C9A84C" letterSpacing="-0.5">S</text>
-            </svg>
-            <span style={{ fontWeight: 700, fontSize: 18 }}><span style={{ color: '#1B3A5C' }}>Fee</span><span style={{ color: '#C9A84C' }}>Slayers</span></span>
+        <header>
+          <div className="header-inner">
+            <a href="#" className="logo">
+              FEE<span>SLAYERS</span>
+            </a>
+            <nav className="nav-links">
+              <a href="#how-it-works">{t.navHowItWorks}</a>
+              <a href="#apply">{t.navApply}</a>
+            </nav>
+            <div className="lang-switcher">
+              {(['en', 'fr', 'es'] as const).map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  className={lang === code ? 'lang-btn active' : 'lang-btn'}
+                  onClick={() => setLang(code)}
+                >
+                  {code.toUpperCase()}
+                </button>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 4 }}>
-            {(['en', 'fr', 'es'] as Language[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => toggleLang(l)}
-                style={{
-                  background: lang === l ? '#1B3A5C' : 'transparent',
-                  color: lang === l ? '#fff' : '#1B3A5C',
-                  border: '1.5px solid #1B3A5C',
-                  borderRadius: 6,
-                  padding: '5px 10px',
-                  fontSize: 13,
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                }}
-              >
-                {l === 'en' ? txt.langEn : l === 'fr' ? txt.langFr : txt.langEs}
-              </button>
-            ))}
-          </div>
-        </div>
+        </header>
 
-        {/* Intro */}
-        <div style={{ marginBottom: 28 }}>
-          <p style={{ fontSize: 17, fontWeight: 700, color: '#1B3A5C', lineHeight: 1.4, margin: '28px 0 8px' }}>
-            {txt.introTitle}
-          </p>
-          <p style={{ fontSize: 15, color: '#6b6560', margin: 0 }}>
-            {txt.introSubtitle}
-          </p>
-        </div>
-
-        {/* Card */}
-        <form onSubmit={handleSubmit} noValidate>
-          <div style={{ background: '#fff', borderRadius: 20, padding: '28px 28px 32px', boxShadow: '0 2px 16px rgba(27,58,92,0.07)' }}>
-
-            {/* Country Toggle */}
-            <div style={{ marginBottom: 24 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: '#1B3A5C', letterSpacing: '0.08em', margin: '0 0 10px' }}>
-                {txt.countryLabel}
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {(['us', 'ca'] as Country[]).map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setCountry(c)}
-                    style={{
-                      padding: '10px 14px',
-                      borderRadius: 10,
-                      border: country === c ? '2px solid #1B3A5C' : '1.5px solid #d4cfc7',
-                      background: country === c ? '#1B3A5C' : '#fafaf8',
-                      color: country === c ? '#fff' : '#6b6560',
-                      fontSize: 13,
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      textAlign: 'center',
-                      transition: 'all 0.15s',
-                    }}
-                  >
-                    {c === 'us' ? txt.countryUs : txt.countryCa}
-                  </button>
-                ))}
+        {/* Hero */}
+        <section className="hero">
+          <div className="hero-inner">
+            <div className="hero-text">
+              <div className="hero-badge">{t.heroBadge}</div>
+              <h1 className="hero-title">
+                <span>{t.heroTitle1}</span>
+                <br />
+                <span className="highlight">{t.heroTitle2}</span>
+                <br />
+                <span>{t.heroTitle3}</span>
+              </h1>
+              <p className="hero-description">{t.heroDesc}</p>
+              <div className="hero-scarcity">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                  <path stroke="currentColor" strokeWidth="2" d="M12 7v5l3 3" />
+                </svg>
+                <span>{t.heroScarcity}</span>
+              </div>
+              <a href="#apply" className="cta-btn">
+                {t.ctaButton}
+              </a>
+              <div className="hero-stats">
+                <div>
+                  <div className="hero-stat-value">100%</div>
+                  <div className="hero-stat-label">{t.statYouOwn}</div>
+                </div>
+                <div>
+                  <div className="hero-stat-value">0</div>
+                  <div className="hero-stat-label">{t.statNoCc}</div>
+                </div>
+                <div>
+                  <div className="hero-stat-value">14</div>
+                  <div className="hero-stat-label">{t.statDays}</div>
+                </div>
               </div>
             </div>
 
-            {/* Business Name */}
-            <div style={{ marginBottom: 18 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>
-                {txt.businessNameLabel} <span style={{ color: '#e53e3e' }}>*</span>
-              </label>
-              <input
-                type="text"
-                placeholder={txt.businessNamePlaceholder}
-                value={businessName}
-                onChange={(e) => { setBusinessName(e.target.value); setErrors((p) => { const n = { ...p }; delete n.businessName; return n; }); }}
-                onFocus={(e) => { if (!errors.businessName) e.target.style.borderColor = '#C9A84C'; }}
-                onBlur={(e) => { e.target.style.borderColor = errors.businessName ? '#e53e3e' : '#d4cfc7'; }}
-                style={inputStyle(!!errors.businessName)}
-              />
-              {errors.businessName && (
-                <p style={{ color: '#e53e3e', fontSize: 12, marginTop: 5 }}>{errors.businessName}</p>
-              )}
+            <div className="hero-visual">
+              <div className="hero-card-stack">
+                <div className="case-study-tag">{t.caseStudyLabel}</div>
+                <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--gold)', marginBottom: '0.5rem' }}>
+                    {t.dashboardLabel}
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'white' }}>{t.dashboardBusiness}</div>
+                  <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>{t.dashboardLocation}</div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.15)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
+                    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--gold)' }}>150</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>
+                      {t.appointmentsLabel}
+                    </div>
+                  </div>
+                  <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
+                    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10b981' }}>$9.00</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>
+                      {t.cplLabel}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t.spendLabel}</div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'white', marginTop: '0.25rem' }}>$1,350 / month</div>
+                </div>
+              </div>
             </div>
+          </div>
+        </section>
 
-            {/* Email */}
-            <div style={{ marginBottom: 18 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>
-                {txt.emailLabel} <span style={{ color: '#e53e3e' }}>*</span>
-              </label>
-              <input
-                type="email"
-                placeholder={txt.emailPlaceholder}
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); setErrors((p) => { const n = { ...p }; delete n.email; return n; }); }}
-                onFocus={(e) => { if (!errors.email) e.target.style.borderColor = '#C9A84C'; }}
-                onBlur={(e) => { e.target.style.borderColor = errors.email ? '#e53e3e' : '#d4cfc7'; }}
-                style={inputStyle(!!errors.email)}
-              />
-              {errors.email && (
-                <p style={{ color: '#e53e3e', fontSize: 12, marginTop: 5 }}>{errors.email}</p>
-              )}
+        {/* How It Works */}
+        <section className="steps-section" id="how-it-works">
+          <div className="section-inner">
+            <div className="section-header">
+              <span className="section-label">{t.howItWorksLabel}</span>
+              <h2 className="section-title">{t.howItWorksTitle}</h2>
+              <p className="section-sub">{t.howItWorksSub}</p>
             </div>
-
-            {/* Phone */}
-            <div style={{ marginBottom: 18 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>
-                {txt.phoneLabel} <span style={{ color: '#e53e3e' }}>*</span>
-              </label>
-              <input
-                type="tel"
-                placeholder={txt.phonePlaceholder}
-                value={phone}
-                onChange={(e) => { setPhone(e.target.value); setErrors((p) => { const n = { ...p }; delete n.phone; return n; }); }}
-                onFocus={(e) => { if (!errors.phone) e.target.style.borderColor = '#C9A84C'; }}
-                onBlur={(e) => { e.target.style.borderColor = errors.phone ? '#e53e3e' : '#d4cfc7'; }}
-                style={inputStyle(!!errors.phone)}
-              />
-              {errors.phone && (
-                <p style={{ color: '#e53e3e', fontSize: 12, marginTop: 5 }}>{errors.phone}</p>
-              )}
+            <div className="steps-grid">
+              <div className="step-card">
+                <div className="step-icon">&#128197;</div>
+                <h3>{t.step1Title}</h3>
+                <p>{t.step1Desc}</p>
+              </div>
+              <div className="step-card">
+                <div className="step-icon">&#128200;</div>
+                <h3>{t.step2Title}</h3>
+                <p>{t.step2Desc}</p>
+              </div>
+              <div className="step-card">
+                <div className="step-icon">&#10003;</div>
+                <h3>{t.step3Title}</h3>
+                <p>{t.step3Desc}</p>
+              </div>
             </div>
+          </div>
+        </section>
 
-            {/* Call Date */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 6 }}>
-                {txt.callDateLabel} <span style={{ color: '#e53e3e' }}>*</span>
-              </label>
-              <input
-                type="date"
-                value={callDate}
-                min={new Date().toISOString().split('T')[0]}
-                onChange={(e) => { setCallDate(e.target.value); setErrors((p) => { const n = { ...p }; delete n.callDate; return n; }); }}
-                onFocus={(e) => { if (!errors.callDate) e.target.style.borderColor = '#C9A84C'; }}
-                onBlur={(e) => { e.target.style.borderColor = errors.callDate ? '#e53e3e' : '#d4cfc7'; }}
-                style={{ ...inputStyle(!!errors.callDate), colorScheme: 'light' }}
-              />
-              {errors.callDate && (
-                <p style={{ color: '#e53e3e', fontSize: 12, marginTop: 5 }}>{errors.callDate}</p>
-              )}
-              <p style={{ fontSize: 12, color: '#6b6560', marginTop: 6 }}>{txt.callDateNote}</p>
-            </div>
+        {/* Form */}
+        <section className="form-section" id="apply">
+          <div className="form-inner">
+            <div className="form-card">
+              <h2>{t.formTitle}</h2>
+              <p className="form-sub">{t.formSub}</p>
 
-            {/* Service Selection */}
-            <div style={{ marginBottom: 28 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1B3A5C', marginBottom: 10 }}>
-                {txt.servicesLabel}
-              </label>
-              {errors.services && (
-                <p style={{ color: '#e53e3e', fontSize: 12, marginBottom: 8 }}>{errors.services}</p>
-              )}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {txt.services.map((svc) => {
-                  const checked = selectedServices.includes(svc.value);
-                  return (
-                    <button
-                      key={svc.value}
-                      type="button"
-                      onClick={() => toggleService(svc.value)}
-                      style={{
-                        padding: '11px 14px',
-                        borderRadius: 10,
-                        border: checked ? '2px solid #1B3A5C' : '1.5px solid #d4cfc7',
-                        background: checked ? '#1B3A5C' : '#fafaf8',
-                        color: checked ? '#fff' : '#6b6560',
-                        fontSize: 13,
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        fontWeight: 500,
-                        transition: 'all 0.15s',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 8,
-                      }}
-                    >
-                      <div style={{
-                        width: 18, height: 18, borderRadius: 4,
-                        border: checked ? 'none' : '1.5px solid #d4cfc7',
-                        background: checked ? '#C9A84C' : 'transparent',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0,
-                      }}>
-                        {checked && (
-                          <svg width="10" height="10" viewBox="0 0 10 10">
-                            <path d="M2 5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                          </svg>
-                        )}
-                      </div>
-                      {svc.label}
+              <form onSubmit={handleSubmit} noValidate>
+                {/* Country */}
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <p style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--gold-light)', marginBottom: '8px' }}>
+                    {t.countryLabel}
+                  </p>
+                  <div className="country-toggle">
+                    <button type="button" className={country === 'us' ? 'country-btn active' : 'country-btn'} onClick={() => setCountry('us')}>
+                      {t.countryUs}
                     </button>
-                  );
-                })}
-              </div>
+                    <button type="button" className={country === 'ca' ? 'country-btn active' : 'country-btn'} onClick={() => setCountry('ca')}>
+                      {t.countryCa}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Business name */}
+                <div className="form-group">
+                  <label htmlFor="businessName">{t.businessNameLabel}</label>
+                  <input
+                    type="text"
+                    id="businessName"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    placeholder={t.businessNamePlaceholder}
+                  />
+                  {errors.businessName && <span className="error-msg">{errors.businessName}</span>}
+                </div>
+
+                {/* Phone */}
+                <div className="form-group">
+                  <label htmlFor="phone">{t.phoneLabel}</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder={t.phonePlaceholder}
+                  />
+                  {errors.phone && <span className="error-msg">{errors.phone}</span>}
+                </div>
+
+                {/* Date */}
+                <div className="form-group">
+                  <label htmlFor="callDate">{t.callDateLabel}</label>
+                  <input type="date" id="callDate" value={callDate} min={minDate} onChange={(e) => setCallDate(e.target.value)} />
+                  {errors.callDate && <span className="error-msg">{errors.callDate}</span>}
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px' }}>{t.callDateNote}</p>
+                </div>
+
+                <button type="submit" className="cta-btn-full" disabled={submitting}>
+                  {submitting ? (
+                    <>
+                      <span
+                        className="spin"
+                        style={{
+                          display: 'inline-block',
+                          width: '16px',
+                          height: '16px',
+                          border: '2.5px solid rgba(27,58,92,0.4)',
+                          borderTopColor: '#0f2338',
+                          borderRadius: '50%',
+                        }}
+                      />{' '}
+                      {t.sendingButton}
+                    </>
+                  ) : (
+                    t.ctaButton
+                  )}
+                </button>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '12px' }}>{t.ctaSubtext}</p>
+              </form>
+
+              <p className="form-disclaimer">{t.disclaimer}</p>
             </div>
-
-            {/* CTA Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: '100%',
-                padding: '15px',
-                background: isSubmitting ? '#2d5075' : '#1B3A5C',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 12,
-                fontSize: 16,
-                fontWeight: 700,
-                cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                letterSpacing: '0.3px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 10,
-                transition: 'background 0.2s',
-              }}
-            >
-              {isSubmitting ? (
-                <>
-                  <div style={{ width: 18, height: 18, border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
-                  {lang === 'fr' ? 'Envoi…' : lang === 'es' ? 'Enviando…' : 'Sending…'}
-                </>
-              ) : txt.ctaButton}
-            </button>
-            <p style={{ fontSize: 12, color: '#b0a89e', textAlign: 'center', marginTop: 10 }}>{txt.ctaSubtext}</p>
           </div>
+        </section>
 
-          <p style={{ textAlign: 'center', fontSize: 12, color: '#b0a89e', marginTop: 20, lineHeight: 1.6 }}>
-            {txt.disclaimer}
-          </p>
-        </form>
+        {/* Trust */}
+        <section className="trust-section">
+          <div className="trust-inner">
+            <div className="trust-item">
+              <div className="trust-icon">&#10003;</div>
+              <span>{t.trustNoCc}</span>
+            </div>
+            <div className="trust-item">
+              <div className="trust-icon">&#128200;</div>
+              <span>{t.trustLeads}</span>
+            </div>
+            <div className="trust-item">
+              <div className="trust-icon">&#128273;</div>
+              <span>{t.trustOwn}</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer>
+          <strong>FeeSlayers</strong> <span>{t.footerDisclaimer}</span>
+        </footer>
       </div>
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        * { box-sizing: border-box; }
-        body { margin: 0; }
-        input::placeholder { color: #b0a89e; }
-        input:focus { border-color: #C9A84C !important; }
-        input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; }
-        input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
-      `}</style>
     </div>
   );
 }
