@@ -3,6 +3,7 @@ node_modules/
 
 # Next.js build output
 .next/
+.next-*/
 out/
 
 # Build artifacts
@@ -25,9 +26,6 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Vercel
-.vercel
-
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
@@ -38,4 +36,9 @@ next-env.d.ts
 *.swp
 *.swo
 
+# Vercel
 .vercel
+.vercel.bak/
+
+# Stale/renamed build output — never commit build artifacts
+.next-broken/
