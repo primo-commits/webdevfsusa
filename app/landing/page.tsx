@@ -402,7 +402,9 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10b981' }}>$9.00</div>
+                    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10b981' }}>
+                      $9.00 <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>CAD</span>
+                    </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>
                       {t.cplLabel}
                     </div>
@@ -410,7 +412,7 @@ export default function LandingPage() {
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem', textAlign: 'center' }}>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t.spendLabel}</div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'white', marginTop: '0.25rem' }}>$1,350 / month</div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'white', marginTop: '0.25rem' }}>$1,350 CAD / month</div>
                 </div>
               </div>
             </div>
