@@ -9,7 +9,7 @@ import Script from 'next/script';
 const META_PIXEL_ID = '1735091511124702';
 
 export const metadata: Metadata = {
-  title: 'FeeSlayers -- 2 Weeks Free Facebook Ad Management',
+  title: 'FeeSlayers | 2 Weeks Free Facebook Ad Management',
   description:
     "See if FeeSlayers is the right fit for your business. We'll run your Facebook ads for 2 weeks at no cost. If you don't see results, you walk away.",
 };
