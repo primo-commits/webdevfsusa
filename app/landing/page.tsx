@@ -7,6 +7,12 @@ import './landing.css';
 const GHL_WEBHOOK_URL =
   'https://services.leadconnectorhq.com/hooks/p05l3tBveztzKCJ14Z6C/webhook-trigger/5V1Bsd31tHBTytuV3b9i';
 
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
+
 type Language = 'en' | 'fr' | 'es';
 type Country = 'us' | 'ca';
 
@@ -285,6 +291,14 @@ export default function LandingPage() {
       });
     } catch {
       // non-blocking: still show confirmation
+    }
+
+    // Meta Pixel conversion. Guarded: fbq is absent when an ad blocker or a
+    // privacy browser stops the base snippet, and an unguarded call would
+    // throw and leave the visitor stuck on a spinning submit button.
+    // The snippet queues calls internally, so this is safe before it loads.
+    if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+      window.fbq('track', 'Lead');
     }
 
     setSubmitting(false);
