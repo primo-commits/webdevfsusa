@@ -28,10 +28,10 @@ export default function PrivacyPolicyPage() {
             </h1>
             <p className="text-cream/40 text-sm mb-12">
               {lang === "en"
-                ? "Last updated: April 2026"
+                ? "Last updated: September 2026"
                 : lang === "fr"
-                ? "Dernière mise à jour : avril 2026"
-                : "Última actualización: abril 2026"}
+                ? "Dernière mise à jour : septembre 2026"
+                : "Última actualización: septiembre 2026"}
             </p>
 
             <div className="space-y-8 text-cream/70 text-base leading-relaxed">

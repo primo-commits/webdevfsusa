@@ -586,7 +586,7 @@ export const translations = {
         },
         {
           title: "6. Cookies and Tracking",
-          body: "Our website uses cookies and similar tracking technologies to improve your browsing experience, analyze site usage, and personalize content. You can control cookies through your browser settings. Disabling cookies may affect some website functionality.",
+          body: "Our website uses cookies and similar tracking technologies. On our landing page at /landing we use the Meta Pixel, a tool provided by Meta Platforms, Inc. (Facebook and Instagram). When you visit that page the pixel records a page view, and if you submit the application form it records that a form was submitted. This information is sent to Meta and is used to measure how our advertising performs, to show our ads to people who have visited the page, and to help Meta build similar audiences. The pixel sets cookies in your browser, including _fbp and _fbc, which may identify your browser across websites. The Meta Pixel runs only on our landing page and is not present anywhere else on this website. Our pages also load fonts from Google Fonts, which means Google receives your IP address when a page loads. You can control or delete cookies in your browser settings, adjust how Meta uses your information for advertising in your Facebook or Instagram ad preferences, and block the pixel entirely using most ad or tracking blockers. Blocking these technologies does not prevent you from using this site or submitting the form.",
         },
         {
           title: "7. Third-Party Links",
@@ -1303,7 +1303,7 @@ export const translations = {
         },
         {
           title: "6. Cookies et suivi",
-          body: "Notre site web utilise des cookies et des technologies de suivi similaires pour améliorer votre expérience de navigation, analyser l'utilisation du site et personnaliser le contenu. Vous pouvez contrôler les cookies via les paramètres de votre navigateur. Désactiver les cookies peut affecter certaines fonctionnalités du site web.",
+          body: "Notre site web utilise des cookies et des technologies de suivi similaires. Sur notre page de destination (/landing), nous utilisons le pixel Meta, un outil fourni par Meta Platforms, Inc. (Facebook et Instagram). Lorsque vous visitez cette page, le pixel enregistre une visite, et si vous soumettez le formulaire de candidature, il enregistre qu'un formulaire a été soumis. Ces informations sont transmises à Meta et servent à mesurer le rendement de notre publicité, à diffuser nos annonces aux personnes ayant visité la page et à aider Meta à constituer des audiences similaires. Le pixel dépose des cookies dans votre navigateur, notamment _fbp et _fbc, qui peuvent identifier votre navigateur d'un site à l'autre. Le pixel Meta fonctionne uniquement sur notre page de destination et n'est présent nulle part ailleurs sur ce site. Nos pages chargent également des polices depuis Google Fonts, ce qui signifie que Google reçoit votre adresse IP lors du chargement d'une page. Vous pouvez contrôler ou supprimer les cookies dans les paramètres de votre navigateur, ajuster la façon dont Meta utilise vos informations à des fins publicitaires dans vos préférences publicitaires Facebook ou Instagram, et bloquer entièrement le pixel avec la plupart des bloqueurs de publicité ou de suivi. Bloquer ces technologies ne vous empêche pas d'utiliser ce site ni de soumettre le formulaire.",
         },
         {
           title: "7. Liens vers des tiers",
@@ -2016,7 +2016,7 @@ export const translations = {
         },
         {
           title: "6. Cookies y rastreo",
-          body: "Nuestro sitio web usa cookies y tecnologías de rastreo similares para mejorar tu experiencia de navegación, analizar el uso del sitio y personalizar contenido. Puedes controlar las cookies a través de la configuración de tu navegador. Deshabilitar cookies puede afectar algunas funcionalidades del sitio web.",
+          body: "Nuestro sitio web usa cookies y tecnologías de rastreo similares. En nuestra página de destino (/landing) usamos el Píxel de Meta, una herramienta proporcionada por Meta Platforms, Inc. (Facebook e Instagram). Cuando visitas esa página, el píxel registra una visita, y si envías el formulario de solicitud, registra que se envió un formulario. Esta información se transmite a Meta y se usa para medir el rendimiento de nuestra publicidad, mostrar nuestros anuncios a personas que han visitado la página y ayudar a Meta a crear audiencias similares. El píxel coloca cookies en tu navegador, incluidas _fbp y _fbc, que pueden identificar tu navegador entre sitios web. El Píxel de Meta funciona únicamente en nuestra página de destino y no está presente en ninguna otra parte de este sitio. Nuestras páginas también cargan fuentes desde Google Fonts, lo que significa que Google recibe tu dirección IP al cargar una página. Puedes controlar o eliminar cookies en la configuración de tu navegador, ajustar cómo Meta usa tu información con fines publicitarios en tus preferencias de anuncios de Facebook o Instagram, y bloquear el píxel por completo con la mayoría de los bloqueadores de anuncios o rastreo. Bloquear estas tecnologías no te impide usar este sitio ni enviar el formulario.",
         },
         {
           title: "7. Enlaces a terceros",
